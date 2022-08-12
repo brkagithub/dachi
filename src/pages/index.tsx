@@ -3,19 +3,21 @@ import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
   //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-  const { data: session, status } = useSession();
-  if (status === "loading") {
+  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  if (isLoading) {
     return <div className="text-center pt-4">Loading...</div>;
   }
 
-  if (session) {
+  if (meData) {
     return (
       <>
-        Signed in as {session.user?.email} <br />
-        <Link href={`/profile/${session.user?.id}`}>
+        <Navbar me={meData}></Navbar>
+        Signed in as {meData.name} <br />
+        <Link href={`/profile/${meData.id}`}>
           <a>My profile</a>
         </Link>
         <br></br>
@@ -25,6 +27,7 @@ const Home: NextPage = () => {
   }
   return (
     <>
+      <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>
     </>

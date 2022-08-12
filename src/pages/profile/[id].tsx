@@ -17,7 +17,7 @@ const ProfilePage = (props: { user: User }) => {
   return (
     <>
       <Navbar me={meData} />
-      <div>{props.user.name}'s profile</div>
+      <div>{props.user.name}s profile</div>
       {meData && meData?.id ? (
         <NextLink href="/profile/edit">Edit your profile here</NextLink>
       ) : (
