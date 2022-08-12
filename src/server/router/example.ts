@@ -1,7 +1,14 @@
 import { createRouter } from "./context";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const exampleRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (!ctx.session) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next();
+  })
   .query("hello", {
     input: z
       .object({

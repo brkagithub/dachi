@@ -4,12 +4,16 @@ import { trpc } from "../utils/trpc";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-  const { data: session } = useSession();
+  //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    return <div className="text-center pt-4">Loading...</div>;
+  }
+
   if (session) {
     return (
       <>
-        Signed in as {session.user!.email} <br />
+        Signed in as {session.user?.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
@@ -17,7 +21,7 @@ const Home: NextPage = () => {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button onClick={() => signIn("discord")}>Sign in with Discord</button>
     </>
   );
 };
