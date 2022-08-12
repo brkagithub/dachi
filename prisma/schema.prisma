@@ -47,15 +47,30 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
+    createdAt     DateTime  @default(now())
     name          String?
     firstName     String?
+    age           Int?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    description   String?   @db.Text
-    gender        Gender
+    description   String?   @db.Text @default("Add your description here")
+    gender        Gender?
+    riot_accounts  LeagueAccount[]
+    role          Role?
+    fav_champion1   String? //should be enum or 
+    fav_champion2   String? //should be enum or something
+    fav_champion3   String? //should be enum or something
+}
+
+model LeagueAccount {
+    id            String    @id @default(cuid())
+    user          User @relation(fields: [userId], references: [id])
+    userId        String  @unique 
+    ign           String?   @unique
+    server        Server?
 }
 
 model VerificationToken {
@@ -70,4 +85,26 @@ enum Gender {
   MALE
   FEMALE
   NONBINARY
+}
+
+enum Role {
+    TOP
+    JUNGLE
+    MID
+    ADC
+    SUPPORT
+}
+
+enum Server {
+  BR1
+  EUN1
+  EUW1
+  JP1
+  KR
+  LA1
+  LA2
+  NA1
+  OC1
+  TR1
+  RU
 }
