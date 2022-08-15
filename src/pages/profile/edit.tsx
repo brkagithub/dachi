@@ -52,7 +52,10 @@ type Inputs = {
 };
 
 function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
+  const [mutateErrored, setMutateErrored] = useState(false);
+
   const {
+    formState,
     register,
     handleSubmit,
     formState: { errors },
@@ -63,6 +66,9 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
   });
 
   const updateProfileMutation = trpc.useMutation(["user.updateProfile"], {
+    onSuccess: () => {
+      setMutateErrored(false);
+    },
     onError: () => {
       setError(
         "name",
@@ -72,6 +78,7 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
         },
         { shouldFocus: true }
       );
+      setMutateErrored(true);
     },
   });
 
@@ -139,12 +146,19 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       {errors.description && <span>This field is required</span>}
 
       <div className="pt-4" />
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center ">
         <input
           className="bg-gray-500 rounded-full p-2 cursor-pointer"
           type="submit"
           value="Confirm changes"
         />
+        {formState.isSubmitSuccessful && !mutateErrored ? (
+          <div className=" text-green-400">
+            Your profile has been successfully updated!
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </form>
   );
