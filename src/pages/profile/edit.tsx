@@ -1,8 +1,5 @@
-import type { User } from "@prisma/client";
-import { GetStaticProps } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Navbar from "../../components/Navbar";
-import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -52,7 +49,7 @@ type Inputs = {
 };
 
 function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
-  const [mutateErrored, setMutateErrored] = useState(false);
+  const [mutateErrored, setMutateErrored] = useState(true);
 
   const {
     formState,

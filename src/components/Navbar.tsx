@@ -4,8 +4,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { inferQueryOutput, trpc } from "../utils/trpc";
 import NextLink from "next/link";
-import { User } from "@prisma/client";
-import { signOut } from "next-auth/react";
+import { signOut, signIn } from "next-auth/react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -56,10 +55,6 @@ const Navbar: React.FC<{
     { name: "Settings", href: "#", current: current == "settings" },
   ];
 
-  if (!me || typeof me == "undefined") {
-    navigation.push({ name: "Login", href: "/", current: false });
-  }
-
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -82,14 +77,14 @@ const Navbar: React.FC<{
                   <NextLink href="/">
                     <img
                       className="block lg:hidden h-8 w-auto cursor-pointer"
-                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=500"
+                      src="/images/logo_getbrka.png"
                       alt="Getbrka"
                     />
                   </NextLink>
                   <NextLink href="/">
                     <img
-                      className="hidden lg:block h-8 w-auto cursor-pointer"
-                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=500"
+                      className="hidden lg:block w-10 h-auto cursor-pointer"
+                      src="/images/logo_getbrka.png"
                       alt="Getbrka"
                     />
                   </NextLink>
@@ -112,6 +107,20 @@ const Navbar: React.FC<{
                         {item.name}
                       </a>
                     ))}
+                    {!me ? (
+                      <button
+                        onClick={() => {
+                          signIn("discord");
+                        }}
+                        className={
+                          "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                        }
+                      >
+                        Login
+                      </button>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               </div>
@@ -145,7 +154,7 @@ const Navbar: React.FC<{
                               <a
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
+                                  "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400"
                                 )}
                               >
                                 Your Profile
@@ -155,18 +164,14 @@ const Navbar: React.FC<{
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <button
                               className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 w-full text-left"
                               )}
-                              onClick={() => {
-                                signOut();
-                              }}
+                              onClick={() => signOut()}
                             >
                               Sign out
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -197,6 +202,17 @@ const Navbar: React.FC<{
                   {item.name}
                 </Disclosure.Button>
               ))}
+              <Disclosure.Button
+                as="a"
+                onClick={() => {
+                  signIn("discord");
+                }}
+                className={
+                  "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                }
+              >
+                Login
+              </Disclosure.Button>
               <SearchBar hidden={false} />
             </div>
           </Disclosure.Panel>

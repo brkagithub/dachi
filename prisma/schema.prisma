@@ -58,11 +58,16 @@ model User {
     sessions      Session[]
     description   String?   @db.Text @default("Add your description here")
     gender        Gender?
-    riot_accounts  LeagueAccount[]
+    riot_accounts LeagueAccount[]
     role          Role?
-    fav_champion1   String? //should be enum or 
-    fav_champion2   String? //should be enum or something
-    fav_champion3   String? //should be enum or something
+    fav_champion1 String? //should be enum or something
+    fav_champion2 String? //should be enum or something
+    fav_champion3 String? //should be enum or something
+    country       String? //should be enum or something
+    instagram     String?
+    twitter       String?
+    youtube       String?
+    twitch        String?
 }
 
 model LeagueAccount {
@@ -88,11 +93,11 @@ enum Gender {
 }
 
 enum Role {
-    TOP
-    JUNGLE
-    MID
+    Top
+    Jungle
+    Mid
     ADC
-    SUPPORT
+    Support
 }
 
 enum Server {
