@@ -87,9 +87,9 @@ model VerificationToken {
 }
 
 enum Gender {
-  MALE
-  FEMALE
-  NONBINARY
+  Male
+  Female
+  Nonconforming
 }
 
 enum Role {
