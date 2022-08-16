@@ -32,9 +32,9 @@ const ProfilePage = (props: { user: User }) => {
                   {props.user.firstName}, {props.user.age}
                 </div>
                 <div className="capitalize">
-                  {props.user.country} {flag(props.user.country || "Serbia")}
+                  {props.user.country} {flag(props.user.country || "")}
                 </div>
-                {props.user.gender == "NONBINARY" ? (
+                {props.user.gender == "Nonconforming" ? (
                   ""
                 ) : (
                   <div className="capitalize">{props.user.gender}</div>
