@@ -16,6 +16,7 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true
   },
+
   "include": [
     "next-env.d.ts",
     "next-auth.d.ts",

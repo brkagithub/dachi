@@ -70,6 +70,11 @@ model User {
     twitch        String?
 }
 
+model Champion {
+    id            Int    @id
+    name          String
+}
+
 model LeagueAccount {
     id            String    @id @default(cuid())
     user          User @relation(fields: [userId], references: [id])

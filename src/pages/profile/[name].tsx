@@ -6,7 +6,6 @@ import { trpc } from "../../utils/trpc";
 import Navbar from "../../components/Navbar";
 import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
-
 const ProfilePage = (props: { user: User }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
@@ -15,6 +14,13 @@ const ProfilePage = (props: { user: User }) => {
   if (isLoading) {
     return <div>loading...</div>;
   }
+
+  let userRole = "";
+  if (props.user.role == "Top") userRole = "TOP";
+  if (props.user.role == "Jungle") userRole = "JUNGLE";
+  if (props.user.role == "Mid") userRole = "MIDDLE";
+  if (props.user.role == "ADC") userRole = "ADC";
+  if (props.user.role == "Support") userRole = "SUPPORT";
 
   return (
     <>
@@ -92,7 +98,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src="https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/MIDDLE.png"
+                src={`https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/${userRole}.png`}
               ></img>
               <div className="text-center capitalize">{props.user.role}</div>
             </div>
@@ -100,7 +106,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src="https://raw.githubusercontent.com/esports-bits/lol_images/master/champion-squares/Irelia.png"
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion1}
@@ -111,7 +117,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src="https://raw.githubusercontent.com/esports-bits/lol_images/master/champion-squares/Akali.png"
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion2}
@@ -121,7 +127,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src="https://github.com/esports-bits/lol_images/blob/master/champion-squares/Kassadin.png?raw=true"
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion3}
@@ -143,24 +149,31 @@ const ProfilePage = (props: { user: User }) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (!params || !params.id || typeof params.id !== "string") {
+  if (!params || !params.name || typeof params.name !== "string") {
     return {
       notFound: true,
     };
   }
 
   const userInfo = await prisma.user.findFirst({
-    where: { id: { equals: params.id } },
+    where: { name: { equals: params.name, mode: "insensitive" } },
   });
 
   return {
-    props: { user: JSON.parse(JSON.stringify(userInfo)) },
+    props: {
+      user: JSON.parse(JSON.stringify(userInfo)),
+    },
     revalidate: 60,
   };
 };
 
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" };
+  const users = await prisma.user.findMany();
+  const paths = users.map((user) => ({
+    params: { name: user.name },
+  }));
+
+  return { paths, fallback: "blocking" };
 }
 
 export default ProfilePage;

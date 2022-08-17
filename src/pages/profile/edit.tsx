@@ -31,6 +31,9 @@ const EditProfilePage = () => {
               firstName: meData.firstName || "",
               age: meData.age?.toString() || "18",
               description: meData.description || "",
+              favoriteChampion1: meData.fav_champion1 || "",
+              favoriteChampion2: meData.fav_champion2 || "",
+              favoriteChampion3: meData.fav_champion3 || "",
             }}
           />
         </div>
@@ -46,10 +49,16 @@ type Inputs = {
   firstName: string;
   age: string;
   description: string;
+  favoriteChampion1: string;
+  favoriteChampion2: string;
+  favoriteChampion3: string;
 };
 
 function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
   const [mutateErrored, setMutateErrored] = useState(true);
+  const { data: allChamps, isLoading: allChampsLoading } = trpc.useQuery([
+    "riot.allChampNames",
+  ]);
 
   const {
     formState,
@@ -85,8 +94,13 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       firstName: data.firstName,
       age: parseInt(data.age),
       description: data.description,
+      fav_champion1: data.favoriteChampion1,
+      fav_champion2: data.favoriteChampion2,
+      fav_champion3: data.favoriteChampion3,
     });
   };
+
+  if (allChampsLoading) return <div>loading..</div>;
 
   return (
     <form
@@ -141,6 +155,42 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       />
 
       {errors.description && <span>This field is required</span>}
+
+      <span className="px-1">Favorite champion1</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("favoriteChampion1", { required: true })}
+      >
+        {allChamps?.map((champ) => (
+          <option key={champ.id} value={champ.name}>
+            {champ.name}
+          </option>
+        ))}
+      </select>
+
+      <span className="px-1">Favorite champion2</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("favoriteChampion2", { required: true })}
+      >
+        {allChamps?.map((champ) => (
+          <option key={champ.id} value={champ.name}>
+            {champ.name}
+          </option>
+        ))}
+      </select>
+
+      <span className="px-1">Favorite champion3</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("favoriteChampion3", { required: true })}
+      >
+        {allChamps?.map((champ) => (
+          <option key={champ.id} value={champ.name}>
+            {champ.name}
+          </option>
+        ))}
+      </select>
 
       <div className="pt-4" />
       <div className="flex flex-col items-center ">

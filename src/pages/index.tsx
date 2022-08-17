@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       <>
         <Navbar me={meData}></Navbar>
         Signed in as {meData.name} <br />
-        <Link href={`/profile/${meData.id}`}>
+        <Link href={`/profile/${meData.name}`}>
           <a>My profile</a>
         </Link>
         <br></br>
