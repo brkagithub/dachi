@@ -34,6 +34,12 @@ const EditProfilePage = () => {
               favoriteChampion1: meData.fav_champion1 || "",
               favoriteChampion2: meData.fav_champion2 || "",
               favoriteChampion3: meData.fav_champion3 || "",
+              role: meData.role || "Top",
+              gender: meData.gender || "Male",
+              twitter: meData.twitter || "",
+              instagram: meData.instagram || "",
+              twitch: meData.twitch || "",
+              youtube: meData.youtube || "",
             }}
           />
         </div>
@@ -52,6 +58,12 @@ type Inputs = {
   favoriteChampion1: string;
   favoriteChampion2: string;
   favoriteChampion3: string;
+  role: "Top" | "Jungle" | "Mid" | "ADC" | "Support";
+  gender: "Male" | "Female" | "Nonconforming";
+  twitter: string;
+  instagram: string;
+  twitch: string;
+  youtube: string;
 };
 
 function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
@@ -97,10 +109,19 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       fav_champion1: data.favoriteChampion1,
       fav_champion2: data.favoriteChampion2,
       fav_champion3: data.favoriteChampion3,
+      role: data.role,
+      gender: data.gender,
+      twitter: data.twitter,
+      instagram: data.instagram,
+      twitch: data.twitch,
+      youtube: data.youtube,
     });
   };
 
   if (allChampsLoading) return <div>loading..</div>;
+
+  const roles = ["Top", "Jungle", "Mid", "ADC", "Support"];
+  const genders = ["Male", "Female", "Nonconforming"];
 
   return (
     <form
@@ -121,6 +142,7 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       {errors.name && errors.name.type !== "checkUsername" && (
         <span>This field is required</span>
       )}
+
       {errors.name && errors.name.type === "checkUsername" && (
         <span>{errors.name.message}</span>
       )}
@@ -135,6 +157,7 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       />
 
       {errors.firstName && <span>This field is required</span>}
+
       <div className="pt-4" />
 
       <span className="px-1">Age</span>
@@ -156,7 +179,8 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
       {errors.description && <span>This field is required</span>}
 
-      <span className="px-1">Favorite champion1</span>
+      <div className="pt-4" />
+      <span className="px-1">Favorite champion 1</span>
       <select
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         {...register("favoriteChampion1", { required: true })}
@@ -167,8 +191,8 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
           </option>
         ))}
       </select>
-
-      <span className="px-1">Favorite champion2</span>
+      <div className="pt-4" />
+      <span className="px-1">Favorite champion 2</span>
       <select
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         {...register("favoriteChampion2", { required: true })}
@@ -179,8 +203,8 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
           </option>
         ))}
       </select>
-
-      <span className="px-1">Favorite champion3</span>
+      <div className="pt-4" />
+      <span className="px-1">Favorite champion 3</span>
       <select
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         {...register("favoriteChampion3", { required: true })}
@@ -191,8 +215,61 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
           </option>
         ))}
       </select>
+      <div className="pt-4" />
+      <span className="px-1">Main role</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("role", { required: true })}
+      >
+        {roles?.map((role) => (
+          <option key={role} value={role}>
+            {role}
+          </option>
+        ))}
+      </select>
+      <div className="pt-4" />
+      <span className="px-1">Gender</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("gender", { required: true })}
+      >
+        {genders?.map((gender) => (
+          <option key={gender} value={gender}>
+            {gender}
+          </option>
+        ))}
+      </select>
 
       <div className="pt-4" />
+      <span className="px-1">Twitter handle</span>
+      <input
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("twitter")}
+      />
+
+      <div className="pt-4" />
+      <span className="px-1">Instagram handle</span>
+      <input
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("instagram")}
+      />
+
+      <div className="pt-4" />
+      <span className="px-1">Twitch handle</span>
+      <input
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("twitch")}
+      />
+
+      <div className="pt-4" />
+      <span className="px-1">Youtube handle</span>
+      <input
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("youtube")}
+      />
+
+      <div className="pt-4" />
+
       <div className="flex flex-col items-center ">
         <input
           className="bg-gray-500 rounded-full p-2 cursor-pointer"

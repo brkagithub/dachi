@@ -59,36 +59,44 @@ const ProfilePage = (props: { user: User }) => {
             <div className="text-xl text-center relative bottom-16">
               {props.user.name}
             </div>
-            <div className="flex w-36 h-autopt-2 justify-between relative bottom-16">
+            <div className="flex w-36 h-autopt-2 justify-center relative bottom-16 pt-1">
               {props.user.twitter ? (
-                <SocialIcon
-                  style={{ height: 32, width: 32 }}
-                  url={`https://twitter.com/${props.user.twitter}`}
-                />
+                <div className="pr-1 pl-1">
+                  <SocialIcon
+                    style={{ height: 32, width: 32 }}
+                    url={`https://twitter.com/${props.user.twitter}`}
+                  />
+                </div>
               ) : (
                 <></>
               )}
               {props.user.instagram ? (
-                <SocialIcon
-                  style={{ height: 32, width: 32 }}
-                  url={`https://instagram.com/${props.user.instagram}`}
-                />
+                <div className="pr-1 pl-1">
+                  <SocialIcon
+                    style={{ height: 32, width: 32 }}
+                    url={`https://instagram.com/${props.user.instagram}`}
+                  />
+                </div>
               ) : (
                 <></>
               )}
               {props.user.twitch ? (
-                <SocialIcon
-                  style={{ height: 32, width: 32 }}
-                  url={`https://twitch.tv/${props.user.twitch}`}
-                />
+                <div className="pr-1 pl-1">
+                  <SocialIcon
+                    style={{ height: 32, width: 32 }}
+                    url={`https://twitch.tv/${props.user.twitch}`}
+                  />
+                </div>
               ) : (
                 <></>
               )}
-              {props.user.twitter ? (
-                <SocialIcon
-                  style={{ height: 32, width: 32 }}
-                  url={`https://youtube.com/${props.user.youtube}`}
-                />
+              {props.user.youtube ? (
+                <div className="pr-1 pl-1">
+                  <SocialIcon
+                    style={{ height: 32, width: 32 }}
+                    url={`https://youtube.com/channel/${props.user.youtube}`}
+                  />
+                </div>
               ) : (
                 <></>
               )}

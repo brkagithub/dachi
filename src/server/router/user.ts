@@ -33,9 +33,15 @@ export const userRouter = createRouter()
       firstName: z.string(),
       age: z.number(),
       description: z.string(),
-      fav_champion1: z.string(),
+      fav_champion1: z.string(), //todo - make champion enum
       fav_champion2: z.string(),
       fav_champion3: z.string(),
+      role: z.enum(["Top", "Jungle", "Mid", "ADC", "Support"]),
+      gender: z.enum(["Male", "Female", "Nonconforming"]),
+      twitter: z.string(),
+      instagram: z.string(),
+      twitch: z.string(),
+      youtube: z.string(),
     }),
 
     async resolve({ ctx, input }) {
