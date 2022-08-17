@@ -201,7 +201,7 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
         />
         {formState.isSubmitSuccessful && !mutateErrored ? (
           <div className=" text-green-400">
-            Your profile has been successfully updated!
+            Your profile will be updated in 60 seconds!
           </div>
         ) : (
           <></>
