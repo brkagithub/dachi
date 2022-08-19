@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { trpc } from "../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Link from "next/link";
 
 const EditProfilePage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.meFullInfo"]);
@@ -101,6 +102,8 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    console.log(allChamps);
     updateProfileMutation.mutate({
       name: data.name,
       firstName: data.firstName,
@@ -109,6 +112,15 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       fav_champion1: data.favoriteChampion1,
       fav_champion2: data.favoriteChampion2,
       fav_champion3: data.favoriteChampion3,
+      fav_champion1_img:
+        allChamps?.filter((champ) => champ.name == data.favoriteChampion1)[0]
+          ?.uniqueName || "",
+      fav_champion2_img:
+        allChamps?.filter((champ) => champ.name == data.favoriteChampion2)[0]
+          ?.uniqueName || "",
+      fav_champion3_img:
+        allChamps?.filter((champ) => champ.name == data.favoriteChampion3)[0]
+          ?.uniqueName || "",
       role: data.role,
       gender: data.gender,
       twitter: data.twitter,

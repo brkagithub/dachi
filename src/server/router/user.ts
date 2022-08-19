@@ -7,6 +7,7 @@ import { DDragon } from "@fightmegg/riot-api";
 interface champObject {
   id: number;
   name: string;
+  uniqueName: string;
 }
 
 export const userRouter = createRouter()
@@ -36,6 +37,9 @@ export const userRouter = createRouter()
       fav_champion1: z.string(), //todo - make champion enum
       fav_champion2: z.string(),
       fav_champion3: z.string(),
+      fav_champion1_img: z.string(),
+      fav_champion2_img: z.string(),
+      fav_champion3_img: z.string(),
       role: z.enum(["Top", "Jungle", "Mid", "ADC", "Support"]),
       gender: z.enum(["Male", "Female", "Nonconforming"]),
       twitter: z.string(),
@@ -52,7 +56,7 @@ export const userRouter = createRouter()
         },
       });
     },
-  }); /*
+  })
   .mutation("fillDb", {
     async resolve({}) {
       const ddragon = new DDragon();
@@ -60,10 +64,10 @@ export const userRouter = createRouter()
       const champObjects: champObject[] = [];
       let index = 0;
       Object.values(champs.data).forEach((val) => {
-        champObjects.push({ name: val.name, id: index });
+        champObjects.push({ name: val.name, id: index, uniqueName: val.id });
         index++;
       });
 
       await prisma.champion.createMany({ data: champObjects });
     },
-  })*/
+  });

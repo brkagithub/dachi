@@ -63,6 +63,9 @@ model User {
     fav_champion1 String? //should be enum or something
     fav_champion2 String? //should be enum or something
     fav_champion3 String? //should be enum or something
+    fav_champion1_img String? //should be enum or something
+    fav_champion2_img String? //should be enum or something
+    fav_champion3_img String? //should be enum or something
     country       String? //should be enum or something
     instagram     String?
     twitter       String?
@@ -73,6 +76,7 @@ model User {
 model Champion {
     id            Int    @id
     name          String
+    uniqueName    String
 }
 
 model LeagueAccount {

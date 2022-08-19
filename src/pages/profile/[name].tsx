@@ -114,7 +114,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1}.png`}
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1_img}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion1}
@@ -125,7 +125,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2}.png`}
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2_img}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion2}
@@ -135,7 +135,7 @@ const ProfilePage = (props: { user: User }) => {
             <div>
               <img
                 className="h-16 w-auto rounded-full"
-                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3}.png`}
+                src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3_img}.png`}
               ></img>
               <div className="text-center capitalize">
                 {props.user.fav_champion3}
