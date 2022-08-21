@@ -28,6 +28,16 @@ export const userRouter = createRouter()
       });
     },
   })
+  .query("getProfileByName", {
+    input: z.object({
+      name: z.string(),
+    }),
+    async resolve({ input }) {
+      return prisma.user.findFirst({
+        where: { name: input.name },
+      });
+    },
+  })
   .mutation("updateProfile", {
     input: z.object({
       name: z.string(),

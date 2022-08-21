@@ -6,7 +6,22 @@ import { trpc } from "../../utils/trpc";
 import Navbar from "../../components/Navbar";
 import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
-const ProfilePage = (props: { user: User }) => {
+import { PlatformId, RiotAPI, RiotAPITypes } from "@fightmegg/riot-api";
+import { env } from "../../env/server.mjs";
+
+interface matchStats {
+  championName: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  win: boolean;
+}
+
+const ProfilePage = (props: {
+  user: User;
+  rankedStats: RiotAPITypes.League.LeagueEntryDTO[];
+  previousTwentyMatchesStats: matchStats[];
+}) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
   if (!props.user) throw new Error("user doesnt exist");
@@ -21,6 +36,8 @@ const ProfilePage = (props: { user: User }) => {
   if (props.user.role == "Mid") userRole = "MIDDLE";
   if (props.user.role == "ADC") userRole = "ADC";
   if (props.user.role == "Support") userRole = "SUPPORT";
+
+  console.log(props.previousTwentyMatchesStats);
 
   return (
     <>
@@ -143,7 +160,38 @@ const ProfilePage = (props: { user: User }) => {
             </div>
           </div>
         </div>
-
+        {props.rankedStats[0] && (
+          <div className="bg-gray-800 flex justify-between items-center">
+            <img
+              className="h-24 w-auto rounded-full"
+              src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats[0].tier.toLowerCase()}.png`}
+            ></img>
+            <div className="flex flex-col items-center">
+              <div className="font-bold">
+                <span className="capitalize">
+                  {props.rankedStats[0].tier.toLowerCase()}
+                </span>
+                <span> {props.rankedStats[0].rank}</span>
+              </div>
+              <div className="text-sm">
+                {props.rankedStats[0].leaguePoints} LP
+              </div>
+            </div>
+            <div className="pl-8 pr-4 flex flex-col items-center">
+              <div className="text-sm">
+                {props.rankedStats[0].wins}W {props.rankedStats[0].losses}L
+              </div>
+              <div className="text-xs">
+                {(
+                  (props.rankedStats[0].wins /
+                    (props.rankedStats[0].wins + props.rankedStats[0].losses)) *
+                  100
+                ).toFixed(0)}
+                %
+              </div>
+            </div>
+          </div>
+        )}
         {meData && meData?.id ? (
           <div className="mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
@@ -167,9 +215,54 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: { name: { equals: params.name, mode: "insensitive" } },
   });
 
+  const rAPI = new RiotAPI(env.RIOT_API_KEY);
+
+  const summoner = await rAPI.summoner.getBySummonerName({
+    region: PlatformId.EUW1,
+    summonerName: "cxccxcccxcccc",
+  });
+
+  const previousTwentyMatchesStats: matchStats[] = [];
+
+  const account = await rAPI.league.getEntriesBySummonerId({
+    region: PlatformId.EUW1,
+    summonerId: summoner.id,
+  });
+
+  const ids = await rAPI.matchV5.getIdsbyPuuid({
+    cluster: PlatformId.EUROPE,
+    puuid: summoner.puuid,
+    params: {
+      queue: 420, //420 - soloq, 440 - flex
+    },
+  }); //get match stats (know how many games by account.wins+losses)
+
+  for (const id of ids) {
+    const match = await rAPI.matchV5.getMatchById({
+      cluster: PlatformId.EUROPE,
+      matchId: id,
+    });
+
+    const player = match.info.participants.filter(
+      (participant) => participant.puuid == summoner.puuid
+    )[0];
+
+    if (!player) continue;
+
+    previousTwentyMatchesStats.push({
+      championName: player.championName,
+      kills: player.kills,
+      deaths: player.deaths,
+      assists: player.assists,
+      win: player.win,
+    });
+  }
+
   return {
     props: {
       user: JSON.parse(JSON.stringify(userInfo)),
+      rankedStats: account,
+      previousTwentyMatchesStats: previousTwentyMatchesStats,
     },
     revalidate: 60,
   };

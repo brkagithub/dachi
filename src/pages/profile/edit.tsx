@@ -2,7 +2,6 @@ import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { trpc } from "../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Link from "next/link";
 
 const EditProfilePage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.meFullInfo"]);
