@@ -60,6 +60,18 @@ type Inputs = {
   favoriteChampion3: string;
   role: "Top" | "Jungle" | "Mid" | "ADC" | "Support";
   gender: "Male" | "Female" | "Nonconforming";
+  /*server:
+    | "eun1"
+    | "euw1"
+    | "na1"
+    | "la1"
+    | "la2"
+    | "kr"
+    | "jp1"
+    | "br1"
+    | "oc1"
+    | "ru"
+    | "tr1";*/
   twitter: string;
   instagram: string;
   twitch: string;

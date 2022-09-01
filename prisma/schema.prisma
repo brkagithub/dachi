@@ -84,7 +84,7 @@ model LeagueAccount {
     user          User @relation(fields: [userId], references: [id])
     userId        String  @unique 
     ign           String?   @unique
-    server        Server?
+    server        String?
 }
 
 model VerificationToken {
@@ -107,18 +107,4 @@ enum Role {
     Mid
     ADC
     Support
-}
-
-enum Server {
-  BR1
-  EUN1
-  EUW1
-  JP1
-  KR
-  LA1
-  LA2
-  NA1
-  OC1
-  TR1
-  RU
 }
