@@ -83,8 +83,9 @@ model LeagueAccount {
     id            String    @id @default(cuid())
     user          User @relation(fields: [userId], references: [id])
     userId        String  @unique 
-    ign           String?   @unique
-    server        String?
+    ign           String?
+    server        Server?
+    @@unique([ign, server])
 }
 
 model VerificationToken {
@@ -107,4 +108,18 @@ enum Role {
     Mid
     ADC
     Support
+}
+
+enum Server {
+    eun1
+    euw1
+    na1
+    la1
+    la2
+    kr
+    jp1
+    br1
+    oc1
+    ru
+    tr1
 }

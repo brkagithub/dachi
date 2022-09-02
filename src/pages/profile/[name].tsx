@@ -20,10 +20,24 @@ interface matchStats {
 
 type matchStatsMap = matchStats[];
 
+type Server =
+  | "eun1"
+  | "euw1"
+  | "na1"
+  | "la1"
+  | "la2"
+  | "kr"
+  | "jp1"
+  | "br1"
+  | "oc1"
+  | "ru"
+  | "tr1";
+
 const ProfilePage = (props: {
   user: User;
   rankedStats: RiotAPITypes.League.LeagueEntryDTO[];
   previousTwentyMatchesStats: matchStatsMap;
+  server: Server;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
@@ -32,6 +46,8 @@ const ProfilePage = (props: {
   if (isLoading) {
     return <div>loading...</div>;
   }
+
+  console.log(props);
 
   const PreviousTwentyStats = () => (
     <div className="pl-4 flex justify-center">
@@ -295,7 +311,7 @@ const ProfilePage = (props: {
         {props.rankedStats[0] && (
           <div>
             <div className="text-xl text-center pt-6 md:pt-2 md:pb-4">
-              {props.rankedStats[0].summonerName} {"(EUNE)"}
+              {props.rankedStats[0].summonerName} {`(${props.server})`}
             </div>
             <div className="flex justify-between items-center pb-2">
               <img
@@ -359,17 +375,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: { name: { equals: params.name, mode: "insensitive" } },
   });
 
+  const userRiotAccount = await prisma.leagueAccount.findFirst({
+    where: { userId: userInfo?.id },
+  });
+
+  console.log(userRiotAccount?.server);
+
   const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
   const summoner = await rAPI.summoner.getBySummonerName({
-    region: PlatformId.EUNE1,
-    summonerName: "lkura",
+    // no clue why ts errors here
+    // @ts-ignore
+    region: userRiotAccount?.server || PlatformId.EUNE1,
+    summonerName: userRiotAccount?.ign || "vvvvvvwvvvvvv",
   });
 
   const previousTwentyMatchesStats: matchStatsMap = [];
 
   const account = await rAPI.league.getEntriesBySummonerId({
-    region: PlatformId.EUNE1,
+    // no clue why ts errors here
+    // @ts-ignore
+    region: userRiotAccount?.server || PlatformId.EUNE1,
     summonerId: summoner.id,
   });
 
@@ -434,6 +460,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       user: JSON.parse(JSON.stringify(userInfo)),
       rankedStats: account,
       previousTwentyMatchesStats: previousTwentyMatchesStats,
+      server: userRiotAccount?.server,
     },
     revalidate: 60,
   };

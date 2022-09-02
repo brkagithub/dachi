@@ -2,9 +2,12 @@ import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { trpc } from "../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { LeagueAccount } from "@prisma/client";
 
 const EditProfilePage = () => {
-  const { data: meData, isLoading } = trpc.useQuery(["user.meFullInfo"]);
+  const { data: meData, isLoading } = trpc.useQuery([
+    "user.meFullInfoWithRiotAccounts",
+  ]);
 
   if (isLoading) {
     return <div>loading...</div>;
@@ -36,11 +39,14 @@ const EditProfilePage = () => {
               favoriteChampion3: meData.fav_champion3 || "",
               role: meData.role || "Top",
               gender: meData.gender || "Male",
+              server: meData.accounts[0]?.server || "euw1",
+              ign: meData.accounts[0]?.ign || "",
               twitter: meData.twitter || "",
               instagram: meData.instagram || "",
               twitch: meData.twitch || "",
               youtube: meData.youtube || "",
             }}
+            accounts={meData.accounts}
           />
         </div>
       )}
@@ -60,7 +66,7 @@ type Inputs = {
   favoriteChampion3: string;
   role: "Top" | "Jungle" | "Mid" | "ADC" | "Support";
   gender: "Male" | "Female" | "Nonconforming";
-  /*server:
+  server:
     | "eun1"
     | "euw1"
     | "na1"
@@ -71,14 +77,21 @@ type Inputs = {
     | "br1"
     | "oc1"
     | "ru"
-    | "tr1";*/
+    | "tr1";
+  ign: string;
   twitter: string;
   instagram: string;
   twitch: string;
   youtube: string;
 };
 
-function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
+function UserEditForm({
+  defaultValues,
+  accounts,
+}: {
+  defaultValues: Inputs;
+  accounts: LeagueAccount[];
+}) {
   const [mutateErrored, setMutateErrored] = useState(true);
   const { data: allChamps, isLoading: allChampsLoading } = trpc.useQuery([
     "riot.allChampNames",
@@ -112,9 +125,15 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
     },
   });
 
+  const createRiotAccountMutation = trpc.useMutation([
+    "user.createRiotAccount",
+  ]);
+
+  const updateRiotAccountMutation = trpc.useMutation([
+    "user.updateRiotAccount",
+  ]);
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    console.log(allChamps);
     updateProfileMutation.mutate({
       name: data.name,
       firstName: data.firstName,
@@ -139,12 +158,37 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       twitch: data.twitch,
       youtube: data.youtube,
     });
+
+    if (accounts.length > 0) {
+      updateRiotAccountMutation.mutate({
+        server: data.server,
+        ign: data.ign,
+      });
+    } else {
+      createRiotAccountMutation.mutate({
+        server: data.server,
+        ign: data.ign,
+      });
+    }
   };
 
   if (allChampsLoading) return <div>loading..</div>;
 
   const roles = ["Top", "Jungle", "Mid", "ADC", "Support"];
   const genders = ["Male", "Female", "Nonconforming"];
+  const servers = [
+    ["eun1", "EUNE"],
+    ["euw1", "EUW"],
+    ["na1", "NA"],
+    ["la1", "LAN"],
+    ["la2", "LAS"],
+    ["kr", "KR"],
+    ["jp1", "JP"],
+    ["br1", "BR"],
+    ["oc1", "OCE"],
+    ["ru", "RU"],
+    ["tr1", "TR"],
+  ];
 
   return (
     <form
@@ -203,6 +247,21 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
       {errors.description && <span>This field is required</span>}
 
       <div className="pt-4" />
+
+      <span className="px-1">Gender</span>
+      <select
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("gender", { required: true })}
+      >
+        {genders?.map((gender) => (
+          <option key={gender} value={gender}>
+            {gender}
+          </option>
+        ))}
+      </select>
+
+      <div className="pt-4" />
+
       <span className="px-1">Favorite champion 1</span>
       <select
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
@@ -251,19 +310,29 @@ function UserEditForm({ defaultValues }: { defaultValues: Inputs }) {
         ))}
       </select>
       <div className="pt-4" />
-      <span className="px-1">Gender</span>
+
+      <span className="px-1">Server</span>
       <select
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-        {...register("gender", { required: true })}
+        {...register("server", { required: true })}
       >
-        {genders?.map((gender) => (
-          <option key={gender} value={gender}>
-            {gender}
+        {servers?.map((server) => (
+          <option key={server[0]} value={server[0]}>
+            {server[1]}
           </option>
         ))}
       </select>
 
       <div className="pt-4" />
+
+      <span className="px-1">In game name</span>
+      <input
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        {...register("ign")}
+      />
+
+      <div className="pt-4" />
+
       <span className="px-1">Twitter handle</span>
       <input
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
