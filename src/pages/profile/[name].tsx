@@ -383,7 +383,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let previousTwentyMatchesStats: matchStatsMap | null = null;
 
   if (userRiotAccount && userRiotAccount.ign) {
-    /*
     const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
     const summoner = await rAPI.summoner.getBySummonerName({
@@ -456,7 +455,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       (a, b) => b.wins + b.losses - a.wins - a.losses
     );
 
-    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);*/
+    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);
   }
 
   return {
