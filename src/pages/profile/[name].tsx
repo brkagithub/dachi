@@ -465,7 +465,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       previousTwentyMatchesStats: previousTwentyMatchesStats,
       server: userRiotAccount?.server || null,
     },
-    revalidate: 60,
+    revalidate: 600,
   };
 };
 
