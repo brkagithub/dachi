@@ -51,7 +51,7 @@ const ProfilePage = (props: {
 
   const PreviousTwentyStats = () => (
     <div className="pl-4 flex justify-center">
-      {props.previousTwentyMatchesStats[0] && (
+      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[0] && (
         <div className="flex justify-center items-center flex-col pl-2 pr-2">
           <img
             className="h-16 w-auto rounded-full"
@@ -91,7 +91,7 @@ const ProfilePage = (props: {
           </div>
         </div>
       )}
-      {props.previousTwentyMatchesStats[1] && (
+      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[1] && (
         <div className="flex justify-center items-center flex-col pl-2 pr-2">
           <img
             className="h-16 w-auto rounded-full"
@@ -131,7 +131,7 @@ const ProfilePage = (props: {
           </div>
         </div>
       )}
-      {props.previousTwentyMatchesStats[2] && (
+      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[2] && (
         <div className="flex justify-center items-center flex-col pl-2 pr-2">
           <img
             className="h-16 w-auto rounded-full"
@@ -308,7 +308,7 @@ const ProfilePage = (props: {
             </div>
           </div>
         </div>
-        {props.rankedStats[0] && (
+        {props.rankedStats && props.rankedStats[0] && (
           <div>
             <div className="text-xl text-center pt-6 md:pt-2 md:pb-4">
               {props.rankedStats[0].summonerName} {`(${props.server})`}
@@ -379,7 +379,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: { userId: userInfo?.id },
   });
 
-  console.log(userRiotAccount?.server);
+  if (!userRiotAccount || !userRiotAccount.ign) {
+    return {
+      props: {
+        user: JSON.parse(JSON.stringify(userInfo)),
+        rankedStats: null,
+        previousTwentyMatchesStats: null,
+        server: null,
+      },
+      revalidate: 60,
+    };
+  }
 
   const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
@@ -387,7 +397,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     // no clue why ts errors here
     // @ts-ignore
     region: userRiotAccount?.server || PlatformId.EUNE1,
-    summonerName: userRiotAccount?.ign || "vvvvvvwvvvvvv",
+    summonerName: userRiotAccount?.ign, //n cannot exist
   });
 
   const previousTwentyMatchesStats: matchStatsMap = [];
@@ -460,7 +470,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       user: JSON.parse(JSON.stringify(userInfo)),
       rankedStats: account,
       previousTwentyMatchesStats: previousTwentyMatchesStats,
-      server: userRiotAccount?.server,
+      server: userRiotAccount?.server || "eun1",
     },
     revalidate: 60,
   };
