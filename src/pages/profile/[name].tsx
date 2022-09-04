@@ -379,98 +379,91 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: { userId: userInfo?.id },
   });
 
-  if (!userRiotAccount || !userRiotAccount.ign) {
-    return {
-      props: {
-        user: JSON.parse(JSON.stringify(userInfo)),
-        rankedStats: null,
-        previousTwentyMatchesStats: null,
-        server: null,
-      },
-      revalidate: 60,
-    };
-  }
+  let account = null;
+  let previousTwentyMatchesStats: matchStatsMap | null = null;
 
-  const rAPI = new RiotAPI(env.RIOT_API_KEY);
+  if (userRiotAccount && userRiotAccount.ign) {
+    const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
-  const summoner = await rAPI.summoner.getBySummonerName({
-    // no clue why ts errors here
-    // @ts-ignore
-    region: userRiotAccount?.server || PlatformId.EUNE1,
-    summonerName: userRiotAccount?.ign, //n cannot exist
-  });
-
-  const previousTwentyMatchesStats: matchStatsMap = [];
-
-  const account = await rAPI.league.getEntriesBySummonerId({
-    // no clue why ts errors here
-    // @ts-ignore
-    region: userRiotAccount?.server || PlatformId.EUNE1,
-    summonerId: summoner.id,
-  });
-
-  const ids = await rAPI.matchV5.getIdsbyPuuid({
-    cluster: PlatformId.EUROPE,
-    puuid: summoner.puuid,
-    params: {
-      queue: 420, //420 - soloq, 440 - flex
-    },
-  }); //get match stats (know how many games by account.wins+losses)
-
-  for (const id of ids) {
-    const match = await rAPI.matchV5.getMatchById({
-      cluster: PlatformId.EUROPE,
-      matchId: id,
+    const summoner = await rAPI.summoner.getBySummonerName({
+      // no clue why ts errors here
+      // @ts-ignore
+      region: userRiotAccount?.server || PlatformId.EUNE1,
+      summonerName: userRiotAccount?.ign, //n cannot exist
     });
 
-    const player = match.info.participants.filter(
-      (participant) => participant.puuid == summoner.puuid
-    )[0];
+    previousTwentyMatchesStats = [];
 
-    if (!player) continue;
+    account = await rAPI.league.getEntriesBySummonerId({
+      // no clue why ts errors here
+      // @ts-ignore
+      region: userRiotAccount?.server || PlatformId.EUNE1,
+      summonerId: summoner.id,
+    });
 
-    if (
-      previousTwentyMatchesStats.filter(
-        (el) => player.championName == el.championName
-      ).length == 0
-    ) {
-      //!previousTwentyMatchesStats[player.championName]
-      previousTwentyMatchesStats.push({
-        championName: player.championName,
-        kills: player.kills,
-        deaths: player.deaths,
-        assists: player.assists,
-        wins: player.win ? 1 : 0,
-        losses: player.win ? 0 : 1,
+    const ids = await rAPI.matchV5.getIdsbyPuuid({
+      cluster: PlatformId.EUROPE,
+      puuid: summoner.puuid,
+      params: {
+        queue: 420, //420 - soloq, 440 - flex
+      },
+    }); //get match stats (know how many games by account.wins+losses)
+
+    for (const id of ids) {
+      const match = await rAPI.matchV5.getMatchById({
+        cluster: PlatformId.EUROPE,
+        matchId: id,
       });
-    } else {
-      const indexOfStats = previousTwentyMatchesStats.findIndex(
-        (el) => player.championName == el.championName
-      );
-      const previousStats = previousTwentyMatchesStats[indexOfStats];
-      previousTwentyMatchesStats[indexOfStats] = {
-        championName: player.championName,
-        kills: previousStats!.kills + player.kills,
-        deaths: previousStats!.deaths + player.deaths,
-        assists: previousStats!.assists + player.assists,
-        wins: previousStats!.wins + (player.win ? 1 : 0),
-        losses: previousStats!.losses + (player.win ? 0 : 1),
-      };
+
+      const player = match.info.participants.filter(
+        (participant) => participant.puuid == summoner.puuid
+      )[0];
+
+      if (!player) continue;
+
+      if (
+        previousTwentyMatchesStats.filter(
+          (el) => player.championName == el.championName
+        ).length == 0
+      ) {
+        //!previousTwentyMatchesStats[player.championName]
+        previousTwentyMatchesStats.push({
+          championName: player.championName,
+          kills: player.kills,
+          deaths: player.deaths,
+          assists: player.assists,
+          wins: player.win ? 1 : 0,
+          losses: player.win ? 0 : 1,
+        });
+      } else {
+        const indexOfStats = previousTwentyMatchesStats.findIndex(
+          (el) => player.championName == el.championName
+        );
+        const previousStats = previousTwentyMatchesStats[indexOfStats];
+        previousTwentyMatchesStats[indexOfStats] = {
+          championName: player.championName,
+          kills: previousStats!.kills + player.kills,
+          deaths: previousStats!.deaths + player.deaths,
+          assists: previousStats!.assists + player.assists,
+          wins: previousStats!.wins + (player.win ? 1 : 0),
+          losses: previousStats!.losses + (player.win ? 0 : 1),
+        };
+      }
     }
+
+    previousTwentyMatchesStats.sort(
+      (a, b) => b.wins + b.losses - a.wins - a.losses
+    );
+
+    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);
   }
-
-  previousTwentyMatchesStats.sort(
-    (a, b) => b.wins + b.losses - a.wins - a.losses
-  );
-
-  previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);
 
   return {
     props: {
       user: JSON.parse(JSON.stringify(userInfo)),
       rankedStats: account,
       previousTwentyMatchesStats: previousTwentyMatchesStats,
-      server: userRiotAccount?.server || "eun1",
+      server: userRiotAccount?.server || null,
     },
     revalidate: 60,
   };
