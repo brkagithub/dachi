@@ -85,4 +85,48 @@ export const userRouter = createRouter()
 
       await prisma.champion.createMany({ data: champObjects });
     },
+  })
+  .query("getPotentialMatch", {
+    async resolve({ ctx, input }) {
+      const alreadyMatchedInitiated = await prisma.match.findMany({
+        where: {
+          requestInitiatorId: ctx.session?.user?.id,
+        },
+        select: {
+          requestTargetId: true,
+        },
+      });
+
+      const alreadyMatchedTargeted = await prisma.match.findMany({
+        where: {
+          requestTargetId: ctx.session?.user?.id,
+        },
+        select: {
+          requestInitiatorId: true,
+        },
+      });
+
+      const alreadyMatchedWithIds = [
+        //combine targeted and initiated
+        ...alreadyMatchedInitiated.map((user) => user.requestTargetId),
+        ...alreadyMatchedTargeted.map((user) => user.requestInitiatorId),
+        ctx.session?.user?.id ? ctx.session?.user?.id : "",
+      ];
+
+      const userStillNotMatched = await prisma.user.findFirst({
+        where: {
+          NOT: {
+            id: {
+              in: alreadyMatchedWithIds,
+            },
+          },
+        },
+      });
+
+      const userRiotAccount = await prisma.leagueAccount.findFirst({
+        where: { userId: userStillNotMatched?.id },
+      });
+
+      return { user: userStillNotMatched, rankedStats: userRiotAccount };
+    },
   });
