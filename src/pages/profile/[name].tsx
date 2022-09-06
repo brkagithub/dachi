@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { LeagueAccount, User } from "@prisma/client";
 import { GetStaticProps } from "next";
 import { prisma } from "../../server/db/client";
 import NextLink from "next/link";
@@ -7,18 +7,6 @@ import Navbar from "../../components/Navbar";
 import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
 import { PlatformId, RiotAPI, RiotAPITypes } from "@fightmegg/riot-api";
-import { env } from "../../env/server.mjs";
-
-interface matchStats {
-  championName: string;
-  kills: number;
-  deaths: number;
-  assists: number;
-  wins: number;
-  losses: number;
-}
-
-//type matchStatsArr = matchStats[];
 
 type Server =
   | "eun1"
@@ -33,12 +21,7 @@ type Server =
   | "ru"
   | "tr1";
 
-const ProfilePage = (props: {
-  user: User;
-  rankedStats: RiotAPITypes.League.LeagueEntryDTO[];
-  //previousTwentyMatchesStats: matchStatsArr;
-  server: Server;
-}) => {
+const ProfilePage = (props: { user: User; rankedStats: LeagueAccount }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
   if (!props.user) throw new Error("user doesnt exist");
@@ -49,131 +32,6 @@ const ProfilePage = (props: {
 
   console.log(props);
 
-  /*const PreviousTwentyStats = () => (
-    <div className="pl-4 flex justify-center">
-      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[0] && (
-        <div className="flex justify-center items-center flex-col pl-2 pr-2">
-          <img
-            className="h-16 w-auto rounded-full"
-            src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.previousTwentyMatchesStats[0]?.championName}.png`}
-          ></img>
-          <div className="text-sm p-0">
-            {props.previousTwentyMatchesStats[0]?.wins +
-              props.previousTwentyMatchesStats[0]?.losses}{" "}
-            games
-          </div>
-          <div className="text-sm">
-            {(
-              props.previousTwentyMatchesStats[0]?.kills /
-              (props.previousTwentyMatchesStats[0]?.wins +
-                props.previousTwentyMatchesStats[0]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[0]?.deaths /
-              (props.previousTwentyMatchesStats[0]?.wins +
-                props.previousTwentyMatchesStats[0]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[0]?.assists /
-              (props.previousTwentyMatchesStats[0]?.wins +
-                props.previousTwentyMatchesStats[0]?.losses)
-            ).toFixed(1)}
-          </div>
-          <div>
-            {(
-              (100 * props.previousTwentyMatchesStats[0]?.wins) /
-              (props.previousTwentyMatchesStats[0]?.wins +
-                props.previousTwentyMatchesStats[0]?.losses)
-            ).toFixed(0)}
-            %
-          </div>
-        </div>
-      )}
-      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[1] && (
-        <div className="flex justify-center items-center flex-col pl-2 pr-2">
-          <img
-            className="h-16 w-auto rounded-full"
-            src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.previousTwentyMatchesStats[1]?.championName}.png`}
-          ></img>
-          <div className="text-sm p-0">
-            {props.previousTwentyMatchesStats[1]?.wins +
-              props.previousTwentyMatchesStats[1]?.losses}{" "}
-            games
-          </div>
-          <div className="text-sm">
-            {(
-              props.previousTwentyMatchesStats[1]?.kills /
-              (props.previousTwentyMatchesStats[1]?.wins +
-                props.previousTwentyMatchesStats[1]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[1]?.deaths /
-              (props.previousTwentyMatchesStats[1]?.wins +
-                props.previousTwentyMatchesStats[1]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[1]?.assists /
-              (props.previousTwentyMatchesStats[1]?.wins +
-                props.previousTwentyMatchesStats[1]?.losses)
-            ).toFixed(1)}
-          </div>
-          <div>
-            {(
-              (100 * props.previousTwentyMatchesStats[1]?.wins) /
-              (props.previousTwentyMatchesStats[1]?.wins +
-                props.previousTwentyMatchesStats[1]?.losses)
-            ).toFixed(0)}
-            %
-          </div>
-        </div>
-      )}
-      {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[2] && (
-        <div className="flex justify-center items-center flex-col pl-2 pr-2">
-          <img
-            className="h-16 w-auto rounded-full"
-            src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.previousTwentyMatchesStats[2]?.championName}.png`}
-          ></img>
-          <div className="text-sm p-0">
-            {props.previousTwentyMatchesStats[2]?.wins +
-              props.previousTwentyMatchesStats[2]?.losses}{" "}
-            games
-          </div>
-          <div className="text-sm">
-            {(
-              props.previousTwentyMatchesStats[2]?.kills /
-              (props.previousTwentyMatchesStats[2]?.wins +
-                props.previousTwentyMatchesStats[2]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[2]?.deaths /
-              (props.previousTwentyMatchesStats[2]?.wins +
-                props.previousTwentyMatchesStats[2]?.losses)
-            ).toFixed(1)}{" "}
-            /{" "}
-            {(
-              props.previousTwentyMatchesStats[2]?.assists /
-              (props.previousTwentyMatchesStats[2]?.wins +
-                props.previousTwentyMatchesStats[2]?.losses)
-            ).toFixed(1)}
-          </div>
-          <div>
-            {(
-              (100 * props.previousTwentyMatchesStats[2]?.wins) /
-              (props.previousTwentyMatchesStats[2]?.wins +
-                props.previousTwentyMatchesStats[2]?.losses)
-            ).toFixed(0)}
-            %
-          </div>
-        </div>
-      )}
-    </div>
-  );
-*/
   let userRole = "";
   if (props.user.role == "Top") userRole = "TOP";
   if (props.user.role == "Jungle") userRole = "JUNGLE";
@@ -308,44 +166,45 @@ const ProfilePage = (props: {
             </div>
           </div>
         </div>
-        {props.rankedStats && props.rankedStats[0] && (
-          <div>
-            <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
-              {props.rankedStats[0].summonerName} {`(${props.server})`}
-            </div>
-            <div className="flex justify-between items-center pb-2">
-              <img
-                className="h-36 w-auto rounded-full"
-                src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats[0].tier.toLowerCase()}.png`}
-              ></img>
-              <div className="flex flex-col items-center">
-                <div className="font-bold text-center">
-                  <span className="capitalize">
-                    {props.rankedStats[0].tier.toLowerCase()}
-                  </span>
-                  <span> {props.rankedStats[0].rank}</span>
+        {props.rankedStats &&
+          props.rankedStats.wins &&
+          props.rankedStats.losses && (
+            <div>
+              <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
+                {props.rankedStats.ign} {`(${props.rankedStats.server})`}
+              </div>
+              <div className="flex justify-between items-center pb-2">
+                <img
+                  className="h-36 w-auto rounded-full"
+                  src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats.tier?.toLowerCase()}.png`}
+                ></img>
+                <div className="flex flex-col items-center">
+                  <div className="font-bold text-center">
+                    <span className="capitalize">
+                      {props.rankedStats.tier?.toLowerCase()}
+                    </span>
+                    <span> {props.rankedStats.rank}</span>
+                  </div>
+                  <div className="text-sm">
+                    {props.rankedStats.leaguePoints} LP
+                  </div>
                 </div>
-                <div className="text-sm">
-                  {props.rankedStats[0].leaguePoints} LP
+                <div className="pl-8 pr-4 flex flex-col items-center">
+                  <div className="text-sm">
+                    {props.rankedStats.wins}W {props.rankedStats.losses}L
+                  </div>
+                  <div className="text-xs">
+                    {(
+                      (props.rankedStats.wins /
+                        (props.rankedStats.wins + props.rankedStats.losses)) *
+                      100
+                    ).toFixed(0)}
+                    %
+                  </div>
                 </div>
               </div>
-              <div className="pl-8 pr-4 flex flex-col items-center">
-                <div className="text-sm">
-                  {props.rankedStats[0].wins}W {props.rankedStats[0].losses}L
-                </div>
-                <div className="text-xs">
-                  {(
-                    (props.rankedStats[0].wins /
-                      (props.rankedStats[0].wins +
-                        props.rankedStats[0].losses)) *
-                    100
-                  ).toFixed(0)}
-                  %
-                </div>
-              </div>
             </div>
-          </div>
-        )}
+          )}
         {meData && meData?.id ? (
           <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
@@ -373,91 +232,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     where: { userId: userInfo?.id },
   });
 
-  let account = null;
-  //let previousTwentyMatchesStats: matchStatsArr | null = null;
-
-  if (userRiotAccount && userRiotAccount.ign) {
-    const rAPI = new RiotAPI(env.RIOT_API_KEY);
-
-    const summoner = await rAPI.summoner.getBySummonerName({
-      // no clue why ts errors here
-      // @ts-ignore
-      region: userRiotAccount?.server || PlatformId.EUNE1,
-      summonerName: userRiotAccount?.ign, //n cannot exist
-    });
-
-    //previousTwentyMatchesStats = [];
-
-    account = await rAPI.league.getEntriesBySummonerId({
-      // no clue why ts errors here
-      // @ts-ignore
-      region: userRiotAccount?.server || PlatformId.EUNE1,
-      summonerId: summoner.id,
-    });
-
-    /*const ids = await rAPI.matchV5.getIdsbyPuuid({
-      cluster: PlatformId.EUROPE,
-      puuid: summoner.puuid,
-      params: {
-        queue: 420, //420 - soloq, 440 - flex
-      },
-    }); //get match stats (know how many games by account.wins+losses)
-
-    for (const id of ids) {
-      const match = await rAPI.matchV5.getMatchById({
-        cluster: PlatformId.EUROPE,
-        matchId: id,
-      });
-
-      const player = match.info.participants.filter(
-        (participant) => participant.puuid == summoner.puuid
-      )[0];
-
-      if (!player) continue;
-
-      if (
-        previousTwentyMatchesStats.filter(
-          (el) => player.championName == el.championName
-        ).length == 0
-      ) {
-        //!previousTwentyMatchesStats[player.championName]
-        previousTwentyMatchesStats.push({
-          championName: player.championName,
-          kills: player.kills,
-          deaths: player.deaths,
-          assists: player.assists,
-          wins: player.win ? 1 : 0,
-          losses: player.win ? 0 : 1,
-        });
-      } else {
-        const indexOfStats = previousTwentyMatchesStats.findIndex(
-          (el) => player.championName == el.championName
-        );
-        const previousStats = previousTwentyMatchesStats[indexOfStats];
-        previousTwentyMatchesStats[indexOfStats] = {
-          championName: player.championName,
-          kills: previousStats!.kills + player.kills,
-          deaths: previousStats!.deaths + player.deaths,
-          assists: previousStats!.assists + player.assists,
-          wins: previousStats!.wins + (player.win ? 1 : 0),
-          losses: previousStats!.losses + (player.win ? 0 : 1),
-        };
-      }
-    }
-
-    previousTwentyMatchesStats.sort(
-      (a, b) => b.wins + b.losses - a.wins - a.losses
-    );
-
-    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);*/
-  }
-
   return {
     props: {
       user: JSON.parse(JSON.stringify(userInfo)),
-      rankedStats: account,
-      //previousTwentyMatchesStats: previousTwentyMatchesStats,
-      server: userRiotAccount?.server || null,
+      rankedStats: userRiotAccount,
     },
     revalidate: 60,
   };

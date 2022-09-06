@@ -2,6 +2,8 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
+import { PlatformId, RiotAPI } from "@fightmegg/riot-api";
+import { env } from "../../env/server.mjs";
 
 export const riotRouter = createRouter()
   .query("allChampNames", {
@@ -29,11 +31,32 @@ export const riotRouter = createRouter()
       ]),
     }),
     async resolve({ ctx, input }) {
+      const rAPI = new RiotAPI(env.RIOT_API_KEY);
+
+      const summoner = await rAPI.summoner.getBySummonerName({
+        // no clue why ts errors here
+        // @ts-ignore
+        region: input.server,
+        summonerName: input.ign, //n cannot exist
+      });
+
+      const account = await rAPI.league.getEntriesBySummonerId({
+        // no clue why ts errors here
+        // @ts-ignore
+        region: input.server,
+        summonerId: summoner.id,
+      });
+
       await prisma.leagueAccount.create({
         data: {
           ign: input.ign,
           server: input.server,
           userId: ctx.session!.user!.id, //make this query callable only when logged
+          rank: account[0]?.rank,
+          tier: account[0]?.tier,
+          leaguePoints: account[0]?.leaguePoints,
+          wins: account[0]?.wins,
+          losses: account[0]?.losses,
         },
       });
     },
@@ -56,9 +79,32 @@ export const riotRouter = createRouter()
       ]),
     }),
     async resolve({ ctx, input }) {
+      const rAPI = new RiotAPI(env.RIOT_API_KEY);
+
+      const summoner = await rAPI.summoner.getBySummonerName({
+        // no clue why ts errors here
+        // @ts-ignore
+        region: input.server,
+        summonerName: input.ign, //n cannot exist
+      });
+
+      const account = await rAPI.league.getEntriesBySummonerId({
+        // no clue why ts errors here
+        // @ts-ignore
+        region: input.server,
+        summonerId: summoner.id,
+      });
+
       await prisma.leagueAccount.update({
         where: { userId: ctx.session?.user?.id },
-        data: { ...input },
+        data: {
+          ...input,
+          rank: account[0]?.rank,
+          tier: account[0]?.tier,
+          leaguePoints: account[0]?.leaguePoints,
+          wins: account[0]?.wins,
+          losses: account[0]?.losses,
+        },
       });
     },
   });

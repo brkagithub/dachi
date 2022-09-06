@@ -85,6 +85,7 @@ model LeagueAccount {
     userId        String  @unique 
     ign           String?
     server        Server?
+    tier          String?
     rank          String?
     leaguePoints  Int?
     wins          Int?
