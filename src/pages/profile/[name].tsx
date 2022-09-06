@@ -18,7 +18,7 @@ interface matchStats {
   losses: number;
 }
 
-type matchStatsMap = matchStats[];
+type matchStatsArr = matchStats[];
 
 type Server =
   | "eun1"
@@ -36,7 +36,7 @@ type Server =
 const ProfilePage = (props: {
   user: User;
   rankedStats: RiotAPITypes.League.LeagueEntryDTO[];
-  previousTwentyMatchesStats: matchStatsMap;
+  previousTwentyMatchesStats: matchStatsArr;
   server: Server;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -353,9 +353,9 @@ const ProfilePage = (props: {
           <PreviousTwentyStats />
         </div>
         {meData && meData?.id ? (
-          <div className="mt-8">
+          <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
-          </div>
+          </button>
         ) : (
           <></>
         )}
@@ -380,7 +380,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   let account = null;
-  let previousTwentyMatchesStats: matchStatsMap | null = null;
+  let previousTwentyMatchesStats: matchStatsArr | null = null;
 
   if (userRiotAccount && userRiotAccount.ign) {
     const rAPI = new RiotAPI(env.RIOT_API_KEY);
@@ -402,7 +402,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     });
 
     const ids = await rAPI.matchV5.getIdsbyPuuid({
-      cluster: PlatformId.EUROPE,
+      cluster: PlatformId.AMERICAS,
       puuid: summoner.puuid,
       params: {
         queue: 420, //420 - soloq, 440 - flex
@@ -411,7 +411,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     for (const id of ids) {
       const match = await rAPI.matchV5.getMatchById({
-        cluster: PlatformId.EUROPE,
+        cluster: PlatformId.AMERICAS,
         matchId: id,
       });
 
