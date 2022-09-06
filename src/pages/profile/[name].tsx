@@ -18,7 +18,7 @@ interface matchStats {
   losses: number;
 }
 
-type matchStatsArr = matchStats[];
+//type matchStatsArr = matchStats[];
 
 type Server =
   | "eun1"
@@ -36,7 +36,7 @@ type Server =
 const ProfilePage = (props: {
   user: User;
   rankedStats: RiotAPITypes.League.LeagueEntryDTO[];
-  previousTwentyMatchesStats: matchStatsArr;
+  //previousTwentyMatchesStats: matchStatsArr;
   server: Server;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -49,7 +49,7 @@ const ProfilePage = (props: {
 
   console.log(props);
 
-  const PreviousTwentyStats = () => (
+  /*const PreviousTwentyStats = () => (
     <div className="pl-4 flex justify-center">
       {props.previousTwentyMatchesStats && props.previousTwentyMatchesStats[0] && (
         <div className="flex justify-center items-center flex-col pl-2 pr-2">
@@ -173,7 +173,7 @@ const ProfilePage = (props: {
       )}
     </div>
   );
-
+*/
   let userRole = "";
   if (props.user.role == "Top") userRole = "TOP";
   if (props.user.role == "Jungle") userRole = "JUNGLE";
@@ -310,7 +310,7 @@ const ProfilePage = (props: {
         </div>
         {props.rankedStats && props.rankedStats[0] && (
           <div>
-            <div className="text-xl text-center pt-6 md:pt-2 md:pb-4">
+            <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
               {props.rankedStats[0].summonerName} {`(${props.server})`}
             </div>
             <div className="flex justify-between items-center pb-2">
@@ -343,15 +343,9 @@ const ProfilePage = (props: {
                   %
                 </div>
               </div>
-              <div className="hidden md:flex">
-                <PreviousTwentyStats />
-              </div>
             </div>
           </div>
         )}
-        <div className="md:hidden">
-          <PreviousTwentyStats />
-        </div>
         {meData && meData?.id ? (
           <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
@@ -380,7 +374,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   let account = null;
-  let previousTwentyMatchesStats: matchStatsArr | null = null;
+  //let previousTwentyMatchesStats: matchStatsArr | null = null;
 
   if (userRiotAccount && userRiotAccount.ign) {
     const rAPI = new RiotAPI(env.RIOT_API_KEY);
@@ -392,7 +386,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       summonerName: userRiotAccount?.ign, //n cannot exist
     });
 
-    previousTwentyMatchesStats = [];
+    //previousTwentyMatchesStats = [];
 
     account = await rAPI.league.getEntriesBySummonerId({
       // no clue why ts errors here
@@ -401,8 +395,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       summonerId: summoner.id,
     });
 
-    const ids = await rAPI.matchV5.getIdsbyPuuid({
-      cluster: PlatformId.AMERICAS,
+    /*const ids = await rAPI.matchV5.getIdsbyPuuid({
+      cluster: PlatformId.EUROPE,
       puuid: summoner.puuid,
       params: {
         queue: 420, //420 - soloq, 440 - flex
@@ -411,7 +405,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     for (const id of ids) {
       const match = await rAPI.matchV5.getMatchById({
-        cluster: PlatformId.AMERICAS,
+        cluster: PlatformId.EUROPE,
         matchId: id,
       });
 
@@ -455,14 +449,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       (a, b) => b.wins + b.losses - a.wins - a.losses
     );
 
-    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);
+    previousTwentyMatchesStats.splice(3, previousTwentyMatchesStats.length - 3);*/
   }
 
   return {
     props: {
       user: JSON.parse(JSON.stringify(userInfo)),
       rankedStats: account,
-      previousTwentyMatchesStats: previousTwentyMatchesStats,
+      //previousTwentyMatchesStats: previousTwentyMatchesStats,
       server: userRiotAccount?.server || null,
     },
     revalidate: 60,
