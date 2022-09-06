@@ -71,6 +71,9 @@ model User {
     twitter       String?
     youtube       String?
     twitch        String?
+
+    requestsSent          Match[] @relation("requestsSent")
+    requestsReceived      Match[] @relation("requestsReceived")
 }
 
 model Champion {
@@ -91,6 +94,16 @@ model LeagueAccount {
     wins          Int?
     losses        Int?
     @@unique([ign, server])
+}
+
+model Match { //better to name it "match" or similar
+    id                     String    @id @default(cuid())
+    requestInitiator       User     @relation(name: "requestsSent", fields: [requestInitiatorId], references: [id])
+    requestInitiatorId     String
+    requestTarget          User     @relation(name: "requestsReceived", fields: [requestTargetId], references: [id])
+    requestTargetId        String
+    pending                Boolean @default(true)
+    accepted               Boolean @default(false)
 }
 
 model VerificationToken {

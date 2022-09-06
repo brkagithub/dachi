@@ -219,7 +219,7 @@ const ProfilePage = (props: { user: User; rankedStats: LeagueAccount }) => {
             }
           }}
         >
-          Refresh my league stats
+          Refresh league stats
         </button>
         {meData && meData?.id ? (
           <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
