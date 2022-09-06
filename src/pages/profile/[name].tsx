@@ -23,6 +23,9 @@ type Server =
 
 const ProfilePage = (props: { user: User; rankedStats: LeagueAccount }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  const updateRiotAccountMutation = trpc.useMutation([
+    "riot.updateRiotAccount",
+  ]);
 
   if (!props.user) throw new Error("user doesnt exist");
 
@@ -205,6 +208,19 @@ const ProfilePage = (props: { user: User; rankedStats: LeagueAccount }) => {
               </div>
             </div>
           )}
+        <button
+          className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8"
+          onClick={() => {
+            if (props.rankedStats.ign && props.rankedStats.server) {
+              updateRiotAccountMutation.mutate({
+                ign: props.rankedStats.ign,
+                server: props.rankedStats.server,
+              });
+            }
+          }}
+        >
+          Refresh my league stats
+        </button>
         {meData && meData?.id ? (
           <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
