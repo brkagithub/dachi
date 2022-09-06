@@ -126,11 +126,11 @@ function UserEditForm({
   });
 
   const createRiotAccountMutation = trpc.useMutation([
-    "user.createRiotAccount",
+    "riot.createRiotAccount",
   ]);
 
   const updateRiotAccountMutation = trpc.useMutation([
-    "user.updateRiotAccount",
+    "riot.updateRiotAccount",
   ]);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {

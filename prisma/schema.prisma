@@ -85,6 +85,10 @@ model LeagueAccount {
     userId        String  @unique 
     ign           String?
     server        Server?
+    rank          String?
+    leaguePoints  Int?
+    wins          Int?
+    losses        Int?
     @@unique([ign, server])
 }
 
