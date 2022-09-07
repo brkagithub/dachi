@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
+import NextLink from "next/link";
 
 const Requests: NextPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -63,9 +64,12 @@ const Requests: NextPage = () => {
                   ></img>
                   <div className="p-4"></div>
                   <div className="flex flex-col">
-                    <div className="text-center">
-                      @{req.requestInitiator.name}
-                    </div>
+                    <NextLink href={`profile/${req.requestInitiator.name}`}>
+                      <div className="text-center underline cursor-pointer">
+                        @{req.requestInitiator.name}
+                      </div>
+                    </NextLink>
+
                     <div className="text-sm text-center">
                       {req.requestInitiator.firstName}
                     </div>
