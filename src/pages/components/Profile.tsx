@@ -14,8 +14,6 @@ const Profile = (props: {
     "riot.updateRiotAccount",
   ]);
 
-  if (!props.user) throw new Error("user doesnt exist");
-
   if (isLoading) {
     return <div>loading...</div>;
   }

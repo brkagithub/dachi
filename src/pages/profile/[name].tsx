@@ -11,12 +11,14 @@ const ProfilePage = (props: {
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
-  //if (!props.user) throw new Error("user doesnt exist");
+  if (!props.user) throw new Error("user doesnt exist");
 
   return (
     <>
       <Navbar me={meData} />
-      <Profile user={props.user} rankedStats={props.rankedStats} />
+      {props.user && (
+        <Profile user={props.user} rankedStats={props.rankedStats} />
+      )}
     </>
   );
 };
