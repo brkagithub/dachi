@@ -16,9 +16,7 @@ const ProfilePage = (props: {
   return (
     <>
       <Navbar me={meData} />
-      {props.user && (
-        <Profile user={props.user} rankedStats={props.rankedStats} />
-      )}
+      <Profile user={props.user} rankedStats={props.rankedStats} />
     </>
   );
 };
