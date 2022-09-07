@@ -2,6 +2,7 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
+import { User } from "@prisma/client";
 
 export const matchRouter = createRouter()
   .query("getPotentialMatch", {
@@ -42,6 +43,7 @@ export const matchRouter = createRouter()
       });
 
       const userRiotAccount = await prisma.leagueAccount.findFirst({
+        //if it wasnt find first we could use prisma include from relation queries
         where: { userId: userStillNotMatched?.id },
       });
 
@@ -81,5 +83,25 @@ export const matchRouter = createRouter()
           },
         });
       }
+    },
+  })
+  .query("getFriendRequests", {
+    async resolve({ ctx }) {
+      return await prisma.match.findMany({
+        where: {
+          requestTargetId: ctx.session?.user?.id,
+          pending: true,
+          accepted: false,
+        },
+        include: {
+          requestInitiator: {
+            select: {
+              name: true,
+              firstName: true,
+              image: true,
+            },
+          },
+        },
+      });
     },
   });

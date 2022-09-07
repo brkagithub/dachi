@@ -52,7 +52,7 @@ const Navbar: React.FC<{
   const navigation = [
     {
       name: "Friend requests",
-      href: "#",
+      href: "/requests",
       current: current == "friend requests",
     }, //change current in props
     { name: "Inbox", href: "#", current: current == "inbox" }, //change current in props
