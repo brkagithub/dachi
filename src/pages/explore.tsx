@@ -10,7 +10,11 @@ const Explore: NextPage = () => {
     "match.getPotentialMatch",
   ]);
   const utils = trpc.useContext();
-  const createMatchMutation = trpc.useMutation(["match.createMatch"]);
+  const createMatchMutation = trpc.useMutation(["match.createMatch"], {
+    onSuccess: () => {
+      utils.invalidateQueries(["match.getPotentialMatch"]);
+    },
+  });
 
   if (isLoading) {
     return <div className="text-center pt-4">Loading...</div>;
@@ -57,7 +61,6 @@ const Explore: NextPage = () => {
                       requestTargetId: userMatchedData.user.id,
                       addAsFriend: true,
                     });
-                    utils.invalidateQueries(["match.getPotentialMatch"]);
                   }
                 }}
               >
@@ -76,7 +79,6 @@ const Explore: NextPage = () => {
                       requestTargetId: userMatchedData.user.id,
                       addAsFriend: false,
                     });
-                    utils.invalidateQueries(["match.getPotentialMatch"]);
                   }
                 }}
               >

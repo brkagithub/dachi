@@ -96,11 +96,48 @@ export const matchRouter = createRouter()
         include: {
           requestInitiator: {
             select: {
+              id: true,
               name: true,
               firstName: true,
               image: true,
             },
           },
+        },
+      });
+    },
+  })
+  .mutation("acceptFriendReq", {
+    input: z.object({
+      requestInitiatorId: z.string(),
+      requestTargetId: z.string(),
+    }),
+    async resolve({ input }) {
+      await prisma.match.updateMany({
+        where: {
+          requestInitiatorId: input.requestInitiatorId,
+          requestTargetId: input.requestTargetId,
+        },
+        data: {
+          pending: false,
+          accepted: true,
+        },
+      });
+    },
+  })
+  .mutation("declineFriendReq", {
+    input: z.object({
+      requestInitiatorId: z.string(),
+      requestTargetId: z.string(),
+    }),
+    async resolve({ input }) {
+      await prisma.match.updateMany({
+        where: {
+          requestInitiatorId: input.requestInitiatorId,
+          requestTargetId: input.requestTargetId,
+        },
+        data: {
+          pending: false,
+          accepted: false,
         },
       });
     },
