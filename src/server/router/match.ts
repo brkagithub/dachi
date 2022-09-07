@@ -2,11 +2,10 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
-import { env } from "../../env/server.mjs";
 
 export const matchRouter = createRouter()
   .query("getPotentialMatch", {
-    async resolve({ ctx, input }) {
+    async resolve({ ctx }) {
       const alreadyMatchedInitiated = await prisma.match.findMany({
         where: {
           requestInitiatorId: ctx.session?.user?.id,
@@ -55,13 +54,32 @@ export const matchRouter = createRouter()
       requestTargetId: z.string(),
       addAsFriend: z.boolean(),
     }),
-    async resolve({ ctx, input }) {
-      await prisma.match.create({
-        data: {
-          requestInitiatorId: input.requestInitiatorId,
-          requestTargetId: input.requestTargetId,
-          pending: input.addAsFriend,
+    async resolve({ input }) {
+      const matchExists = await prisma.match.findMany({
+        where: {
+          OR: [
+            {
+              requestInitiatorId: input.requestInitiatorId,
+              requestTargetId: input.requestTargetId,
+            },
+            {
+              requestInitiatorId: input.requestTargetId,
+              requestTargetId: input.requestInitiatorId,
+            },
+          ],
         },
       });
+
+      if (matchExists.length > 0) {
+        return;
+      } else {
+        await prisma.match.create({
+          data: {
+            requestInitiatorId: input.requestInitiatorId,
+            requestTargetId: input.requestTargetId,
+            pending: input.addAsFriend,
+          },
+        });
+      }
     },
   });

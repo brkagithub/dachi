@@ -9,6 +9,7 @@ const Explore: NextPage = () => {
   const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery([
     "match.getPotentialMatch",
   ]);
+  const utils = trpc.useContext();
   const createMatchMutation = trpc.useMutation(["match.createMatch"]);
 
   if (isLoading) {
@@ -41,37 +42,47 @@ const Explore: NextPage = () => {
           ></ProfilePage>
         )}
         {userMatchedData && userMatchedData.user && (
-          <div className="max-w-3xl mx-auto px-2 pt-4 sm:px-6 lg:px-8 flex justify-between">
-            <button
-              type="button"
-              className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              onClick={() => {
-                if (userMatchedData.user?.id) {
-                  createMatchMutation.mutate({
-                    requestInitiatorId: meData.id,
-                    requestTargetId: userMatchedData.user.id,
-                    addAsFriend: true,
-                  });
-                }
-              }}
-            >
-              Add as friend
-            </button>
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-              onClick={() => {
-                if (userMatchedData.user?.id) {
-                  createMatchMutation.mutate({
-                    requestInitiatorId: meData.id,
-                    requestTargetId: userMatchedData.user.id,
-                    addAsFriend: false,
-                  });
-                }
-              }}
-            >
-              Ignore
-            </button>
+          <div className="md:absolute md:bottom-0 md:w-full">
+            <div className="max-w-3xl mx-auto px-2 pt-4 sm:px-6 lg:px-8 flex justify-between">
+              <button
+                type="button"
+                className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                onClick={() => {
+                  if (
+                    userMatchedData.user?.id &&
+                    !createMatchMutation.isLoading
+                  ) {
+                    createMatchMutation.mutate({
+                      requestInitiatorId: meData.id,
+                      requestTargetId: userMatchedData.user.id,
+                      addAsFriend: true,
+                    });
+                    utils.invalidateQueries(["match.getPotentialMatch"]);
+                  }
+                }}
+              >
+                Add as friend
+              </button>
+              <button
+                type="button"
+                className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                onClick={() => {
+                  if (
+                    userMatchedData.user?.id &&
+                    !createMatchMutation.isLoading
+                  ) {
+                    createMatchMutation.mutate({
+                      requestInitiatorId: meData.id,
+                      requestTargetId: userMatchedData.user.id,
+                      addAsFriend: false,
+                    });
+                    utils.invalidateQueries(["match.getPotentialMatch"]);
+                  }
+                }}
+              >
+                Ignore
+              </button>
+            </div>
           </div>
         )}
       </>
