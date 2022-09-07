@@ -6,7 +6,7 @@ import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
 
 const ProfilePage = (props: {
-  user: User | null | undefined;
+  user: User;
   rankedStats: LeagueAccount | null | undefined;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
