@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
-import ProfilePage from "./components/Profile";
+import ProfilePage from "../components/Profile";
 
 const Explore: NextPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -42,7 +42,7 @@ const Explore: NextPage = () => {
           ></ProfilePage>
         )}
         {userMatchedData && userMatchedData.user && (
-          <div className="md:absolute md:bottom-0 md:w-full">
+          <div className="md:absolute md:bottom-0 md:w-full pb-8">
             <div className="max-w-3xl mx-auto px-2 pt-4 sm:px-6 lg:px-8 flex justify-between">
               <button
                 type="button"

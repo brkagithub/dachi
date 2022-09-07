@@ -1,7 +1,7 @@
 import type { LeagueAccount, User } from "@prisma/client";
 import NextLink from "next/link";
-import { trpc } from "../../utils/trpc";
-import Navbar from "../../components/Navbar";
+import { trpc } from "../utils/trpc";
+import Navbar from "./Navbar";
 import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
 

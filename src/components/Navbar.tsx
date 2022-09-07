@@ -11,7 +11,7 @@ function classNames(...classes: string[]) {
 }
 
 type meType = inferQueryOutput<"user.me">;
-type currentType = "settings" | "find friends" | "inbox";
+type currentType = "settings" | "find friends" | "inbox" | "friend requests";
 
 const SearchBar = (props: { hidden: boolean }) => {
   const surroundingDivClass = props.hidden
@@ -50,6 +50,11 @@ const Navbar: React.FC<{
   me: meType | undefined;
 }> = ({ current, me }) => {
   const navigation = [
+    {
+      name: "Friend requests",
+      href: "#",
+      current: current == "friend requests",
+    }, //change current in props
     { name: "Inbox", href: "#", current: current == "inbox" }, //change current in props
     {
       name: "Find friends",

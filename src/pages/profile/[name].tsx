@@ -3,13 +3,13 @@ import { GetStaticProps } from "next";
 import Navbar from "../../components/Navbar";
 import { prisma } from "../../server/db/client";
 import { trpc } from "../../utils/trpc";
-import Profile from "../components/Profile";
+import Profile from "../../components/Profile";
 
 const ProfilePage = (props: {
   user: User;
   rankedStats: LeagueAccount | null | undefined;
 }) => {
-  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  const { data: meData } = trpc.useQuery(["user.me"]);
 
   if (!props.user) throw new Error("user doesnt exist");
 
