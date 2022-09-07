@@ -11,7 +11,7 @@ const ProfilePage = (props: {
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
 
-  if (!props.user) throw new Error("user doesnt exist");
+  //if (!props.user) throw new Error("user doesnt exist");
 
   return (
     <>
