@@ -1,6 +1,25 @@
+import { LeagueAccount, User } from "@prisma/client";
 import { GetStaticProps } from "next";
+import Navbar from "../../components/Navbar";
 import { prisma } from "../../server/db/client";
-import ProfilePage from "../components/ProfilePage";
+import { trpc } from "../../utils/trpc";
+import Profile from "../components/Profile";
+
+const ProfilePage = (props: {
+  user: User;
+  rankedStats: LeagueAccount | null | undefined;
+}) => {
+  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+
+  if (!props.user) throw new Error("user doesnt exist");
+
+  return (
+    <>
+      <Navbar me={meData} />
+      <Profile user={props.user} rankedStats={props.rankedStats} />
+    </>
+  );
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.name || typeof params.name !== "string") {

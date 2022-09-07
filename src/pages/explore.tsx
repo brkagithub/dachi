@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
-import ProfilePage from "./components/ProfilePage";
+import ProfilePage from "./components/Profile";
 
 const Explore: NextPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -20,7 +20,12 @@ const Explore: NextPage = () => {
   }
 
   if (userMatchedData && !userMatchedData.user) {
-    return <div>No more users on the platform left to match</div>;
+    return (
+      <>
+        <Navbar me={meData} />
+        <div>No more users on the platform left to match</div>
+      </>
+    );
   }
 
   console.log(userMatchedData);
@@ -28,6 +33,7 @@ const Explore: NextPage = () => {
   if (meData) {
     return (
       <>
+        <Navbar me={meData} />
         {userMatchedData && userMatchedData.user && (
           <ProfilePage
             user={userMatchedData?.user}
