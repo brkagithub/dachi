@@ -193,7 +193,7 @@ const Profile = (props: {
             </div>
           )}
         <button
-          className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8"
+          className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8"
           onClick={() => {
             if (props.rankedStats?.ign && props.rankedStats?.server) {
               updateRiotAccountMutation.mutate({
@@ -206,7 +206,7 @@ const Profile = (props: {
           Refresh league stats
         </button>
         {meData && meData?.id == props.user.id ? (
-          <button className="bg-gray-500 rounded-full p-2 cursor-pointer mt-8">
+          <button className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (
