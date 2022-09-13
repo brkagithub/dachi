@@ -11,6 +11,9 @@ function classNames(...classes: string[]) {
 }
 
 type meType = inferQueryOutput<"user.me">;
+
+export type { meType };
+
 type currentType = "settings" | "find friends" | "inbox" | "friend requests";
 
 const SearchBar = (props: { hidden: boolean }) => {
