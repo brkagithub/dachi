@@ -2,7 +2,6 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
-import { User } from "@prisma/client";
 
 export const matchRouter = createRouter()
   .query("getPotentialMatch", {
