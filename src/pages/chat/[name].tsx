@@ -35,8 +35,8 @@ const ChatComponent: React.FC<{
     { otherChatterName: recipientName },
   ]);
   const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery([
-    "chat.previousMessages",
-    { otherChatterName: recipientName },
+    "user.getImageByName",
+    { name: recipientName },
   ]);
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
 
@@ -46,7 +46,10 @@ const ChatComponent: React.FC<{
 
   useEffect(() => {
     //add new message to previous messages
-    if (newMsg) setReceivedMessages([...receivedMessages, newMsg]);
+    if (newMsg) {
+      setReceivedMessages([...receivedMessages, newMsg]);
+      messageEnd?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [newMsg]);
 
   useEffect(() => {
@@ -67,9 +70,7 @@ const ChatComponent: React.FC<{
     };
   }, [pusherClient]);
 
-  useEffect(() => {
-    messageEnd?.scrollIntoView({ behavior: "smooth" });
-  });
+  //useEffect(() => {}, [receivedMessages]);
 
   const messageTextIsEmpty = messageText.trim().length === 0;
 
@@ -81,22 +82,73 @@ const ChatComponent: React.FC<{
     return <div>messages loading...</div>;
   }
 
+  const meClassname = "self-end flex flex-col m-1";
+  const recipientClassname = "flex flex-col m-1";
+
   const messagesBeforeRender = previousMessages?.map((message) => {
     return (
-      <div>
-        {message.messageSenderName}
-        {" : "}
-        {message.body} {message.timestamp.toISOString().substring(0, 10)}
+      <div
+        className={
+          message.messageSenderName == recipientName
+            ? recipientClassname
+            : meClassname
+        }
+      >
+        <div className="flex">
+          {message.messageSenderName == recipientName ? (
+            <>
+              <img
+                className="h-8 w-8 rounded-full"
+                src={recipientImage!.image || ""}
+              ></img>
+              <div className="p-1"></div>
+            </>
+          ) : (
+            <></>
+          )}
+          <div
+            className={
+              message.messageSenderName == recipientName
+                ? "text-left p-2 rounded-3xl bg-gray-500 text-black"
+                : "text-right p-2 rounded-3xl bg-gray-300 text-black"
+            }
+          >
+            {message.body}
+          </div>
+        </div>
       </div>
     );
   });
 
   const messages = receivedMessages.map((message) => {
     return (
-      <div>
-        {message.senderName}
-        {" : "}
-        {message.body} {message.timestamp.toString().substring(0, 10)}
+      <div
+        className={
+          message.senderName == recipientName ? recipientClassname : meClassname
+        }
+      >
+        <div className="flex">
+          {message.senderName == recipientName ? (
+            <>
+              <img
+                className="h-8 w-8 rounded-full"
+                src={recipientImage!.image || ""}
+              ></img>
+              <div className="p-1"></div>
+            </>
+          ) : (
+            <></>
+          )}
+          <div
+            className={
+              message.senderName == recipientName
+                ? "text-left p-2 rounded-3xl bg-gray-500 text-black"
+                : "text-right p-2 rounded-3xl bg-gray-300 text-black"
+            }
+          >
+            {message.body}
+          </div>
+        </div>
       </div>
     );
   });
@@ -123,35 +175,35 @@ const ChatComponent: React.FC<{
   };
 
   return (
-    <div>
-      <div>
-        <div>{messagesBeforeRender}</div>
-        <div>{messages}</div>
+    <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex-grow h-screen">
+      <div className="overflow-y-scroll max-h-192">
+        <div className="flex flex-col">{messagesBeforeRender}</div>
+        <div className="flex flex-col">{messages}</div>
         <div
           ref={(element) => {
             messageEnd = element;
           }}
         ></div>
-        <form onSubmit={handleSubmit}>
-          <textarea
-            className="text-black"
-            ref={(element) => {
-              inputBox = element;
-            }}
-            value={messageText}
-            placeholder="Type a message..."
-            onChange={(e) => setMessageText(e.target.value)}
-            //@ts-ignore
-            onKeyPress={handleKeyPress}
-          ></textarea>
-          <button
-            disabled={messageTextIsEmpty}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-red-500"
-          >
-            Send message
-          </button>
-        </form>
       </div>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          className="text-black"
+          ref={(element) => {
+            inputBox = element;
+          }}
+          value={messageText}
+          placeholder="Type a message..."
+          onChange={(e) => setMessageText(e.target.value)}
+          //@ts-ignore
+          onKeyPress={handleKeyPress}
+        ></textarea>
+        <button
+          disabled={messageTextIsEmpty}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-red-500"
+        >
+          Send message
+        </button>
+      </form>
     </div>
   );
 };
@@ -170,10 +222,10 @@ const Chat: NextPage = () => {
 
   if (meData) {
     return (
-      <>
+      <div className="h-screen">
         <Navbar me={meData} />
         <ChatComponent me={meData} recipientName={query.name} />
-      </>
+      </div>
     );
   }
   return (
