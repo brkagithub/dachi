@@ -6,6 +6,7 @@ import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import Pusher from "pusher-js";
 import { useRouter } from "next/router";
 import { compareStrings } from "../../utils/compareStrings";
+import NextLink from "next/link";
 
 //todo: presence, persist msgs in database
 
@@ -35,7 +36,7 @@ const ChatComponent: React.FC<{
     { otherChatterName: recipientName },
   ]);
   const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery([
-    "user.getImageByName",
+    "user.getImageAndFirstNameByName",
     { name: recipientName },
   ]);
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
@@ -48,9 +49,19 @@ const ChatComponent: React.FC<{
     //add new message to previous messages
     if (newMsg) {
       setReceivedMessages([...receivedMessages, newMsg]);
-      messageEnd?.scrollIntoView({ behavior: "smooth" });
+      //messageEnd?.scrollIntoView({ behavior: "smooth" });
     }
   }, [newMsg]);
+
+  useEffect(() => {
+    //scroll when new msg is received and added
+    messageEnd?.scrollIntoView({ behavior: "smooth" });
+  }, [receivedMessages]);
+
+  useEffect(() => {
+    //maybe unneeded
+    setReceivedMessages([]);
+  }, [previousMessages]);
 
   useEffect(() => {
     if (!me || !me.name) return;
@@ -98,7 +109,7 @@ const ChatComponent: React.FC<{
           {message.messageSenderName == recipientName ? (
             <>
               <img
-                className="h-8 w-8 rounded-full"
+                className="h-10 w-10 rounded-full cursor-pointer"
                 src={recipientImage!.image || ""}
               ></img>
               <div className="p-1"></div>
@@ -130,10 +141,12 @@ const ChatComponent: React.FC<{
         <div className="flex">
           {message.senderName == recipientName ? (
             <>
-              <img
-                className="h-8 w-8 rounded-full"
-                src={recipientImage!.image || ""}
-              ></img>
+              <NextLink href={`/profile/${recipientName}`}>
+                <img
+                  className="h-8 w-8 rounded-full"
+                  src={recipientImage!.image || ""}
+                ></img>
+              </NextLink>
               <div className="p-1"></div>
             </>
           ) : (
@@ -176,7 +189,21 @@ const ChatComponent: React.FC<{
 
   return (
     <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex-grow h-screen">
-      <div className="overflow-y-scroll max-h-192">
+      <div className="flex">
+        <div className="p-2">
+          <NextLink href={`/profile/${recipientName}`}>
+            <img
+              className="h-8 w-8 rounded-full cursor-pointer"
+              src={recipientImage!.image || ""}
+            ></img>
+          </NextLink>
+        </div>
+        <div className="flex flex-col pl-4">
+          <div className="text-xl">{recipientImage!.firstName}</div>
+          <div className="text-sm text-gray-400">@{recipientName}</div>
+        </div>
+      </div>
+      <div className="overflow-y-scroll max-h-192 pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <div className="flex flex-col">{messagesBeforeRender}</div>
         <div className="flex flex-col">{messages}</div>
         <div
@@ -185,24 +212,19 @@ const ChatComponent: React.FC<{
           }}
         ></div>
       </div>
+      <div className="p-3"></div>
       <form onSubmit={handleSubmit}>
         <textarea
-          className="text-black"
+          className="text-black w-full rounded-3xl p-2"
           ref={(element) => {
             inputBox = element;
           }}
           value={messageText}
-          placeholder="Type a message..."
+          placeholder="Message..."
           onChange={(e) => setMessageText(e.target.value)}
           //@ts-ignore
           onKeyPress={handleKeyPress}
         ></textarea>
-        <button
-          disabled={messageTextIsEmpty}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-red-500"
-        >
-          Send message
-        </button>
       </form>
     </div>
   );
