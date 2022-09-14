@@ -14,28 +14,108 @@ const pusherServerClient = new PusherServer({
   cluster: env.PUSHER_APP_CLUSTER!,
 });
 
-export const chatRouter = createRouter().mutation("sendMessage", {
-  input: z.object({
-    messageBody: z.string(),
-    recipientName: z.string(),
-  }),
-  async resolve({ ctx, input }) {
-    if (!ctx.session || !ctx.session.user?.name) {
-      throw new TRPCError({
-        message: "You are not signed in",
-        code: "UNAUTHORIZED",
+export const chatRouter = createRouter()
+  .mutation("sendMessage", {
+    input: z.object({
+      messageBody: z.string(),
+      recipientName: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.name) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      let participants = compareStrings(
+        input.recipientName,
+        ctx.session.user?.name
+      );
+
+      const timestamp = new Date();
+
+      const sender = await prisma.user.findFirst({
+        where: {
+          name: ctx.session.user?.name,
+        },
       });
-    }
 
-    let participants = compareStrings(
-      input.recipientName,
-      ctx.session.user?.name
-    );
+      const receiver = await prisma.user.findFirst({
+        where: {
+          name: input.recipientName,
+        },
+      });
 
-    pusherServerClient.trigger(
-      `${participants[0]}-${participants[1]}`,
-      "message-sent",
-      { body: input.messageBody, senderName: ctx.session.user?.name }
-    );
-  },
-});
+      if (!receiver || !sender) return;
+
+      await prisma.message.create({
+        data: {
+          body: input.messageBody,
+          timestamp: timestamp,
+          messageSenderId: sender.id,
+          messageSenderName: sender.name!,
+          messageReceiverId: receiver.id,
+          messageReceiverName: receiver.name!,
+        },
+      });
+
+      pusherServerClient.trigger(
+        `${participants[0]}-${participants[1]}`,
+        "message-sent",
+        {
+          body: input.messageBody,
+          senderName: ctx.session.user?.name,
+          timestamp: timestamp,
+        }
+      );
+    },
+  })
+  .query("previousMessages", {
+    input: z.object({
+      otherChatterName: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      const otherChatter = await prisma.user.findFirst({
+        where: {
+          name: input.otherChatterName,
+        },
+      });
+
+      if (!otherChatter) return;
+
+      let lastDay = Date.now() - 24 * 60 * 60 * 1000;
+      let lastDayString = new Date(lastDay).toISOString();
+
+      const previousMessages = await prisma.message.findMany({
+        where: {
+          OR: [
+            {
+              messageReceiverId: ctx.session.user.id,
+              messageSenderId: otherChatter.id,
+              timestamp: { gte: lastDayString },
+            },
+            {
+              messageReceiverId: otherChatter.id,
+              messageSenderId: ctx.session.user.id,
+              timestamp: { gte: lastDayString },
+            },
+          ],
+        },
+        orderBy: [
+          {
+            timestamp: "asc",
+          },
+        ],
+      });
+
+      return previousMessages;
+    },
+  });

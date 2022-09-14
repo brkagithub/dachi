@@ -85,4 +85,17 @@ export const userRouter = createRouter()
 
       await prisma.champion.createMany({ data: champObjects });
     },
+  })
+  .query("getImageByName", {
+    input: z.object({ name: z.string() }),
+    async resolve({ input }) {
+      const user = await prisma.user.findFirst({
+        where: { name: input.name },
+        select: {
+          image: true,
+        },
+      });
+
+      return user;
+    },
   });

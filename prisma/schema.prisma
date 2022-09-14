@@ -74,6 +74,9 @@ model User {
 
     requestsSent          Match[] @relation("requestsSent")
     requestsReceived      Match[] @relation("requestsReceived")
+
+    messagesSent          Message[] @relation("messagesSent")
+    messagesReceived      Message[] @relation("messagesReceived")
 }
 
 model Champion {
@@ -96,7 +99,7 @@ model LeagueAccount {
     @@unique([ign, server])
 }
 
-model Match { //better to name it "match" or similar
+model Match { 
     id                     String    @id @default(cuid())
     requestInitiator       User     @relation(name: "requestsSent", fields: [requestInitiatorId], references: [id])
     requestInitiatorId     String
@@ -104,6 +107,18 @@ model Match { //better to name it "match" or similar
     requestTargetId        String
     pending                Boolean @default(true)
     accepted               Boolean @default(false)
+}
+
+model Message { 
+    id                     String    @id @default(cuid())
+    messageSender          User     @relation(name: "messagesSent", fields: [messageSenderId], references: [id])
+    messageSenderId        String
+    messageSenderName      String
+    messageReceiver        User     @relation(name: "messagesReceived", fields: [messageReceiverId], references: [id])
+    messageReceiverId      String
+    messageReceiverName    String
+    body                   String
+    timestamp              DateTime
 }
 
 model VerificationToken {

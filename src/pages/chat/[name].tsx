@@ -7,10 +7,12 @@ import Pusher from "pusher-js";
 import { useRouter } from "next/router";
 import { compareStrings } from "../../utils/compareStrings";
 
+//todo: presence, persist msgs in database
+
 type Message = {
   body: string;
   senderName: string;
-  //timestamp
+  timestamp: Date;
 };
 
 const ChatComponent: React.FC<{
@@ -28,26 +30,24 @@ const ChatComponent: React.FC<{
     []
   );
 
+  const { data: previousMessages, isLoading: messagesLoading } = trpc.useQuery([
+    "chat.previousMessages",
+    { otherChatterName: recipientName },
+  ]);
+  const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery([
+    "chat.previousMessages",
+    { otherChatterName: recipientName },
+  ]);
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
 
   const [messageText, setMessageText] = useState("");
-  const [receivedMessages, setReceivedMessages] = useState<Message[]>([]);
-  const [newMsg, setNewMsg] = useState<Message | null>(null);
+  const [receivedMessages, setReceivedMessages] = useState<Message[]>([]); //messages received between render and now
+  const [newMsg, setNewMsg] = useState<Message | null>(null); //hook to add new message to receivedMessages
 
   useEffect(() => {
     //add new message to previous messages
     if (newMsg) setReceivedMessages([...receivedMessages, newMsg]);
   }, [newMsg]);
-
-  const messageTextIsEmpty = messageText.trim().length === 0;
-
-  const messages = receivedMessages.map((message, index) => {
-    return (
-      <div>
-        {message.senderName}:{message.body}
-      </div>
-    );
-  });
 
   useEffect(() => {
     if (!me || !me.name) return;
@@ -69,6 +69,36 @@ const ChatComponent: React.FC<{
 
   useEffect(() => {
     messageEnd?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  const messageTextIsEmpty = messageText.trim().length === 0;
+
+  if (imageLoading) {
+    return <div>user data loading...</div>;
+  }
+
+  if (messagesLoading) {
+    return <div>messages loading...</div>;
+  }
+
+  const messagesBeforeRender = previousMessages?.map((message) => {
+    return (
+      <div>
+        {message.messageSenderName}
+        {" : "}
+        {message.body} {message.timestamp.toISOString().substring(0, 10)}
+      </div>
+    );
+  });
+
+  const messages = receivedMessages.map((message) => {
+    return (
+      <div>
+        {message.senderName}
+        {" : "}
+        {message.body} {message.timestamp.toString().substring(0, 10)}
+      </div>
+    );
   });
 
   const handleSubmit = (e: FormEvent) => {
@@ -95,7 +125,8 @@ const ChatComponent: React.FC<{
   return (
     <div>
       <div>
-        {messages}
+        <div>{messagesBeforeRender}</div>
+        <div>{messages}</div>
         <div
           ref={(element) => {
             messageEnd = element;
