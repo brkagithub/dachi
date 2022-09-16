@@ -85,14 +85,14 @@ export const chatRouter = createRouter()
 
       const otherChatter = await prisma.user.findFirst({
         where: {
-          name: input.otherChatterName,
+          name: { equals: input.otherChatterName, mode: "insensitive" },
         },
       });
 
       if (!otherChatter) return;
 
-      let lastDay = Date.now() - 24 * 60 * 60 * 1000;
-      let lastDayString = new Date(lastDay).toISOString();
+      /*let lastDay = Date.now() - 2 * 24 * 60 * 60 * 1000;
+      let lastDayString = new Date(lastDay).toISOString();*/
 
       const previousMessages = await prisma.message.findMany({
         where: {
@@ -100,12 +100,12 @@ export const chatRouter = createRouter()
             {
               messageReceiverId: ctx.session.user.id,
               messageSenderId: otherChatter.id,
-              timestamp: { gte: lastDayString },
+              //timestamp: { gte: lastDayString },
             },
             {
               messageReceiverId: otherChatter.id,
               messageSenderId: ctx.session.user.id,
-              timestamp: { gte: lastDayString },
+              //timestamp: { gte: lastDayString },
             },
           ],
         },

@@ -39,6 +39,7 @@ const ChatComponent: React.FC<{
     "user.getImageAndFirstNameByName",
     { name: recipientName },
   ]);
+
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
 
   const [messageText, setMessageText] = useState("");
@@ -104,8 +105,9 @@ const ChatComponent: React.FC<{
             ? recipientClassname
             : meClassname
         }
+        key={message.id}
       >
-        <div className="flex">
+        <div className="flex" key={message.id}>
           {message.messageSenderName == recipientName ? (
             <>
               <img
@@ -123,6 +125,7 @@ const ChatComponent: React.FC<{
                 ? "text-left p-2 rounded-3xl bg-gray-500 text-black"
                 : "text-right p-2 rounded-3xl bg-gray-300 text-black"
             }
+            key={message.id}
           >
             {message.body}
           </div>
@@ -131,19 +134,20 @@ const ChatComponent: React.FC<{
     );
   });
 
-  const messages = receivedMessages.map((message) => {
+  const messages = receivedMessages.map((message, index) => {
     return (
       <div
         className={
           message.senderName == recipientName ? recipientClassname : meClassname
         }
+        key={index + " "}
       >
         <div className="flex">
           {message.senderName == recipientName ? (
             <>
               <NextLink href={`/profile/${recipientName}`}>
                 <img
-                  className="h-8 w-8 rounded-full"
+                  className="h-10 w-10 rounded-full"
                   src={recipientImage!.image || ""}
                 ></img>
               </NextLink>
@@ -188,8 +192,8 @@ const ChatComponent: React.FC<{
   };
 
   return (
-    <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex-grow h-screen">
-      <div className="flex">
+    <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex flex-col">
+      <div className="flex pb-4">
         <div className="p-2">
           <NextLink href={`/profile/${recipientName}`}>
             <img
@@ -244,7 +248,7 @@ const Chat: NextPage = () => {
 
   if (meData) {
     return (
-      <div className="h-screen">
+      <div>
         <Navbar me={meData} />
         <ChatComponent me={meData} recipientName={query.name} />
       </div>
