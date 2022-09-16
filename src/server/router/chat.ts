@@ -71,6 +71,32 @@ export const chatRouter = createRouter()
       );
     },
   })
+  .mutation("userTyping", {
+    input: z.object({
+      recipientName: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.name) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      let participants = compareStrings(
+        input.recipientName,
+        ctx.session.user?.name
+      );
+
+      pusherServerClient.trigger(
+        `${participants[0]}-${participants[1]}`,
+        "user-typing",
+        {
+          username: ctx.session.user.name,
+        }
+      );
+    },
+  })
   .query("previousMessages", {
     input: z.object({
       otherChatterName: z.string(),

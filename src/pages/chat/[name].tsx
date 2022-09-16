@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar, { meType } from "../../components/Navbar";
-import React, { FormEvent, useEffect, useMemo, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Pusher from "pusher-js";
 import { useRouter } from "next/router";
 import { compareStrings } from "../../utils/compareStrings";
@@ -16,56 +16,48 @@ type Message = {
   timestamp: Date;
 };
 
+type TypingData = {
+  username: string;
+};
+
 const ChatComponent: React.FC<{
   me: meType | undefined;
   recipientName: string;
 }> = ({ me, recipientName }) => {
   let inputBox: HTMLElement | null = null;
-  let messageEnd: HTMLElement | null = null;
+  let messageEnd = useRef<HTMLElement>(null);
 
-  const pusherClient = useMemo(
-    () =>
-      new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-        cluster: "eu",
-      }),
-    []
+  const { data: previousMessages, isLoading: messagesLoading } = trpc.useQuery(
+    ["chat.previousMessages", { otherChatterName: recipientName }],
+    {
+      refetchOnWindowFocus: false,
+      onSuccess: () => {
+        setReceivedMessages([]);
+      },
+    }
   );
-
-  const { data: previousMessages, isLoading: messagesLoading } = trpc.useQuery([
-    "chat.previousMessages",
-    { otherChatterName: recipientName },
-  ]);
   const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery([
     "user.getImageAndFirstNameByName",
     { name: recipientName },
   ]);
 
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
+  const userTypingMutation = trpc.useMutation(["chat.userTyping"]);
 
   const [messageText, setMessageText] = useState("");
+  const [typing, setTyping] = useState("");
   const [receivedMessages, setReceivedMessages] = useState<Message[]>([]); //messages received between render and now
   const [newMsg, setNewMsg] = useState<Message | null>(null); //hook to add new message to receivedMessages
 
-  useEffect(() => {
-    //add new message to previous messages
-    if (newMsg) {
-      setReceivedMessages([...receivedMessages, newMsg]);
-      //messageEnd?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [newMsg]);
-
-  useEffect(() => {
-    //scroll when new msg is received and added
-    messageEnd?.scrollIntoView({ behavior: "smooth" });
-  }, [receivedMessages]);
-
-  useEffect(() => {
-    //maybe unneeded
-    setReceivedMessages([]);
-  }, [previousMessages]);
+  var clearInterval1 = 900; //0.9 seconds
+  var clearTimerId1: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
     if (!me || !me.name) return;
+
+    const pusherClient = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
+      cluster: "eu",
+    });
 
     let participants = compareStrings(recipientName, me?.name);
 
@@ -76,13 +68,33 @@ const ChatComponent: React.FC<{
       //should be object with msgBody, senderName
       setNewMsg(data);
     });
+    channel.bind("user-typing", (data: TypingData) => {
+      if (data.username !== me.name) {
+        var typingText = data.username + " is typing...";
+        setTyping(typingText);
+        clearTimeout(clearTimerId1);
+        clearTimerId1 = setTimeout(function () {
+          setTyping("");
+        }, clearInterval1);
+      }
+    });
 
     return () => {
       pusherClient.unsubscribe(`${participants[0]}-${participants[1]}`); //${props.chatterName}-${me?.name}
     };
-  }, [pusherClient]);
+  }, []);
 
-  //useEffect(() => {}, [receivedMessages]);
+  useEffect(() => {
+    messageEnd?.current?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  useEffect(() => {
+    //add new message to previous messages
+    if (newMsg) {
+      setReceivedMessages([...receivedMessages, newMsg]);
+      //messageEnd?.current?.scrollIntoView();
+    }
+  }, [newMsg]);
 
   const messageTextIsEmpty = messageText.trim().length === 0;
 
@@ -191,6 +203,20 @@ const ChatComponent: React.FC<{
     e.preventDefault();
   };
 
+  var canPublish = true;
+  var throttleTime = 200;
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessageText(e.target.value);
+    if (canPublish && me?.name && e.target.value) {
+      userTypingMutation.mutate({ recipientName: recipientName });
+      canPublish = false;
+      setTimeout(function () {
+        canPublish = true;
+      }, throttleTime);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex flex-col">
       <div className="flex pb-4">
@@ -209,11 +235,30 @@ const ChatComponent: React.FC<{
       </div>
       <div className="overflow-y-scroll max-h-192 pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <div className="flex flex-col">{messagesBeforeRender}</div>
+        <div>---------------------------------------</div>
         <div className="flex flex-col">{messages}</div>
+        {typing && (
+          <div className={recipientClassname}>
+            <div className="flex">
+              <img
+                className="h-10 w-10 rounded-full cursor-pointer"
+                src={recipientImage!.image || ""}
+              ></img>
+              <div className="p-1"></div>
+
+              <div
+                className={
+                  "text-left p-2 rounded-3xl bg-gray-500 text-black italic text-md"
+                }
+              >
+                {typing}
+              </div>
+            </div>
+          </div>
+        )}
         <div
-          ref={(element) => {
-            messageEnd = element;
-          }}
+          //@ts-ignore
+          ref={messageEnd}
         ></div>
       </div>
       <div className="p-3"></div>
@@ -225,7 +270,7 @@ const ChatComponent: React.FC<{
           }}
           value={messageText}
           placeholder="Message..."
-          onChange={(e) => setMessageText(e.target.value)}
+          onChange={(e) => handleTextChange(e)}
           //@ts-ignore
           onKeyPress={handleKeyPress}
         ></textarea>

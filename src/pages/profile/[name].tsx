@@ -16,7 +16,11 @@ const ProfilePage = (props: {
   return (
     <>
       <Navbar me={meData} />
-      <Profile user={props.user} rankedStats={props.rankedStats} />
+      <Profile
+        user={props.user}
+        rankedStats={props.rankedStats}
+        key={props.user.id}
+      />
     </>
   );
 };
