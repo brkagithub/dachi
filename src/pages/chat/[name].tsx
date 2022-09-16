@@ -24,7 +24,6 @@ const ChatComponent: React.FC<{
   me: meType | undefined;
   recipientName: string;
 }> = ({ me, recipientName }) => {
-  let inputBox: HTMLElement | null = null;
   let messageEnd = useRef<HTMLElement>(null);
 
   const { data: previousMessages, isLoading: messagesLoading } = trpc.useQuery(
@@ -46,6 +45,8 @@ const ChatComponent: React.FC<{
 
   const [messageText, setMessageText] = useState("");
   const [typing, setTyping] = useState("");
+  const [lastMessageSeen, setLastMessageSeen] = useState(false);
+  const [recipientOnline, setRecipientOnline] = useState(false);
   const [receivedMessages, setReceivedMessages] = useState<Message[]>([]); //messages received between render and now
   const [newMsg, setNewMsg] = useState<Message | null>(null); //hook to add new message to receivedMessages
 
@@ -67,6 +68,9 @@ const ChatComponent: React.FC<{
     channel.bind("message-sent", (data: Message) => {
       //should be object with msgBody, senderName
       setNewMsg(data);
+      if (channel.subscriptionCount != 2) {
+        setLastMessageSeen(false);
+      }
     });
     channel.bind("user-typing", (data: TypingData) => {
       if (data.username !== me.name) {
@@ -77,6 +81,13 @@ const ChatComponent: React.FC<{
           setTyping("");
         }, clearInterval1);
       }
+    });
+
+    channel.bind("pusher:subscription_count", (_: any) => {
+      if (channel.subscriptionCount == 2) {
+        setRecipientOnline(true);
+        setLastMessageSeen(true);
+      } else setRecipientOnline(false);
     });
 
     return () => {
@@ -113,7 +124,7 @@ const ChatComponent: React.FC<{
   const meClassname = "self-end flex flex-col m-1";
   const recipientClassname = "flex flex-col m-1";
 
-  const messagesBeforeRender = previousMessages?.map((message) => {
+  const messagesBeforeRender = previousMessages?.map((message, index) => {
     return (
       <div
         className={
@@ -146,6 +157,13 @@ const ChatComponent: React.FC<{
             {message.body}
           </div>
         </div>
+        {index == previousMessages.length - 1 &&
+          receivedMessages.length == 0 &&
+          message.messageSenderName != recipientName && (
+            <div className="text-sm text-right">
+              {lastMessageSeen || recipientOnline ? "👁" : "✈"}
+            </div>
+          )}
       </div>
     );
   });
@@ -182,6 +200,12 @@ const ChatComponent: React.FC<{
             {message.body}
           </div>
         </div>
+        {index == receivedMessages.length - 1 &&
+          message.senderName != recipientName && (
+            <div className="text-sm text-right">
+              {lastMessageSeen || recipientOnline ? "👁" : "✈"}
+            </div>
+          )}
       </div>
     );
   });
@@ -235,6 +259,11 @@ const ChatComponent: React.FC<{
         <div className="flex flex-col pl-4">
           <div className="text-xl">{recipientImage!.firstName}</div>
           <div className="text-sm text-gray-400">@{recipientName}</div>
+          {recipientOnline ? (
+            <div className="text-sm text-green-600">online</div>
+          ) : (
+            <div className="text-sm text-red-600">offline</div>
+          )}
         </div>
       </div>
       <div className="overflow-y-scroll max-h-192 pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
@@ -268,9 +297,6 @@ const ChatComponent: React.FC<{
       <form onSubmit={handleSubmit}>
         <textarea
           className="text-black w-full rounded-3xl p-2"
-          ref={(element) => {
-            inputBox = element;
-          }}
           value={messageText}
           placeholder="Message..."
           onChange={(e) => handleTextChange(e)}
