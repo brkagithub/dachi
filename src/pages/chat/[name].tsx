@@ -106,6 +106,10 @@ const ChatComponent: React.FC<{
     return <div>messages loading...</div>;
   }
 
+  if (!recipientImage) {
+    return <div>no such user exists</div>;
+  }
+
   const meClassname = "self-end flex flex-col m-1";
   const recipientClassname = "flex flex-col m-1";
 
@@ -235,7 +239,6 @@ const ChatComponent: React.FC<{
       </div>
       <div className="overflow-y-scroll max-h-192 pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <div className="flex flex-col">{messagesBeforeRender}</div>
-        <div>---------------------------------------</div>
         <div className="flex flex-col">{messages}</div>
         {typing && (
           <div className={recipientClassname}>

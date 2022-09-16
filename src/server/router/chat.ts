@@ -111,7 +111,7 @@ export const chatRouter = createRouter()
 
       const otherChatter = await prisma.user.findFirst({
         where: {
-          name: { equals: input.otherChatterName, mode: "insensitive" },
+          name: { equals: input.otherChatterName },
         },
       });
 
