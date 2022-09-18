@@ -107,7 +107,7 @@ export const matchRouter = createRouter()
   })
   .query("getFriends", {
     async resolve({ ctx }) {
-      return await prisma.match.findMany({
+      const allFriends = await prisma.match.findMany({
         where: {
           OR: [
             {
@@ -141,6 +141,37 @@ export const matchRouter = createRouter()
           },
         },
       });
+
+      const allFriendsWithLastMessage = await Promise.all(
+        allFriends.map(async (friend) => {
+          const lastMessage = await prisma.message.findMany({
+            select: {
+              body: true,
+              timestamp: true,
+            },
+            where: {
+              OR: [
+                {
+                  messageReceiverId: friend.requestInitiatorId,
+                  messageSenderId: friend.requestTargetId,
+                },
+                {
+                  messageReceiverId: friend.requestTargetId,
+                  messageSenderId: friend.requestInitiatorId,
+                },
+              ],
+            },
+            orderBy: {
+              timestamp: "desc",
+            },
+            take: 1,
+          });
+
+          return { ...friend, lastMessage };
+        })
+      );
+
+      return allFriendsWithLastMessage;
     },
   })
   .mutation("acceptFriendReq", {
