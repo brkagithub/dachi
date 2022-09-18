@@ -38,7 +38,8 @@ const Home: NextPage = () => {
     return (
       <>
         <Navbar me={meData}></Navbar>
-        <div className="max-w-2xl m-auto">
+        <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
+          <h1 className="text-2xl">My chats</h1>
           <div className="mx-auto pt-4">
             {friends?.map((req) => (
               <NextLink
@@ -47,11 +48,9 @@ const Home: NextPage = () => {
                     req.requestInitiator.name) ||
                   (req.requestTargetId != meData.id && req.requestTarget.name)
                 }`}
+                key={req.id}
               >
-                <div
-                  className="flex items-center cursor-pointer border rounded-3xl border-gray-400 p-2 mb-4"
-                  key={req.id}
-                >
+                <div className="flex items-center cursor-pointer border rounded-3xl border-gray-400 p-2 mb-4">
                   <div className="flex justify-start items-center w-full">
                     <img
                       className="h-16 w-16 rounded-full"
