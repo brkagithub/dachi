@@ -6,8 +6,9 @@ import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
   //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
-  /*const fillDb = trpc.useMutation(["user.fillDb"]);*/
+  const { data: meData, isLoading } = trpc.useQuery(["user.me"], {
+    refetchOnWindowFocus: false,
+  }); /*const fillDb = trpc.useMutation(["user.fillDb"]);*/
   if (isLoading) {
     return <div className="text-center pt-4">Loading...</div>;
   }

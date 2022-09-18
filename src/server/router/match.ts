@@ -105,6 +105,44 @@ export const matchRouter = createRouter()
       });
     },
   })
+  .query("getFriends", {
+    async resolve({ ctx }) {
+      return await prisma.match.findMany({
+        where: {
+          OR: [
+            {
+              requestTargetId: ctx.session?.user?.id,
+              pending: false,
+              accepted: true,
+            },
+            {
+              requestInitiatorId: ctx.session?.user?.id,
+              pending: false,
+              accepted: true,
+            },
+          ],
+        },
+        include: {
+          requestInitiator: {
+            select: {
+              id: true,
+              name: true,
+              firstName: true,
+              image: true,
+            },
+          },
+          requestTarget: {
+            select: {
+              id: true,
+              name: true,
+              firstName: true,
+              image: true,
+            },
+          },
+        },
+      });
+    },
+  })
   .mutation("acceptFriendReq", {
     input: z.object({
       requestInitiatorId: z.string(),

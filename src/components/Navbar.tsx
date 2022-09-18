@@ -58,7 +58,7 @@ const Navbar: React.FC<{
       href: "/requests",
       current: current == "friend requests",
     }, //change current in props
-    { name: "Inbox", href: "#", current: current == "inbox" }, //change current in props
+    { name: "Inbox", href: "/chat", current: current == "inbox" }, //change current in props
     {
       name: "Find friends",
       href: "/explore",

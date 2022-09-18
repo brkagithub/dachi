@@ -5,9 +5,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { LeagueAccount } from "@prisma/client";
 
 const EditProfilePage = () => {
-  const { data: meData, isLoading } = trpc.useQuery([
-    "user.meFullInfoWithRiotAccounts",
-  ]);
+  const { data: meData, isLoading } = trpc.useQuery(
+    ["user.meFullInfoWithRiotAccounts"],
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   if (isLoading) {
     return <div>loading...</div>;
@@ -93,9 +96,12 @@ function UserEditForm({
   accounts: LeagueAccount[];
 }) {
   const [mutateErrored, setMutateErrored] = useState(true);
-  const { data: allChamps, isLoading: allChampsLoading } = trpc.useQuery([
-    "riot.allChampNames",
-  ]);
+  const { data: allChamps, isLoading: allChampsLoading } = trpc.useQuery(
+    ["riot.allChampNames"],
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const {
     formState,

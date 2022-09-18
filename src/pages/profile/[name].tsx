@@ -9,7 +9,9 @@ const ProfilePage = (props: {
   user: User;
   rankedStats: LeagueAccount | null | undefined;
 }) => {
-  const { data: meData } = trpc.useQuery(["user.me"]);
+  const { data: meData } = trpc.useQuery(["user.me"], {
+    refetchOnWindowFocus: false,
+  });
 
   if (!props.user) throw new Error("user doesnt exist");
 
