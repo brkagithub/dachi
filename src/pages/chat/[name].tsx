@@ -35,10 +35,12 @@ const ChatComponent: React.FC<{
       },
     }
   );
-  const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery([
-    "user.getImageAndFirstNameByName",
-    { name: recipientName },
-  ]);
+  const { data: recipientImage, isLoading: imageLoading } = trpc.useQuery(
+    ["user.getImageAndFirstNameByName", { name: recipientName }],
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const sendMessageMutation = trpc.useMutation(["chat.sendMessage"]);
   const userTypingMutation = trpc.useMutation(["chat.userTyping"]);
@@ -137,10 +139,12 @@ const ChatComponent: React.FC<{
         <div className="flex" key={message.id}>
           {message.messageSenderName == recipientName ? (
             <>
-              <img
-                className="h-10 w-10 rounded-full cursor-pointer"
-                src={recipientImage!.image || ""}
-              ></img>
+              <NextLink href={`/profile/${recipientName}`}>
+                <img
+                  className="h-10 w-10 rounded-full cursor-pointer"
+                  src={recipientImage!.image || ""}
+                ></img>
+              </NextLink>
               <div className="p-1"></div>
             </>
           ) : (
@@ -149,12 +153,19 @@ const ChatComponent: React.FC<{
           <div
             className={
               message.messageSenderName == recipientName
-                ? "text-left p-2 rounded-3xl bg-gray-500 text-black"
-                : "text-right p-2 rounded-3xl bg-gray-300 text-black"
+                ? "text-left pt-2 pb-2 rounded-3xl bg-gray-500 text-black flex"
+                : "text-right pt-2 pb-2 rounded-3xl bg-gray-300 text-black flex"
             }
             key={message.id}
           >
-            {message.body}
+            <div className="max-w-xxs sm:max-w-xs md:max-w-sm lg:max-w-md break-words pl-3 pr-3 text-left">
+              {message.body}
+            </div>
+            <div className="flex">
+              <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
+                {message.timestamp.toISOString().substring(11, 16)}
+              </div>
+            </div>
           </div>
         </div>
         {index == previousMessages.length - 1 &&
@@ -181,7 +192,7 @@ const ChatComponent: React.FC<{
             <>
               <NextLink href={`/profile/${recipientName}`}>
                 <img
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full cursor-pointer"
                   src={recipientImage!.image || ""}
                 ></img>
               </NextLink>
@@ -193,11 +204,18 @@ const ChatComponent: React.FC<{
           <div
             className={
               message.senderName == recipientName
-                ? "text-left p-2 rounded-3xl bg-gray-500 text-black"
-                : "text-right p-2 rounded-3xl bg-gray-300 text-black"
+                ? "text-left pt-2 pb-2 rounded-3xl bg-gray-500 text-black flex"
+                : "text-right pt-2 pb-2 rounded-3xl bg-gray-300 text-black flex"
             }
           >
-            {message.body}
+            <div className="max-w-xxs sm:max-w-xs md:max-w-sm lg:max-w-md break-words pl-3 pr-3 text-left">
+              {message.body}
+            </div>
+            <div className="flex">
+              <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
+                {message.timestamp.toString().substring(11, 16)}
+              </div>
+            </div>
           </div>
         </div>
         {index == receivedMessages.length - 1 &&
@@ -246,7 +264,7 @@ const ChatComponent: React.FC<{
   };
 
   return (
-    <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2 flex flex-col">
+    <div className="max-w-2xl mx-auto pt-2 pr-4 pl-4 md:pl-2 md:pr-2 flex flex-col">
       <div className="flex pb-4">
         <div className="p-2">
           <NextLink href={`/profile/${recipientName}`}>
@@ -296,7 +314,7 @@ const ChatComponent: React.FC<{
       <div className="p-3"></div>
       <form onSubmit={handleSubmit}>
         <textarea
-          className="text-black w-full rounded-3xl p-2"
+          className="text-black w-full rounded-3xl p-2 mb-6"
           value={messageText}
           placeholder="Message..."
           onChange={(e) => handleTextChange(e)}
@@ -309,7 +327,9 @@ const ChatComponent: React.FC<{
 };
 
 const Chat: NextPage = () => {
-  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  const { data: meData, isLoading } = trpc.useQuery(["user.me"], {
+    refetchOnWindowFocus: false,
+  });
   const { query } = useRouter();
 
   if (!query.name || typeof query.name !== "string") {

@@ -6,6 +6,9 @@ module.exports = {
       spacing: {
         192: "75vh",
       },
+      maxWidth: {
+        xxs: "14rem",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar")],
