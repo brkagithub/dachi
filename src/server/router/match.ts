@@ -171,7 +171,20 @@ export const matchRouter = createRouter()
         })
       );
 
-      return allFriendsWithLastMessage;
+      return allFriendsWithLastMessage.sort((friend1, friend2) => {
+        if (!friend1.lastMessage || !friend1.lastMessage[0]) {
+          return 1;
+        }
+        if (!friend2.lastMessage || !friend2.lastMessage[0]) {
+          return -1;
+        }
+
+        if (
+          friend1.lastMessage[0]?.timestamp > friend2.lastMessage[0]?.timestamp
+        ) {
+          return 1;
+        } else return -1;
+      });
     },
   })
   .mutation("acceptFriendReq", {
