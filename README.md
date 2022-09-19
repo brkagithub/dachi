@@ -134,3 +134,4 @@ TODO:
 - separate page to verify riot accounts
 - some queries need to be only callable when logged in - make those queries secure
 - support multiple riot accounts instead of one
+- fix bug with refresh league stats changing the acc to flex from soloq
