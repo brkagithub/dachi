@@ -180,7 +180,7 @@ export const matchRouter = createRouter()
         }
 
         if (
-          friend1.lastMessage[0]?.timestamp > friend2.lastMessage[0]?.timestamp
+          friend1.lastMessage[0]?.timestamp < friend2.lastMessage[0]?.timestamp
         ) {
           return 1;
         } else return -1;
