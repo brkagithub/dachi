@@ -35,6 +35,16 @@ export const chatRouter = createRouter()
 
       const timestamp = new Date();
 
+      pusherServerClient.trigger(
+        `${participants[0]}-${participants[1]}`,
+        "message-sent",
+        {
+          body: input.messageBody,
+          senderName: ctx.session.user?.name,
+          timestamp: timestamp,
+        }
+      );
+
       const sender = await prisma.user.findFirst({
         where: {
           name: ctx.session.user?.name,
@@ -59,16 +69,6 @@ export const chatRouter = createRouter()
           messageReceiverName: receiver.name!,
         },
       });
-
-      pusherServerClient.trigger(
-        `${participants[0]}-${participants[1]}`,
-        "message-sent",
-        {
-          body: input.messageBody,
-          senderName: ctx.session.user?.name,
-          timestamp: timestamp,
-        }
-      );
     },
   })
   .mutation("userTyping", {
