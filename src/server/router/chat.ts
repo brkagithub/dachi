@@ -117,6 +117,9 @@ export const chatRouter = createRouter()
         where: {
           name: { equals: input.otherChatterName },
         },
+        select: {
+          id: true,
+        },
       });
 
       if (!otherChatter) return;
