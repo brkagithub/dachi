@@ -86,7 +86,7 @@ const ChatComponent: React.FC<{
     });
 
     channel.bind("pusher:subscription_count", (_: any) => {
-      if (channel.subscriptionCount == 2) {
+      if (channel.subscriptionCount && channel.subscriptionCount >= 2) {
         setRecipientOnline(true);
         setLastMessageSeen(true);
       } else setRecipientOnline(false);
@@ -104,6 +104,7 @@ const ChatComponent: React.FC<{
   useEffect(() => {
     //add new message to previous messages
     if (newMsg) {
+      console.log("newMsg effect ran, newMsg: ", newMsg);
       setReceivedMessages([...receivedMessages, newMsg]);
       //messageEnd?.current?.scrollIntoView();
     }
