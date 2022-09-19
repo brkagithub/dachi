@@ -49,6 +49,10 @@ export const chatRouter = createRouter()
         where: {
           name: ctx.session.user?.name,
         },
+        select: {
+          id: true,
+          name: true,
+        },
       });
 
       const receiver = await prisma.user.findFirst({
