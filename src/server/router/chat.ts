@@ -19,6 +19,7 @@ export const chatRouter = createRouter()
     input: z.object({
       messageBody: z.string(),
       recipientName: z.string(),
+      messageSeen: z.boolean(),
     }),
     async resolve({ ctx, input }) {
       if (!ctx.session || !ctx.session.user?.name) {
@@ -71,6 +72,7 @@ export const chatRouter = createRouter()
           messageSenderName: sender.name!,
           messageReceiverId: receiver.id,
           messageReceiverName: receiver.name!,
+          messageSeen: input.messageSeen,
         },
       });
     },
@@ -149,6 +151,34 @@ export const chatRouter = createRouter()
         ],
       });
 
+      await prisma.message.updateMany({
+        where: {
+          messageReceiverId: { equals: ctx.session.user.id },
+          messageSenderId: { equals: otherChatter.id },
+          messageSeen: false,
+        },
+        data: {
+          messageSeen: true,
+        },
+      });
+
       return previousMessages;
+    },
+  })
+  .query("numberOfUnseenMessagesTotal", {
+    async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      return await prisma.message.count({
+        where: {
+          messageReceiverId: { equals: ctx.session.user.id },
+          messageSeen: false,
+        },
+      });
     },
   });

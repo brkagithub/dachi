@@ -119,6 +119,7 @@ model Message {
     messageReceiverName    String
     body                   String
     timestamp              DateTime
+    messageSeen            Boolean  @default(false)
 }
 
 model VerificationToken {

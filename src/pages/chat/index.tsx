@@ -83,11 +83,20 @@ const Home: NextPage = () => {
                             : "start a conversation..."}
                         </div>
                       </div>
-                      <div className="pr-1 text-sm">
-                        {friend.lastMessage[0]?.timestamp
-                          .toISOString()
-                          .substring(11, 16)}
-                      </div>
+                      {friend.lastMessage[0]?.timestamp && (
+                        <div className="flex flex-col items-center">
+                          <div className="pr-1 text-sm pb-1">
+                            {friend.lastMessage[0]?.timestamp
+                              .toISOString()
+                              .substring(11, 16)}
+                          </div>
+                          {friend.numUnseenMsgs > 0 && (
+                            <div className="flex items-center justify-center rounded-full bg-red-600 w-6 h-6">
+                              {friend.numUnseenMsgs}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

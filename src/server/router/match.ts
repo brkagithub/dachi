@@ -105,6 +105,17 @@ export const matchRouter = createRouter()
       });
     },
   })
+  .query("numberFriendRequests", {
+    async resolve({ ctx }) {
+      return await prisma.match.count({
+        where: {
+          requestTargetId: ctx.session?.user?.id,
+          pending: true,
+          accepted: false,
+        },
+      });
+    },
+  })
   .query("getFriends", {
     async resolve({ ctx }) {
       const allFriends = await prisma.match.findMany({
@@ -167,7 +178,20 @@ export const matchRouter = createRouter()
             take: 1,
           });
 
-          return { ...friend, lastMessage };
+          const numUnseenMsgs = await prisma.message.count({
+            where: {
+              messageReceiverId: { equals: ctx.session?.user?.id },
+              messageSenderId: {
+                equals:
+                  ctx.session?.user?.id == friend.requestInitiatorId
+                    ? friend.requestTargetId
+                    : friend.requestInitiatorId,
+              },
+              messageSeen: false,
+            },
+          });
+
+          return { ...friend, lastMessage, numUnseenMsgs };
         })
       );
 

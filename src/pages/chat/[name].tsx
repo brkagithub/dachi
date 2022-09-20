@@ -62,7 +62,7 @@ const ChatComponent: React.FC<{
       cluster: "eu",
     });
 
-    let participants = compareStrings(recipientName, me?.name);
+    let participants = compareStrings(recipientName, me.name);
 
     const channel = pusherClient.subscribe(
       `${participants[0]}-${participants[1]}`
@@ -104,7 +104,6 @@ const ChatComponent: React.FC<{
   useEffect(() => {
     //add new message to previous messages
     if (newMsg) {
-      console.log("newMsg effect ran, newMsg: ", newMsg);
       setReceivedMessages([...receivedMessages, newMsg]);
       //messageEnd?.current?.scrollIntoView();
     }
@@ -234,6 +233,7 @@ const ChatComponent: React.FC<{
     sendMessageMutation.mutate({
       messageBody: messageText,
       recipientName: recipientName,
+      messageSeen: recipientOnline == true,
     });
     setMessageText("");
   };
@@ -245,6 +245,7 @@ const ChatComponent: React.FC<{
     sendMessageMutation.mutate({
       messageBody: messageText,
       recipientName: recipientName,
+      messageSeen: recipientOnline == true,
     });
     setMessageText("");
     e.preventDefault();

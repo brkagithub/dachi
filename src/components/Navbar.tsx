@@ -52,6 +52,13 @@ const Navbar: React.FC<{
   current?: currentType;
   me: meType | undefined;
 }> = ({ current, me }) => {
+  const { data: numUnseenMsgs, isLoading: isLoadingUnseenMsgs } = trpc.useQuery(
+    ["chat.numberOfUnseenMessagesTotal"]
+  );
+
+  const { data: numFriendRequests, isLoading: isLoadingNumFriendRequests } =
+    trpc.useQuery(["match.numberFriendRequests"]);
+
   const navigation = [
     {
       name: "Friend requests",
@@ -104,21 +111,65 @@ const Navbar: React.FC<{
                 <SearchBar hidden={true} />
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {navigation.map((item) =>
+                      item.name == "Inbox" &&
+                      numUnseenMsgs &&
+                      numUnseenMsgs > 0 ? (
+                        <div className="flex items-center" key={item.name}>
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </a>
+                          <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                            {numUnseenMsgs}
+                          </div>
+                        </div>
+                      ) : item.name == "Friend requests" &&
+                        numFriendRequests &&
+                        numFriendRequests > 0 ? (
+                        <div className="flex items-center" key={item.name}>
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </a>
+                          <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                            {numFriendRequests}
+                          </div>
+                        </div>
+                      ) : (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </a>
+                      )
+                    )}
                     {!me ? (
                       <button
                         onClick={() => {
@@ -198,22 +249,66 @@ const Navbar: React.FC<{
 
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
+              {navigation.map((item) =>
+                item.name == "Inbox" && numUnseenMsgs && numUnseenMsgs > 0 ? (
+                  <div className="flex items-center text-left" key={item.name}>
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                    <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                      {numUnseenMsgs}
+                    </div>
+                  </div>
+                ) : item.name == "Friend requests" &&
+                  numFriendRequests &&
+                  numFriendRequests > 0 ? (
+                  <div className="flex items-center text-left" key={item.name}>
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                    <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                      {numFriendRequests}
+                    </div>
+                  </div>
+                ) : (
+                  <Disclosure.Button
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    className={classNames(
+                      item.current
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "block px-3 py-2 rounded-md text-base font-medium"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                )
+              )}
               <Disclosure.Button
                 as="a"
                 onClick={() => {
