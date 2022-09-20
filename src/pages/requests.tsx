@@ -65,7 +65,7 @@ const Requests: NextPage = () => {
                   <div className="p-4"></div>
                   <div className="flex flex-col">
                     <NextLink href={`profile/${req.requestInitiator.name}`}>
-                      <div className="text-center underline cursor-pointer">
+                      <div className="underline cursor-pointer">
                         @{req.requestInitiator.name}
                       </div>
                     </NextLink>
