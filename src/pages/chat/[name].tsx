@@ -287,7 +287,7 @@ const ChatComponent: React.FC<{
           </div>
         </div>
         <div>
-          <div className="overflow-y-scroll max-h-[calc(100vh-16rem)] pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+          <div className="overflow-y-scroll h-[calc(100vh-16rem)] pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
             <div className="flex flex-col">{messagesBeforeRender}</div>
             <div className="flex flex-col">{messages}</div>
             {typing && (
@@ -314,7 +314,7 @@ const ChatComponent: React.FC<{
               ref={messageEnd}
             ></div>
           </div>
-          <form onSubmit={handleSubmit} className="pt-3 pb-3">
+          <form onSubmit={handleSubmit} className="pt-3 pb-3 pr-1 pl-1">
             <textarea
               className="text-black w-full rounded-3xl p-2 mb-2 h-16"
               value={messageText}
