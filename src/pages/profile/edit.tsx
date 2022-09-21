@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import { trpc } from "../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LeagueAccount } from "@prisma/client";
+//import cloudinary from "cloudinary";
 
 const EditProfilePage = () => {
   const { data: meData, isLoading } = trpc.useQuery(
@@ -48,6 +49,7 @@ const EditProfilePage = () => {
               instagram: meData.instagram || "",
               twitch: meData.twitch || "",
               youtube: meData.youtube || "",
+              profilePicture: null,
             }}
             accounts={meData.accounts}
           />
@@ -86,6 +88,7 @@ type Inputs = {
   instagram: string;
   twitch: string;
   youtube: string;
+  profilePicture: FileList | null;
 };
 
 function UserEditForm({
@@ -139,7 +142,47 @@ function UserEditForm({
     "riot.updateRiotAccount",
   ]);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const changeProfilePicURL = trpc.useMutation([
+    "user.changeProfilePictureURL",
+  ]);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (data.profilePicture && data.profilePicture.length > 0) {
+      const formData = new FormData();
+
+      //weird error downlevelIteration
+      //@ts-ignore
+      for (const file of data.profilePicture) {
+        formData.append("file", file); //there will be only one
+        formData.append("upload_preset", "getbrkauploads");
+        formData.append("cloud_name", "dhupiskro");
+      }
+
+      /*if (data.profilePicture[0] && data.profilePicture[0].name) {
+        cloudinary.v2.uploader.upload(
+          data.profilePicture[0]?.name,
+          { upload_preset: "my_preset" },
+          (error, result) => {
+            console.log(result, error);
+          }
+        );
+      }*/
+
+      const dataReturned = await fetch(
+        "https://api.cloudinary.com/v1_1/dhupiskro/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      ).then((r) => r.json());
+
+      console.log(dataReturned);
+
+      if (dataReturned.secure_url) {
+        changeProfilePicURL.mutate({ newUrl: dataReturned.secure_url });
+      }
+    }
+
     updateProfileMutation.mutate({
       name: data.name,
       firstName: data.firstName,
@@ -364,6 +407,14 @@ function UserEditForm({
       <input
         className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         {...register("youtube")}
+      />
+
+      <div className="pt-4" />
+      <span className="px-1">Profile picture</span>
+      <input
+        type="file"
+        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-400"
+        {...register("profilePicture")}
       />
 
       <div className="pt-4" />

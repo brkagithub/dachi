@@ -3,6 +3,7 @@ import { createRouter } from "./context";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
 import { DDragon } from "@fightmegg/riot-api";
+import { TRPCError } from "@trpc/server";
 
 interface champObject {
   id: number;
@@ -98,5 +99,21 @@ export const userRouter = createRouter()
       });
 
       return user;
+    },
+  })
+  .mutation("changeProfilePictureURL", {
+    input: z.object({ newUrl: z.string() }),
+    async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      await prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: { image: input.newUrl },
+      });
     },
   });
