@@ -1,7 +1,6 @@
 import type { LeagueAccount, User } from "@prisma/client";
 import NextLink from "next/link";
 import { trpc } from "../utils/trpc";
-import Navbar from "./Navbar";
 import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
 
@@ -26,6 +25,20 @@ const Profile = (props: {
   if (props.user.role == "Mid") userRole = "MIDDLE";
   if (props.user.role == "ADC") userRole = "ADC";
   if (props.user.role == "Support") userRole = "SUPPORT";
+
+  const serverMap = new Map<string, string>([
+    ["eun1", "EUNE"],
+    ["euw1", "EUW"],
+    ["na1", "NA"],
+    ["la1", "LAN"],
+    ["la2", "LAS"],
+    ["kr", "KR"],
+    ["jp1", "JP"],
+    ["br1", "BR"],
+    ["oc1", "OCE"],
+    ["ru", "RU"],
+    ["tr1", "TR"],
+  ]);
 
   return (
     <>
@@ -158,7 +171,10 @@ const Profile = (props: {
           props.rankedStats.losses && (
             <div>
               <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
-                {props.rankedStats.ign} {`(${props.rankedStats.server})`}
+                {props.rankedStats.ign}{" "}
+                {`(${serverMap.get(
+                  props.rankedStats.server ? props.rankedStats.server : ""
+                )})`}
               </div>
               <div className="flex justify-between items-center pb-2">
                 <img
