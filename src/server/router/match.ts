@@ -2,6 +2,7 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const matchRouter = createRouter()
   .query("getPotentialMatch", {
@@ -107,6 +108,13 @@ export const matchRouter = createRouter()
   })
   .query("numberFriendRequests", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       return await prisma.match.count({
         where: {
           requestTargetId: ctx.session?.user?.id,

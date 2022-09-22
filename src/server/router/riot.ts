@@ -47,18 +47,24 @@ export const riotRouter = createRouter()
         summonerId: summoner.id,
       });
 
-      await prisma.leagueAccount.create({
-        data: {
-          ign: input.ign,
-          server: input.server,
-          userId: ctx.session!.user!.id, //make this query callable only when logged
-          rank: account[0]?.rank,
-          tier: account[0]?.tier,
-          leaguePoints: account[0]?.leaguePoints,
-          wins: account[0]?.wins,
-          losses: account[0]?.losses,
-        },
-      });
+      const soloQAccount = account.find(
+        (acc) => acc.queueType == "RANKED_SOLO_5x5"
+      );
+
+      if (soloQAccount) {
+        await prisma.leagueAccount.create({
+          data: {
+            ign: input.ign,
+            server: input.server,
+            userId: ctx.session!.user!.id, //make this query callable only when logged
+            rank: soloQAccount.rank,
+            tier: soloQAccount.tier,
+            leaguePoints: soloQAccount.leaguePoints,
+            wins: soloQAccount.wins,
+            losses: soloQAccount.losses,
+          },
+        });
+      }
     },
   })
   .mutation("updateRiotAccount", {
@@ -78,7 +84,7 @@ export const riotRouter = createRouter()
         "tr1",
       ]),
     }),
-    async resolve({ ctx, input }) {
+    async resolve({ input }) {
       const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
       const summoner = await rAPI.summoner.getBySummonerName({
@@ -95,16 +101,27 @@ export const riotRouter = createRouter()
         summonerId: summoner.id,
       });
 
-      await prisma.leagueAccount.update({
-        where: { userId: ctx.session?.user?.id },
-        data: {
-          ...input,
-          rank: account[0]?.rank,
-          tier: account[0]?.tier,
-          leaguePoints: account[0]?.leaguePoints,
-          wins: account[0]?.wins,
-          losses: account[0]?.losses,
-        },
-      });
+      const soloQAccount = account.find(
+        (acc) => acc.queueType == "RANKED_SOLO_5x5"
+      );
+
+      if (soloQAccount) {
+        await prisma.leagueAccount.update({
+          where: {
+            ign_server: {
+              ign: input.ign,
+              server: input.server,
+            },
+          },
+          data: {
+            ...input,
+            rank: soloQAccount.rank,
+            tier: soloQAccount.tier,
+            leaguePoints: soloQAccount.leaguePoints,
+            wins: soloQAccount.wins,
+            losses: soloQAccount.losses,
+          },
+        });
+      }
     },
   });
