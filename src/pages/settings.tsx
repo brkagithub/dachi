@@ -7,6 +7,7 @@ import { LeagueAccount } from "@prisma/client";
 
 const SettingsPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+
   const { data: myFilter, isLoading: isLoadingFilter } = trpc.useQuery(
     ["user.getFilterForUser"],
     {

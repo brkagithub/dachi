@@ -64,11 +64,23 @@ export const riotRouter = createRouter()
             losses: soloQAccount.losses,
           },
         });
+
+        await prisma.user.update({
+          where: {
+            id: ctx.session!.user!.id,
+          },
+          data: {
+            //@ts-ignore
+            tier: soloQAccount.tier,
+            server: input.server,
+          },
+        });
       }
     },
   })
   .mutation("updateRiotAccount", {
     input: z.object({
+      userId: z.string(),
       ign: z.string(),
       server: z.enum([
         "eun1",
@@ -84,7 +96,7 @@ export const riotRouter = createRouter()
         "tr1",
       ]),
     }),
-    async resolve({ input }) {
+    async resolve({ ctx, input }) {
       const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
       const summoner = await rAPI.summoner.getBySummonerName({
@@ -108,10 +120,7 @@ export const riotRouter = createRouter()
       if (soloQAccount) {
         await prisma.leagueAccount.update({
           where: {
-            ign_server: {
-              ign: input.ign,
-              server: input.server,
-            },
+            userId: input.userId,
           },
           data: {
             ...input,
@@ -120,6 +129,17 @@ export const riotRouter = createRouter()
             leaguePoints: soloQAccount.leaguePoints,
             wins: soloQAccount.wins,
             losses: soloQAccount.losses,
+          },
+        });
+
+        await prisma.user.update({
+          where: {
+            id: input.userId,
+          },
+          data: {
+            //@ts-ignore
+            tier: soloQAccount.tier,
+            server: input.server,
           },
         });
       }

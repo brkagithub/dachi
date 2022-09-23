@@ -5,10 +5,16 @@ import Navbar from "../components/Navbar";
 import ProfilePage from "../components/Profile";
 
 const Explore: NextPage = () => {
-  const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
-  const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery([
-    "match.getPotentialMatch",
-  ]);
+  const { data: meData, isLoading } = trpc.useQuery(["user.me"], {
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery(
+    ["match.getPotentialMatch"],
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const utils = trpc.useContext();
   const createMatchMutation = trpc.useMutation(["match.createMatch"], {
     onSuccess: () => {

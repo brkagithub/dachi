@@ -215,6 +215,7 @@ const Profile = (props: {
               updateRiotAccountMutation.mutate({
                 ign: props.rankedStats.ign,
                 server: props.rankedStats.server,
+                userId: props.user.id,
               });
             }
           }}

@@ -33,6 +33,7 @@ const EditProfilePage = () => {
         <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 pt-1 flex flex-col items-center">
           <div className="text-center text-2xl">Update your profile here</div>
           <UserEditForm
+            id={meData?.id || ""}
             defaultValues={{
               name: meData.name || "",
               firstName: meData.firstName || "",
@@ -94,9 +95,11 @@ type Inputs = {
 function UserEditForm({
   defaultValues,
   accounts,
+  id,
 }: {
   defaultValues: Inputs;
   accounts: LeagueAccount[];
+  id: string;
 }) {
   const [mutateErrored, setMutateErrored] = useState(true);
   const { data: allChamps, isLoading: allChampsLoading } = trpc.useQuery(
@@ -210,6 +213,7 @@ function UserEditForm({
       updateRiotAccountMutation.mutate({
         server: data.server,
         ign: data.ign,
+        userId: id,
       });
     } else {
       createRiotAccountMutation.mutate({

@@ -4,6 +4,7 @@ import { prisma } from "../../server/db/client";
 import { z } from "zod";
 import { DDragon } from "@fightmegg/riot-api";
 import { TRPCError } from "@trpc/server";
+import { FilterIcon } from "@heroicons/react/outline";
 
 interface champObject {
   id: number;
@@ -14,12 +15,25 @@ interface champObject {
 export const userRouter = createRouter()
   .query("getSession", {
     resolve({ ctx }) {
+      if (!ctx.session) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
       return ctx.session;
     },
   })
   .query("me", {
     resolve({ ctx }) {
-      return ctx.session?.user;
+      if (!ctx.session || !ctx.session.user) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      return ctx.session.user;
     },
   })
   .query("meFullInfo", {

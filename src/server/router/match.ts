@@ -3,13 +3,21 @@ import { createRouter } from "./context";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { User } from "@prisma/client";
 
 export const matchRouter = createRouter()
   .query("getPotentialMatch", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const alreadyMatchedInitiated = await prisma.match.findMany({
         where: {
-          requestInitiatorId: ctx.session?.user?.id,
+          requestInitiatorId: ctx.session.user.id,
         },
         select: {
           requestTargetId: true,
@@ -18,7 +26,7 @@ export const matchRouter = createRouter()
 
       const alreadyMatchedTargeted = await prisma.match.findMany({
         where: {
-          requestTargetId: ctx.session?.user?.id,
+          requestTargetId: ctx.session.user.id,
         },
         select: {
           requestInitiatorId: true,
@@ -29,18 +37,43 @@ export const matchRouter = createRouter()
         //combine targeted and initiated
         ...alreadyMatchedInitiated.map((user) => user.requestTargetId),
         ...alreadyMatchedTargeted.map((user) => user.requestInitiatorId),
-        ctx.session?.user?.id ? ctx.session?.user?.id : "",
+        ctx.session.user.id,
       ];
 
-      const userStillNotMatched = await prisma.user.findFirst({
-        where: {
-          NOT: {
-            id: {
-              in: alreadyMatchedWithIds,
+      const filter = await prisma.filter.findFirst({
+        where: { userId: ctx.session.user.id },
+      });
+
+      let userStillNotMatched: User | null = null;
+
+      if (!filter) {
+        userStillNotMatched = await prisma.user.findFirst({
+          where: {
+            NOT: {
+              id: {
+                in: alreadyMatchedWithIds,
+              },
             },
           },
-        },
-      });
+        });
+      } else {
+        userStillNotMatched = await prisma.user.findFirst({
+          where: {
+            NOT: {
+              id: {
+                in: alreadyMatchedWithIds,
+              },
+            },
+            AND: {
+              age: { gte: filter.ageLowerLimit, lte: filter.ageUpperLimit },
+              gender: { in: filter.genders },
+              role: { in: filter.roles },
+              server: { in: filter.servers },
+              tier: { in: filter.tiers },
+            },
+          },
+        });
+      }
 
       const userRiotAccount = await prisma.leagueAccount.findFirst({
         //if it wasnt find first we could use prisma include from relation queries
