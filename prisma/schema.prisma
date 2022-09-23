@@ -129,10 +129,10 @@ model Filter {
     userId String  @unique
     ageUpperLimit    Int?
     ageLowerLimit    Int?
-    gender Gender?
-    role   Role?
-    server Server?
-    tier String?
+    genders Gender[]
+    roles   Role[]
+    servers Server[]
+    tiers Tier[]
 }
 
 model VerificationToken {
@@ -169,4 +169,16 @@ enum Server {
     oc1
     ru
     tr1
+}
+
+enum Tier {
+    CHALLENGER
+    GRANDMASTER
+    MASTER
+    DIAMOND
+    PLATINUM
+    GOLD
+    SILVER
+    BRONZE
+    IRON
 }

@@ -30,7 +30,7 @@ const EditProfilePage = () => {
       {!meData ? (
         <div>You need to log in to edit your profile</div>
       ) : (
-        <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 flex flex-col items-center">
+        <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 pt-1 flex flex-col items-center">
           <div className="text-center text-2xl">Update your profile here</div>
           <UserEditForm
             defaultValues={{
@@ -175,8 +175,6 @@ function UserEditForm({
           body: formData,
         }
       ).then((r) => r.json());
-
-      console.log(dataReturned);
 
       if (dataReturned.secure_url) {
         changeProfilePicURL.mutate({ newUrl: dataReturned.secure_url });
