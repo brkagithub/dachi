@@ -71,7 +71,7 @@ const Navbar: React.FC<{
       href: "/explore",
       current: current == "find friends",
     },
-    { name: "Settings", href: "#", current: current == "settings" },
+    { name: "Settings", href: "/settings", current: current == "settings" },
   ];
 
   return (

@@ -54,6 +54,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    filter        Filter?
     accounts      Account[]
     sessions      Session[]
     description   String?   @db.Text @default("Add your description here")
@@ -120,6 +121,18 @@ model Message {
     body                   String
     timestamp              DateTime
     messageSeen            Boolean  @default(false)
+}
+
+model Filter {
+    id            String    @id @default(cuid())
+    user   User @relation(fields: [userId], references: [id])
+    userId String  @unique
+    ageUpperLimit    Int?
+    ageLowerLimit    Int?
+    gender Gender?
+    role   Role?
+    server Server?
+    tier String?
 }
 
 model VerificationToken {
