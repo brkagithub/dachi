@@ -163,7 +163,7 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {message.timestamp.toISOString().substring(11, 16)}
+                {message.timestamp.getHours()}:{message.timestamp.getMinutes()}
               </div>
             </div>
           </div>
@@ -213,7 +213,8 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {message.timestamp.toString().substring(11, 16)}
+                {new Date(message.timestamp.toString()).getHours()}:
+                {new Date(message.timestamp.toString()).getMinutes()}
               </div>
             </div>
           </div>

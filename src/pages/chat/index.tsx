@@ -83,20 +83,34 @@ const Home: NextPage = () => {
                             : "start a conversation..."}
                         </div>
                       </div>
-                      {friend.lastMessage[0]?.timestamp && (
-                        <div className="flex flex-col items-center">
-                          <div className="pr-1 text-sm pb-1">
-                            {friend.lastMessage[0]?.timestamp
-                              .toISOString()
-                              .substring(11, 16)}
-                          </div>
-                          {friend.numUnseenMsgs > 0 && (
-                            <div className="flex items-center justify-center rounded-full bg-red-600 w-6 h-6">
-                              {friend.numUnseenMsgs}
+                      {friend.lastMessage[0]?.timestamp &&
+                        (new Date().toDateString() ===
+                        friend.lastMessage[0].timestamp.toDateString() ? (
+                          <div className="flex flex-col items-center">
+                            <div className="pr-1 text-sm pb-1">
+                              {friend.lastMessage[0]?.timestamp.getHours()}:
+                              {friend.lastMessage[0]?.timestamp.getMinutes()}
                             </div>
-                          )}
-                        </div>
-                      )}
+                            {friend.numUnseenMsgs > 0 && (
+                              <div className="flex items-center justify-center rounded-full bg-red-600 w-6 h-6">
+                                {friend.numUnseenMsgs}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center">
+                            <div className="pr-1 text-sm pb-1">
+                              {friend.lastMessage[0]?.timestamp
+                                .toISOString()
+                                .substring(0, 10)}
+                            </div>
+                            {friend.numUnseenMsgs > 0 && (
+                              <div className="flex items-center justify-center rounded-full bg-red-600 w-6 h-6">
+                                {friend.numUnseenMsgs}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </div>
