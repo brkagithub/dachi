@@ -4,6 +4,7 @@ import { prisma } from "../../server/db/client";
 import { z } from "zod";
 import { PlatformId, RiotAPI } from "@fightmegg/riot-api";
 import { env } from "../../env/server.mjs";
+import { TRPCError } from "@trpc/server";
 
 export const riotRouter = createRouter()
   .query("allChampNames", {
@@ -31,6 +32,13 @@ export const riotRouter = createRouter()
       ]),
     }),
     async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
       const summoner = await rAPI.summoner.getBySummonerName({
@@ -56,7 +64,7 @@ export const riotRouter = createRouter()
           data: {
             ign: input.ign,
             server: input.server,
-            userId: ctx.session!.user!.id, //make this query callable only when logged
+            userId: ctx.session.user.id, //make this query callable only when logged
             rank: soloQAccount.rank,
             tier: soloQAccount.tier,
             leaguePoints: soloQAccount.leaguePoints,
@@ -67,7 +75,7 @@ export const riotRouter = createRouter()
 
         await prisma.user.update({
           where: {
-            id: ctx.session!.user!.id,
+            id: ctx.session.user.id,
           },
           data: {
             //@ts-ignore
@@ -96,7 +104,7 @@ export const riotRouter = createRouter()
         "tr1",
       ]),
     }),
-    async resolve({ ctx, input }) {
+    async resolve({ input }) {
       const rAPI = new RiotAPI(env.RIOT_API_KEY);
 
       const summoner = await rAPI.summoner.getBySummonerName({

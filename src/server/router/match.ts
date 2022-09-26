@@ -89,7 +89,18 @@ export const matchRouter = createRouter()
       requestTargetId: z.string(),
       addAsFriend: z.boolean(),
     }),
-    async resolve({ input }) {
+    async resolve({ ctx, input }) {
+      if (
+        !ctx.session ||
+        !ctx.session.user?.id ||
+        ctx.session.user.id != input.requestInitiatorId
+      ) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const matchExists = await prisma.match.findMany({
         where: {
           OR: [
@@ -120,6 +131,13 @@ export const matchRouter = createRouter()
   })
   .query("getFriendRequests", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       return await prisma.match.findMany({
         where: {
           requestTargetId: ctx.session?.user?.id,
@@ -159,6 +177,13 @@ export const matchRouter = createRouter()
   })
   .query("getFriends", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const allFriends = await prisma.match.findMany({
         where: {
           OR: [
@@ -257,7 +282,18 @@ export const matchRouter = createRouter()
       requestInitiatorId: z.string(),
       requestTargetId: z.string(),
     }),
-    async resolve({ input }) {
+    async resolve({ ctx, input }) {
+      if (
+        !ctx.session ||
+        !ctx.session.user?.id ||
+        ctx.session.user.id != input.requestTargetId
+      ) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       await prisma.match.updateMany({
         where: {
           requestInitiatorId: input.requestInitiatorId,
@@ -275,7 +311,18 @@ export const matchRouter = createRouter()
       requestInitiatorId: z.string(),
       requestTargetId: z.string(),
     }),
-    async resolve({ input }) {
+    async resolve({ ctx, input }) {
+      if (
+        !ctx.session ||
+        !ctx.session.user?.id ||
+        ctx.session.user.id != input.requestTargetId
+      ) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       await prisma.match.updateMany({
         where: {
           requestInitiatorId: input.requestInitiatorId,

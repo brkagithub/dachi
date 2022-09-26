@@ -38,6 +38,13 @@ export const userRouter = createRouter()
   })
   .query("meFullInfo", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const user = await prisma.user.findFirst({
         where: { id: ctx.session?.user?.id },
       });
@@ -47,6 +54,13 @@ export const userRouter = createRouter()
   })
   .query("meFullInfoWithRiotAccounts", {
     async resolve({ ctx }) {
+      if (!ctx.session || !ctx.session.user) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       const user = await prisma.user.findFirst({
         where: { id: ctx.session?.user?.id },
       });
@@ -79,6 +93,13 @@ export const userRouter = createRouter()
     }),
 
     async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
       await prisma.user.update({
         where: { id: ctx.session?.user?.id },
         data: {
@@ -87,7 +108,7 @@ export const userRouter = createRouter()
       });
     },
   })
-  .mutation("fillDb", {
+  /*.mutation("fillDb", {
     async resolve({}) {
       const ddragon = new DDragon();
       const champs = await ddragon.champion.all();
@@ -100,7 +121,7 @@ export const userRouter = createRouter()
 
       await prisma.champion.createMany({ data: champObjects });
     },
-  })
+  })*/
   .query("getImageAndFirstNameByName", {
     input: z.object({ name: z.string() }),
     async resolve({ input }) {
