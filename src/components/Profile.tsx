@@ -169,59 +169,62 @@ const Profile = (props: {
         {props.rankedStats &&
           props.rankedStats.wins &&
           props.rankedStats.losses && (
-            <div>
-              <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
-                {props.rankedStats.ign}{" "}
-                {`(${serverMap.get(
-                  props.rankedStats.server ? props.rankedStats.server : ""
-                )})`}
-              </div>
-              <div className="flex justify-between items-center pb-2">
-                <img
-                  className="h-36 w-auto rounded-full"
-                  src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats.tier?.toLowerCase()}.png`}
-                ></img>
-                <div className="flex flex-col items-center">
-                  <div className="font-bold text-center">
-                    <span className="capitalize">
-                      {props.rankedStats.tier?.toLowerCase()}
-                    </span>
-                    <span> {props.rankedStats.rank}</span>
+            <>
+              <div>
+                <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
+                  {props.rankedStats.ign}{" "}
+                  {`(${serverMap.get(
+                    props.rankedStats.server ? props.rankedStats.server : ""
+                  )})`}
+                </div>
+                <div className="flex justify-between items-center pb-2">
+                  <img
+                    className="h-36 w-auto rounded-full"
+                    src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats.tier?.toLowerCase()}.png`}
+                  ></img>
+                  <div className="flex flex-col items-center">
+                    <div className="font-bold text-center">
+                      <span className="capitalize">
+                        {props.rankedStats.tier?.toLowerCase()}
+                      </span>
+                      <span> {props.rankedStats.rank}</span>
+                    </div>
+                    <div className="text-sm">
+                      {props.rankedStats.leaguePoints} LP
+                    </div>
                   </div>
-                  <div className="text-sm">
-                    {props.rankedStats.leaguePoints} LP
+                  <div className="pl-8 pr-4 flex flex-col items-center">
+                    <div className="text-sm">
+                      {props.rankedStats.wins}W {props.rankedStats.losses}L
+                    </div>
+                    <div className="text-xs">
+                      {(
+                        (props.rankedStats.wins /
+                          (props.rankedStats.wins + props.rankedStats.losses)) *
+                        100
+                      ).toFixed(0)}
+                      %
+                    </div>
                   </div>
                 </div>
-                <div className="pl-8 pr-4 flex flex-col items-center">
-                  <div className="text-sm">
-                    {props.rankedStats.wins}W {props.rankedStats.losses}L
-                  </div>
-                  <div className="text-xs">
-                    {(
-                      (props.rankedStats.wins /
-                        (props.rankedStats.wins + props.rankedStats.losses)) *
-                      100
-                    ).toFixed(0)}
-                    %
-                  </div>
-                </div>
               </div>
-            </div>
+              <button
+                className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8"
+                onClick={() => {
+                  if (props.rankedStats?.ign && props.rankedStats?.server) {
+                    updateRiotAccountMutation.mutate({
+                      ign: props.rankedStats.ign,
+                      server: props.rankedStats.server,
+                      userId: props.user.id,
+                    });
+                  }
+                }}
+              >
+                Refresh league stats
+              </button>
+            </>
           )}
-        <button
-          className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8"
-          onClick={() => {
-            if (props.rankedStats?.ign && props.rankedStats?.server) {
-              updateRiotAccountMutation.mutate({
-                ign: props.rankedStats.ign,
-                server: props.rankedStats.server,
-                userId: props.user.id,
-              });
-            }
-          }}
-        >
-          Refresh league stats
-        </button>
+
         {meData && meData?.id == props.user.id ? (
           <button className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
