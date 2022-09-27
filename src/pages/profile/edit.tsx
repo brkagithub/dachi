@@ -31,7 +31,9 @@ const EditProfilePage = () => {
         <div>You need to log in to edit your profile</div>
       ) : (
         <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 pt-1 flex flex-col items-center">
-          <div className="text-center text-2xl">Update your profile here</div>
+          <div className="text-center text-2xl font-semibold pt-2 text-indigo-200">
+            Update your profile here
+          </div>
           <UserEditForm
             id={meData?.id || ""}
             defaultValues={{
@@ -246,9 +248,9 @@ function UserEditForm({
       className="w-full shadow-md rounded px-8 pt-6 pb-8 flex-col items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <span className="px-1">Name</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">Name</span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-200 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("name", {
           required: true,
           onChange: () => {
@@ -258,50 +260,60 @@ function UserEditForm({
       />
 
       {errors.name && errors.name.type !== "checkUsername" && (
-        <span>This field is required</span>
+        <span className="text-red-400">This field is required</span>
       )}
 
       {errors.name && errors.name.type === "checkUsername" && (
-        <span>{errors.name.message}</span>
+        <span className="text-red-400">{errors.name.message}</span>
       )}
       <div className="pt-4" />
 
-      <span className="px-1">First name</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        First name
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("firstName", {
           required: true,
         })}
       />
 
-      {errors.firstName && <span>This field is required</span>}
+      {errors.firstName && (
+        <span className="text-red-400">This field is required</span>
+      )}
 
       <div className="pt-4" />
 
-      <span className="px-1">Age</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">Age</span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         type="number"
         {...register("age", { required: true })}
       />
 
-      {errors.age && <span>This field is required</span>}
+      {errors.age && (
+        <span className="text-red-400">This field is required</span>
+      )}
 
       <div className="pt-4" />
 
-      <span className="px-1">Description</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Description
+      </span>
       <textarea
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("description", { required: true })}
       />
 
-      {errors.description && <span>This field is required</span>}
+      {errors.description && (
+        <span className="text-red-400">This field is required</span>
+      )}
 
       <div className="pt-4" />
 
-      <span className="px-1">Gender</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">Gender</span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("gender", { required: true })}
       >
         {genders?.map((gender) => (
@@ -313,9 +325,11 @@ function UserEditForm({
 
       <div className="pt-4" />
 
-      <span className="px-1">Favorite champion 1</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Favorite champion 1
+      </span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("favoriteChampion1", { required: true })}
       >
         {allChamps?.map((champ) => (
@@ -325,9 +339,11 @@ function UserEditForm({
         ))}
       </select>
       <div className="pt-4" />
-      <span className="px-1">Favorite champion 2</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Favorite champion 2
+      </span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("favoriteChampion2", { required: true })}
       >
         {allChamps?.map((champ) => (
@@ -337,9 +353,11 @@ function UserEditForm({
         ))}
       </select>
       <div className="pt-4" />
-      <span className="px-1">Favorite champion 3</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Favorite champion 3
+      </span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("favoriteChampion3", { required: true })}
       >
         {allChamps?.map((champ) => (
@@ -349,9 +367,11 @@ function UserEditForm({
         ))}
       </select>
       <div className="pt-4" />
-      <span className="px-1">Main role</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Main role
+      </span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("role", { required: true })}
       >
         {roles?.map((role) => (
@@ -362,9 +382,9 @@ function UserEditForm({
       </select>
       <div className="pt-4" />
 
-      <span className="px-1">Server</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">Server</span>
       <select
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("server", { required: true })}
       >
         {servers?.map((server) => (
@@ -376,46 +396,59 @@ function UserEditForm({
 
       <div className="pt-4" />
 
-      <span className="px-1">In game name</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        In game name
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("ign")}
       />
 
       <div className="pt-4" />
 
-      <span className="px-1">Twitter handle</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Twitter handle
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("twitter")}
       />
 
       <div className="pt-4" />
-      <span className="px-1">Instagram handle</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Instagram handle
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("instagram")}
       />
 
       <div className="pt-4" />
-      <span className="px-1">Twitch handle</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Twitch handle
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("twitch")}
       />
 
       <div className="pt-4" />
-      <span className="px-1">Youtube handle</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Youtube handle
+      </span>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("youtube")}
       />
 
       <div className="pt-4" />
-      <span className="px-1">Profile picture</span>
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Profile picture
+      </span>
+
       <input
         type="file"
-        className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline bg-gray-400"
+        className="block w-full text-indigo-300 bg-gray-900 rounded-lg border border-sky-100 cursor-pointer file:bg-indigo-300 file:border-0 file:p-1 file:text-gray-900 file:cursor-pointer"
         {...register("profilePicture")}
       />
 
@@ -423,7 +456,7 @@ function UserEditForm({
 
       <div className="flex flex-col items-center ">
         <input
-          className="bg-gray-500 rounded-full p-2 cursor-pointer"
+          className="bg-gray-900 rounded-full pt-2 pb-2 pr-4 pl-4 cursor-pointer text-lg font-bold border border-sky-100"
           type="submit"
           value="Confirm changes"
         />

@@ -52,12 +52,13 @@ const Navbar: React.FC<{
   current?: currentType;
   me: meType | undefined;
 }> = ({ current, me }) => {
-  const { data: numUnseenMsgs, isLoading: isLoadingUnseenMsgs } = trpc.useQuery(
-    ["chat.numberOfUnseenMessagesTotal"]
-  );
+  const { data: numUnseenMsgs } = trpc.useQuery([
+    "chat.numberOfUnseenMessagesTotal",
+  ]);
 
-  const { data: numFriendRequests, isLoading: isLoadingNumFriendRequests } =
-    trpc.useQuery(["match.numberFriendRequests"]);
+  const { data: numFriendRequests } = trpc.useQuery([
+    "match.numberFriendRequests",
+  ]);
 
   const navigation = [
     {
