@@ -133,3 +133,4 @@ Here are some resources that we commonly refer to:
 TODO:
 - separate page to verify riot accounts
 - support multiple riot accounts instead of one
+- signup/login with google
