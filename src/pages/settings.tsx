@@ -33,7 +33,9 @@ const SettingsPage = () => {
         <div>You need to log in to edit your filters</div>
       ) : (
         <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 pt-1 flex flex-col items-center">
-          <div className="text-center text-2xl">Update your filters here</div>
+          <div className="text-center text-2xl font-semibold pt-2 text-indigo-200">
+            Update your filters here
+          </div>
           <FilterEditForm
             defaultValues={{
               ageUpper: myFilter?.ageUpperLimit || 50,
@@ -141,9 +143,11 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
       onSubmit={handleSubmit(onSubmit)}
     >
       <>
-        <span className="px-1 text-lg">Age lower limit</span>
+        <span className="px-1 text-indigo-400 font-semibold text-lg">
+          Age lower limit
+        </span>
         <input
-          className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow border border-sky-200 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
           type="number"
           {...register("ageLower", { required: true })}
         />
@@ -152,9 +156,11 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="pt-4" />
 
-        <span className="px-1 text-lg">Age upper limit</span>
+        <span className="px-1 text-indigo-400 font-semibold text-lg">
+          Age upper limit
+        </span>
         <input
-          className="shadow border rounded w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow border border-sky-200 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
           type="number"
           {...register("ageUpper", { required: true })}
         />
@@ -163,23 +169,33 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="pt-4" />
 
-        <div className="px-1 pb-2 text-lg">Role</div>
+        <div className="px-1 text-indigo-400 font-semibold text-lg pb-2 pt-2">
+          Role
+        </div>
 
         {roles?.map((role) => {
           return (
-            <div className="flex justify-between" key={role}>
-              <div className="flex">
-                <img
-                  className="h-8 w-auto rounded-full "
-                  src={`https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/${
-                    role == "Mid" ? "MIDDLE" : role.toLocaleUpperCase()
-                  }.png`}
-                ></img>
-                <div className="pl-3 capitalize flex items-center">{role}</div>
-              </div>
+            <div
+              className="flex justify-between hover:bg-indigo-900 pr-1"
+              key={role}
+            >
+              <label htmlFor={role} className="w-full">
+                <div className="flex">
+                  <img
+                    className="h-8 w-auto rounded-full "
+                    src={`https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/${
+                      role == "Mid" ? "MIDDLE" : role.toLocaleUpperCase()
+                    }.png`}
+                  ></img>
+                  <div className="pl-3 capitalize flex items-center">
+                    {role}
+                  </div>
+                </div>
+              </label>
               <input
                 {...register("roles")}
                 name="roles"
+                id={role}
                 type="checkbox"
                 value={role}
               ></input>
@@ -189,14 +205,22 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="pt-4" />
 
-        <div className="px-1 pb-2 text-lg">Gender</div>
+        <div className="px-1 text-indigo-400 font-semibold text-lg pb-2 pt-2">
+          Gender
+        </div>
 
         {genders?.map((gender) => {
           return (
-            <div className="flex justify-between" key={gender}>
-              <span className="px-1">{gender}</span>
+            <div
+              className="flex justify-between hover:bg-indigo-900 pr-1"
+              key={gender}
+            >
+              <label htmlFor={gender} className="px-1 w-full">
+                {gender}
+              </label>
               <input
                 {...register("genders")}
+                id={gender}
                 name="genders"
                 type="checkbox"
                 value={gender}
@@ -207,15 +231,23 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="pt-4" />
 
-        <div className="px-1 pb-2 text-lg">Server</div>
+        <div className="px-1 text-indigo-400 font-semibold text-lg pb-2 pt-2">
+          Server
+        </div>
 
         {servers?.map((server) => {
           return (
-            <div className="flex justify-between" key={server[1]}>
-              <span className="px-1">{server[1]}</span>
+            <div
+              className="flex justify-between hover:bg-indigo-900 pr-1"
+              key={server[1]}
+            >
+              <label htmlFor={server[1]} className="px-1 w-full">
+                {server[1]}
+              </label>
               <input
                 {...register("servers")}
                 name="servers"
+                id={server[1]}
                 type="checkbox"
                 value={server[0]}
               ></input>
@@ -225,23 +257,31 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="pt-4" />
 
-        <div className="px-1 pb-2 text-lg">Tier</div>
+        <div className="px-1 text-indigo-400 font-semibold text-lg pb-2 pt-2">
+          Tier
+        </div>
 
         {tiers?.map((tier) => {
           return (
-            <div className="flex justify-between items-center" key={tier}>
-              <div className="flex">
-                <img
-                  className="h-12 w-auto rounded-full"
-                  src={`https://opgg-static.akamaized.net/images/medals_new/${tier?.toLowerCase()}.png`}
-                ></img>
-                <div className="pl-3 capitalize flex items-center">
-                  {tier.toLowerCase()}
+            <div
+              className="flex justify-between items-center hover:bg-indigo-900 pr-1"
+              key={tier}
+            >
+              <label htmlFor={tier} className="w-full">
+                <div className="flex">
+                  <img
+                    className="h-12 w-auto rounded-full"
+                    src={`https://opgg-static.akamaized.net/images/medals_new/${tier?.toLowerCase()}.png`}
+                  ></img>
+                  <div className="pl-3 capitalize flex items-center">
+                    {tier.toLowerCase()}
+                  </div>
                 </div>
-              </div>
+              </label>
               <input
                 {...register("tiers")}
                 name="tiers"
+                id={tier}
                 type="checkbox"
                 value={tier}
               ></input>

@@ -301,7 +301,7 @@ function UserEditForm({
         Description
       </span>
       <textarea
-        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
+        className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900 h-28 md:h-24"
         {...register("description", { required: true })}
       />
 
