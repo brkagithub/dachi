@@ -153,8 +153,8 @@ const ChatComponent: React.FC<{
           <div
             className={
               message.messageSenderName == recipientName
-                ? "text-left pt-2 pb-2 rounded-3xl bg-gray-500 text-black flex"
-                : "text-right pt-2 pb-2 rounded-3xl bg-gray-300 text-black flex"
+                ? "text-left pt-2 pb-2 rounded-3xl bg-indigo-200 text-black flex"
+                : "text-right pt-2 pb-2 rounded-3xl bg-indigo-400 text-black flex"
             }
             key={message.id}
           >
@@ -204,8 +204,8 @@ const ChatComponent: React.FC<{
           <div
             className={
               message.senderName == recipientName
-                ? "text-left pt-2 pb-2 rounded-3xl bg-gray-500 text-black flex"
-                : "text-right pt-2 pb-2 rounded-3xl bg-gray-300 text-black flex"
+                ? "text-left pt-2 pb-2 rounded-3xl bg-indigo-200 text-black flex"
+                : "text-right pt-2 pb-2 rounded-3xl bg-indigo-400 text-black flex"
             }
           >
             <div className="max-w-xxs sm:max-w-xs md:max-w-sm lg:max-w-md break-words pl-3 pr-3 text-left">
@@ -280,7 +280,11 @@ const ChatComponent: React.FC<{
           </div>
           <div className="flex flex-col pl-4">
             <div className="text-xl">{recipientImage!.firstName}</div>
-            <div className="text-sm text-gray-400">@{recipientName}</div>
+            <NextLink href={`/profile/${recipientName}`}>
+              <div className="text-sm text-gray-400 cursor-pointer">
+                @{recipientName}
+              </div>
+            </NextLink>
             {recipientOnline ? (
               <div className="text-sm text-green-600">online</div>
             ) : (

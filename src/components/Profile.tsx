@@ -17,8 +17,6 @@ const Profile = (props: {
     return <div>loading...</div>;
   }
 
-  console.log(props);
-
   let userRole = "";
   if (props.user.role == "Top") userRole = "TOP";
   if (props.user.role == "Jungle") userRole = "JUNGLE";
@@ -73,7 +71,7 @@ const Profile = (props: {
               className="h-36 w-36 rounded-full relative bottom-16"
               src={props.user.image || ""}
             ></img>
-            <div className="text-xl text-center relative bottom-16">
+            <div className="text-xl text-center relative bottom-16 font-semibold">
               {props.user.name}
             </div>
             <div className="flex w-36 h-autopt-2 justify-center relative bottom-16 pt-1">
@@ -209,7 +207,7 @@ const Profile = (props: {
                 </div>
               </div>
               <button
-                className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8"
+                className="bg-indigo-900 rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
                 onClick={() => {
                   if (props.rankedStats?.ign && props.rankedStats?.server) {
                     updateRiotAccountMutation.mutate({
@@ -226,7 +224,7 @@ const Profile = (props: {
           )}
 
         {meData && meData?.id == props.user.id ? (
-          <button className="bg-gray-500 rounded-full p-4 cursor-pointer mt-8">
+          <button className="bg-indigo-900 rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (

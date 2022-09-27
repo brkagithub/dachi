@@ -25,7 +25,7 @@ const Home: NextPage = () => {
       <>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
-          <h1 className="text-2xl">
+          <h1 className="text-2xl text-indigo-200">
             You have no friends added right now. Click find friends in the
             navbar.
           </h1>
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
       <>
         <Navbar me={meData}></Navbar>
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
-          <h1 className="text-2xl">My chats</h1>
+          <h1 className="text-2xl font-semibold text-indigo-200">My chats</h1>
           <div className="mx-auto pt-4">
             {friends?.map((friend) => (
               <NextLink
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
                 }`}
                 key={friend.id}
               >
-                <div className="flex items-center cursor-pointer border rounded-3xl border-gray-400 p-2 mb-4">
+                <div className="flex items-center cursor-pointer border border-indigo-400 rounded-3xl border-indigo- p-2 mb-4">
                   <div className="flex justify-start items-center w-full">
                     <img
                       className="h-16 w-16 rounded-full"
@@ -73,7 +73,12 @@ const Home: NextPage = () => {
                             (friend.requestTargetId != meData.id &&
                               friend.requestTarget.name)}
                         </div>
-
+                        <div className="text-sm text-left pb-2">
+                          {(friend.requestInitiatorId != meData.id &&
+                            friend.requestInitiator.firstName) ||
+                            (friend.requestTargetId != meData.id &&
+                              friend.requestTarget.firstName)}
+                        </div>
                         <div className="text-sm text-left">
                           {friend.lastMessage[0]?.body
                             ? friend.lastMessage[0]?.body.length > 23

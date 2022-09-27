@@ -98,8 +98,6 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
   const updateFilterMutation = trpc.useMutation(["user.updateFilterForUser"]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-
     updateFilterMutation.mutate({
       ageLowerLimit: data.ageLower,
       ageUpperLimit: data.ageUpper,
