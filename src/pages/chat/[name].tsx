@@ -112,15 +112,15 @@ const ChatComponent: React.FC<{
   const messageTextIsEmpty = messageText.trim().length === 0;
 
   if (imageLoading) {
-    return <div>user data loading...</div>;
+    return <div className="text-center pt-4">user data loading...</div>;
   }
 
   if (messagesLoading) {
-    return <div>messages loading...</div>;
+    return <div className="text-center pt-4">messages loading...</div>;
   }
 
   if (!recipientImage) {
-    return <div>no such user exists</div>;
+    return <div className="text-center pt-4">no such user exists</div>;
   }
 
   const meClassname = "self-end flex flex-col m-1";

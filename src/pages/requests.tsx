@@ -27,11 +27,11 @@ const Requests: NextPage = () => {
   const utils = trpc.useContext();
 
   if (isLoading) {
-    return <div className="text-center pt-4">Loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   if (isLoadingRequests) {
-    return <div className="text-center pt-4">Loading requests...</div>;
+    return <div className="text-center pt-4">loading requests...</div>;
   }
 
   if (friendsRequests && friendsRequests.length == 0) {

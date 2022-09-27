@@ -13,11 +13,11 @@ const Home: NextPage = () => {
     "match.getFriends",
   ]);
   if (isLoading) {
-    return <div className="text-center pt-4">Loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   if (isLoadingFriends) {
-    return <div className="text-center pt-4">Loading chats...</div>;
+    return <div className="text-center pt-4">loading chats...</div>;
   }
 
   if (friends && friends.length == 0) {

@@ -16,7 +16,7 @@ const ProfilePage = (props: {
   if (!props.user) throw new Error("user doesnt exist");
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   return (

@@ -14,7 +14,7 @@ const EditProfilePage = () => {
   );
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   const page = (
@@ -225,7 +225,8 @@ function UserEditForm({
     }
   };
 
-  if (allChampsLoading) return <div>loading..</div>;
+  if (allChampsLoading)
+    return <div className="text-center pt-4">loading..</div>;
 
   const roles = ["Top", "Jungle", "Mid", "ADC", "Support"];
   const genders = ["Male", "Female", "Nonconforming"];

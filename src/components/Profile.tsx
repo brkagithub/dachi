@@ -14,7 +14,7 @@ const Profile = (props: {
   ]);
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   let userRole = "";

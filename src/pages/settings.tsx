@@ -16,7 +16,7 @@ const SettingsPage = () => {
   );
 
   if (isLoading || isLoadingFilter) {
-    return <div>loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   const page = (

@@ -23,11 +23,11 @@ const Explore: NextPage = () => {
   });
 
   if (isLoading) {
-    return <div className="text-center pt-4">Loading...</div>;
+    return <div className="text-center pt-4">loading...</div>;
   }
 
   if (matchIsLoading) {
-    return <div className="text-center pt-4">Match loading...</div>;
+    return <div className="text-center pt-4">potential match loading...</div>;
   }
 
   if (userMatchedData && !userMatchedData.user) {
