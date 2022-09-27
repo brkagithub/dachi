@@ -50,28 +50,51 @@ const Requests: NextPage = () => {
       <>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
-          <h1 className="text-2xl">My friend requests</h1>
+          <h1 className="text-2xl text-indigo-200 font-semibold">
+            My friend requests
+          </h1>
           <div className="mx-auto pt-4">
             {friendsRequests?.map((req) => (
               <div
-                className="flex justify-between items-center border rounded-3xl border-gray-400 p-2 mb-4"
+                className="flex justify-between items-center border rounded-3xl border-indigo-400 p-2 mb-4"
                 key={req.id}
               >
                 <div className="flex justify-start items-center">
-                  <img
-                    className="h-16 w-16 rounded-full"
-                    src={req.requestInitiator.image || ""}
-                  ></img>
+                  <NextLink href={`profile/${req.requestInitiator.name}`}>
+                    <img
+                      className="h-16 w-16 rounded-full cursor-pointer"
+                      src={req.requestInitiator.image || ""}
+                    ></img>
+                  </NextLink>
                   <div className="p-4"></div>
                   <div className="flex flex-col">
                     <NextLink href={`profile/${req.requestInitiator.name}`}>
-                      <div className="underline cursor-pointer">
+                      <div className="underline cursor-pointer text-center md:text-left">
                         @{req.requestInitiator.name}
                       </div>
                     </NextLink>
 
-                    <div className="text-sm text-center">
+                    <div className="text-sm text-center md:text-left">
                       {req.requestInitiator.firstName}
+                    </div>
+                    <div className="flex md:items-center flex-col md:flex-row">
+                      {req.requestInitiator.tier && (
+                        <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 capitalize text-center md:text-left">
+                          {req.requestInitiator.tier.toLowerCase()}
+                        </div>
+                      )}
+                      {req.requestInitiator.role && (
+                        <>
+                          <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
+                            {req.requestInitiator.role}
+                          </div>
+                        </>
+                      )}
+                      {req.requestInitiator.fav_champion1 && (
+                        <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
+                          {req.requestInitiator.fav_champion1}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -92,7 +115,7 @@ const Requests: NextPage = () => {
                           }
                         }}
                         type="button"
-                        className="text-white border border-white hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
+                        className="text-indigo-400 border border-indigo-400 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
                       >
                         <svg
                           aria-hidden="true"
@@ -127,7 +150,7 @@ const Requests: NextPage = () => {
                           }
                         }}
                         type="button"
-                        className="text-white border border-white hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
+                        className="text-indigo-400 border border-indigo-400 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
                       >
                         <svg
                           aria-hidden="true"
