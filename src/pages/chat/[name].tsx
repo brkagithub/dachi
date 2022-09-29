@@ -348,7 +348,7 @@ const ChatComponent: React.FC<{
             </div>
             <form onSubmit={handleSubmit} className="pt-3 pb-3 pr-1 pl-1">
               <textarea
-                className="text-black w-full rounded-3xl p-2 mb-2 h-16"
+                className="bg-gray-700 resize-none placeholder:text-black text-black w-full rounded-3xl p-2 mb-2 h-16"
                 value={messageText}
                 placeholder="Message..."
                 onChange={(e) => handleTextChange(e)}

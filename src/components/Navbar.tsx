@@ -130,7 +130,7 @@ const Navbar: React.FC<{
                           >
                             {item.name}
                           </a>
-                          <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                          <div className="flex items-center justify-center rounded-full bg-purple-600 w-5 h-5">
                             {numUnseenMsgs}
                           </div>
                         </div>
@@ -151,7 +151,7 @@ const Navbar: React.FC<{
                           >
                             {item.name}
                           </a>
-                          <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                          <div className="flex items-center justify-center rounded-full bg-purple-600 w-5 h-5">
                             {numFriendRequests}
                           </div>
                         </div>
@@ -267,7 +267,7 @@ const Navbar: React.FC<{
                     >
                       {item.name}
                     </Disclosure.Button>
-                    <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                    <div className="flex items-center justify-center rounded-full bg-purple-600 w-5 h-5">
                       {numUnseenMsgs}
                     </div>
                   </div>
@@ -289,7 +289,7 @@ const Navbar: React.FC<{
                     >
                       {item.name}
                     </Disclosure.Button>
-                    <div className="flex items-center justify-center rounded-full bg-red-600 w-5 h-5">
+                    <div className="flex items-center justify-center rounded-full bg-purple-600 w-5 h-5">
                       {numFriendRequests}
                     </div>
                   </div>

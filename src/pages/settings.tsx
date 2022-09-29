@@ -300,7 +300,7 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="flex flex-col items-center ">
           <input
-            className="bg-gray-500 rounded-full p-2 cursor-pointer"
+            className="bg-gray-900 rounded-full pt-2 pb-2 pr-4 pl-4 cursor-pointer text-lg font-bold border border-sky-100"
             type="submit"
             value="Confirm changes"
           />

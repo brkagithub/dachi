@@ -100,7 +100,7 @@ const Home: NextPage = () => {
                             (friend.requestTargetId != meData.id &&
                               friend.requestTarget.firstName)}
                         </div>
-                        <div className="text-sm text-left">
+                        <div className="text-sm text-left text-gray-400">
                           {friend.lastMessage[0]?.body
                             ? friend.lastMessage[0]?.body.length > 23
                               ? friend.lastMessage[0]?.body.substring(0, 23) +

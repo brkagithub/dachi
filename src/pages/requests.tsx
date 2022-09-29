@@ -57,7 +57,9 @@ const Requests: NextPage = () => {
         </Head>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
-          <h1 className="text-2xl">You have no friend requests right now</h1>
+          <h1 className="text-2xl text-indigo-200 font-semibold">
+            You have no friend requests right now
+          </h1>
         </div>
       </>
     );

@@ -79,7 +79,7 @@ const Explore: NextPage = () => {
             <div className="max-w-3xl mx-auto px-2 pt-4 sm:px-6 lg:px-8 flex justify-between">
               <button
                 type="button"
-                className="text-black bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                className="border border-sky-100 text-black bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
                 onClick={() => {
                   if (
                     userMatchedData.user?.id &&
@@ -97,7 +97,7 @@ const Explore: NextPage = () => {
               </button>
               <button
                 type="button"
-                className="text-black bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                className="border border-red-300 text-black bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
                 onClick={() => {
                   if (
                     userMatchedData.user?.id &&
