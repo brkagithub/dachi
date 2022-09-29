@@ -3,6 +3,7 @@ import { trpc } from "../utils/trpc";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import Head from "next/head";
 
 const Home: NextPage = () => {
   //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
@@ -16,6 +17,9 @@ const Home: NextPage = () => {
   if (meData) {
     return (
       <>
+        <Head>
+          <title>Getbrka</title>
+        </Head>
         <Navbar me={meData}></Navbar>
         Signed in as {meData.name} <br />
         <Link href={`/profile/${meData.name}`}>
@@ -28,6 +32,9 @@ const Home: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>Getbrka</title>
+      </Head>
       <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>

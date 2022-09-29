@@ -3,6 +3,7 @@ import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import NextLink from "next/link";
+import Head from "next/head";
 
 const Requests: NextPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
@@ -27,16 +28,33 @@ const Requests: NextPage = () => {
   const utils = trpc.useContext();
 
   if (isLoading) {
-    return <div className="text-center pt-4">loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>My requests</title>
+        </Head>
+        <div className="text-center pt-4">loading...</div>
+      </>
+    );
   }
 
   if (isLoadingRequests) {
-    return <div className="text-center pt-4">loading requests...</div>;
+    return (
+      <>
+        <Head>
+          <title>My requests</title>
+        </Head>
+        <div className="text-center pt-4">loading requests...</div>
+      </>
+    );
   }
 
   if (friendsRequests && friendsRequests.length == 0) {
     return (
       <>
+        <Head>
+          <title>My requests</title>
+        </Head>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           <h1 className="text-2xl">You have no friend requests right now</h1>
@@ -48,6 +66,9 @@ const Requests: NextPage = () => {
   if (meData) {
     return (
       <>
+        <Head>
+          <title>My requests</title>
+        </Head>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           <h1 className="text-2xl text-indigo-200 font-semibold">
@@ -180,6 +201,9 @@ const Requests: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>My requests</title>
+      </Head>
       <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>

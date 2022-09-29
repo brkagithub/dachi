@@ -3,6 +3,7 @@ import { trpc } from "../../utils/trpc";
 import { signIn, signOut } from "next-auth/react";
 import Navbar from "../../components/Navbar";
 import NextLink from "next/link";
+import Head from "next/head";
 
 const Home: NextPage = () => {
   //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
@@ -13,16 +14,33 @@ const Home: NextPage = () => {
     "match.getFriends",
   ]);
   if (isLoading) {
-    return <div className="text-center pt-4">loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>Inbox</title>
+        </Head>
+        <div className="text-center pt-4">loading...</div>
+      </>
+    );
   }
 
   if (isLoadingFriends) {
-    return <div className="text-center pt-4">loading chats...</div>;
+    return (
+      <>
+        <Head>
+          <title>Inbox</title>
+        </Head>
+        <div className="text-center pt-4">loading chats...</div>
+      </>
+    );
   }
 
   if (friends && friends.length == 0) {
     return (
       <>
+        <Head>
+          <title>Inbox</title>
+        </Head>
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           <h1 className="text-2xl text-indigo-200">
@@ -37,6 +55,9 @@ const Home: NextPage = () => {
   if (meData) {
     return (
       <>
+        <Head>
+          <title>Inbox</title>
+        </Head>
         <Navbar me={meData}></Navbar>
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           <h1 className="text-2xl font-semibold text-indigo-200">My chats</h1>
@@ -128,6 +149,9 @@ const Home: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>Inbox</title>
+      </Head>
       <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { trpc } from "../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LeagueAccount } from "@prisma/client";
+import Head from "next/head";
 //import cloudinary from "cloudinary";
 
 const SettingsPage = () => {
@@ -16,11 +17,21 @@ const SettingsPage = () => {
   );
 
   if (isLoading || isLoadingFilter) {
-    return <div className="text-center pt-4">loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>My settings</title>
+        </Head>
+        <div className="text-center pt-4">loading...</div>
+      </>
+    );
   }
 
   const page = (
     <>
+      <Head>
+        <title>My settings</title>
+      </Head>
       <Navbar
         me={{
           id: meData?.id || "",

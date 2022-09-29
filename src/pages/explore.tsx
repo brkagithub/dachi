@@ -3,6 +3,7 @@ import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import ProfilePage from "../components/Profile";
+import Head from "next/head";
 
 const Explore: NextPage = () => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"], {
@@ -23,18 +24,39 @@ const Explore: NextPage = () => {
   });
 
   if (isLoading) {
-    return <div className="text-center pt-4">loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>Find teammates</title>
+        </Head>
+        <div className="text-center pt-4">loading...</div>
+      </>
+    );
   }
 
   if (matchIsLoading) {
-    return <div className="text-center pt-4">potential match loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>Find teammates</title>
+        </Head>
+        <div className="text-center pt-4">potential match loading...</div>
+      </>
+    );
   }
 
   if (userMatchedData && !userMatchedData.user) {
     return (
       <>
+        <Head>
+          <title>Find teammates</title>
+        </Head>
         <Navbar me={meData} />
-        <div>No more users on the platform left to match</div>
+        <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
+          <h1 className="text-2xl text-indigo-200">
+            No more users on the platform left to match.
+          </h1>
+        </div>
       </>
     );
   }
@@ -42,6 +64,9 @@ const Explore: NextPage = () => {
   if (meData) {
     return (
       <>
+        <Head>
+          <title>Find teammates</title>
+        </Head>
         <Navbar me={meData} />
         {userMatchedData && userMatchedData.user && (
           <ProfilePage
@@ -96,6 +121,9 @@ const Explore: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>Find teammates</title>
+      </Head>
       <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>

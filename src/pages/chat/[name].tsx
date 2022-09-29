@@ -7,6 +7,7 @@ import Pusher from "pusher-js";
 import { useRouter } from "next/router";
 import { compareStrings } from "../../utils/compareStrings";
 import NextLink from "next/link";
+import Head from "next/head";
 
 //todo: presence, persist msgs in database
 
@@ -111,16 +112,37 @@ const ChatComponent: React.FC<{
 
   const messageTextIsEmpty = messageText.trim().length === 0;
 
+  if (!recipientImage) {
+    return (
+      <>
+        <Head>
+          <title>Chat - {recipientName}</title>
+        </Head>
+        <div className="text-center pt-4">no such user exists</div>
+      </>
+    );
+  }
+
   if (imageLoading) {
-    return <div className="text-center pt-4">user data loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>Chat - {recipientName}</title>
+        </Head>
+        <div className="text-center pt-4">user data loading...</div>
+      </>
+    );
   }
 
   if (messagesLoading) {
-    return <div className="text-center pt-4">messages loading...</div>;
-  }
-
-  if (!recipientImage) {
-    return <div className="text-center pt-4">no such user exists</div>;
+    return (
+      <>
+        <Head>
+          <title>Chat - {recipientName}</title>
+        </Head>
+        <div className="text-center pt-4">messages loading...</div>
+      </>
+    );
   }
 
   const meClassname = "self-end flex flex-col m-1";
@@ -267,72 +289,77 @@ const ChatComponent: React.FC<{
   };
 
   return (
-    <div className="max-w-2xl mx-auto  h-[calc(100vh-4rem)] flex flex-col">
-      <div className="flex flex-col justify-between">
-        <div className="flex pb-4">
-          <div className="p-2">
-            <NextLink href={`/profile/${recipientName}`}>
-              <img
-                className="h-8 w-8 rounded-full cursor-pointer"
-                src={recipientImage!.image || ""}
-              ></img>
-            </NextLink>
+    <>
+      <Head>
+        <title>Chat - {recipientName}</title>
+      </Head>
+      <div className="max-w-2xl mx-auto  h-[calc(100vh-4rem)] flex flex-col">
+        <div className="flex flex-col justify-between">
+          <div className="flex pb-4">
+            <div className="p-2">
+              <NextLink href={`/profile/${recipientName}`}>
+                <img
+                  className="h-8 w-8 rounded-full cursor-pointer"
+                  src={recipientImage!.image || ""}
+                ></img>
+              </NextLink>
+            </div>
+            <div className="flex flex-col pl-4">
+              <div className="text-xl">{recipientImage!.firstName}</div>
+              <NextLink href={`/profile/${recipientName}`}>
+                <div className="text-sm text-gray-400 cursor-pointer">
+                  @{recipientName}
+                </div>
+              </NextLink>
+              {recipientOnline ? (
+                <div className="text-sm text-green-600">online</div>
+              ) : (
+                <div className="text-sm text-red-600">offline</div>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col pl-4">
-            <div className="text-xl">{recipientImage!.firstName}</div>
-            <NextLink href={`/profile/${recipientName}`}>
-              <div className="text-sm text-gray-400 cursor-pointer">
-                @{recipientName}
-              </div>
-            </NextLink>
-            {recipientOnline ? (
-              <div className="text-sm text-green-600">online</div>
-            ) : (
-              <div className="text-sm text-red-600">offline</div>
-            )}
-          </div>
-        </div>
-        <div>
-          <div className="overflow-y-scroll h-[calc(100vh-16rem)] pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-            <div className="flex flex-col">{messagesBeforeRender}</div>
-            <div className="flex flex-col">{messages}</div>
-            {typing && (
-              <div className={recipientClassname}>
-                <div className="flex">
-                  <img
-                    className="h-10 w-10 rounded-full cursor-pointer"
-                    src={recipientImage!.image || ""}
-                  ></img>
-                  <div className="p-1"></div>
+          <div>
+            <div className="overflow-y-scroll h-[calc(100vh-16rem)] pr-4 scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+              <div className="flex flex-col">{messagesBeforeRender}</div>
+              <div className="flex flex-col">{messages}</div>
+              {typing && (
+                <div className={recipientClassname}>
+                  <div className="flex">
+                    <img
+                      className="h-10 w-10 rounded-full cursor-pointer"
+                      src={recipientImage!.image || ""}
+                    ></img>
+                    <div className="p-1"></div>
 
-                  <div
-                    className={
-                      "text-left p-2 rounded-3xl bg-gray-500 text-black italic text-md"
-                    }
-                  >
-                    {typing}
+                    <div
+                      className={
+                        "text-left p-2 rounded-3xl bg-gray-500 text-black italic text-md"
+                      }
+                    >
+                      {typing}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-            <div
-              //@ts-ignore
-              ref={messageEnd}
-            ></div>
+              )}
+              <div
+                //@ts-ignore
+                ref={messageEnd}
+              ></div>
+            </div>
+            <form onSubmit={handleSubmit} className="pt-3 pb-3 pr-1 pl-1">
+              <textarea
+                className="text-black w-full rounded-3xl p-2 mb-2 h-16"
+                value={messageText}
+                placeholder="Message..."
+                onChange={(e) => handleTextChange(e)}
+                //@ts-ignore
+                onKeyPress={handleKeyPress}
+              ></textarea>
+            </form>
           </div>
-          <form onSubmit={handleSubmit} className="pt-3 pb-3 pr-1 pl-1">
-            <textarea
-              className="text-black w-full rounded-3xl p-2 mb-2 h-16"
-              value={messageText}
-              placeholder="Message..."
-              onChange={(e) => handleTextChange(e)}
-              //@ts-ignore
-              onKeyPress={handleKeyPress}
-            ></textarea>
-          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -347,7 +374,14 @@ const Chat: NextPage = () => {
   }
 
   if (isLoading) {
-    return <div className="text-center pt-4">Loading...</div>;
+    return (
+      <>
+        <Head>
+          <title>Chat</title>
+        </Head>
+        <div className="text-center pt-4">Loading...</div>
+      </>
+    );
   }
 
   if (meData) {
@@ -360,6 +394,9 @@ const Chat: NextPage = () => {
   }
   return (
     <>
+      <Head>
+        <title>Chat</title>
+      </Head>
       <Navbar me={meData}></Navbar>
       Not signed in <br />
       <button onClick={() => signIn("discord")}>Sign in with Discord</button>
