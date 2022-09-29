@@ -22,7 +22,7 @@ const ProfilePage = (props: {
         <Head>
           <title>Loading..</title>
         </Head>
-        <div className="text-center pt-4">loading...</div>;
+        <div className="text-center pt-4">loading...</div>
       </>
     );
   }
@@ -30,7 +30,7 @@ const ProfilePage = (props: {
   return (
     <>
       <Head>
-        <title>{props.user.name}'s profile</title>
+        <title>{props.user.name}&apos;s profile</title>
       </Head>
       <Navbar me={meData} />
       <Profile
