@@ -134,3 +134,4 @@ TODO:
 - separate page to verify riot accounts
 - support multiple riot accounts instead of one
 - signup/login with google
+- live searching for party/clash
