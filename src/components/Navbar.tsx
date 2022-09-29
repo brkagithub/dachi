@@ -12,6 +12,12 @@ function classNames(...classes: string[]) {
 
 type meType = inferQueryOutput<"user.me">;
 
+type navigationType = {
+  name: string;
+  href: string;
+  current: boolean;
+};
+
 export type { meType };
 
 type currentType = "settings" | "find friends" | "inbox" | "friend requests";
@@ -60,20 +66,24 @@ const Navbar: React.FC<{
     "match.numberFriendRequests",
   ]);
 
-  const navigation = [
-    {
-      name: "Friend requests",
-      href: "/requests",
-      current: current == "friend requests",
-    }, //change current in props
-    { name: "Inbox", href: "/chat", current: current == "inbox" }, //change current in props
-    {
-      name: "Find friends",
-      href: "/explore",
-      current: current == "find friends",
-    },
-    { name: "Settings", href: "/settings", current: current == "settings" },
-  ];
+  let navigation: navigationType[] = [];
+
+  if (me) {
+    navigation = [
+      {
+        name: "Friend requests",
+        href: "/requests",
+        current: current == "friend requests",
+      }, //change current in props
+      { name: "Inbox", href: "/chat", current: current == "inbox" }, //change current in props
+      {
+        name: "Find friends",
+        href: "/explore",
+        current: current == "find friends",
+      },
+      { name: "Settings", href: "/settings", current: current == "settings" },
+    ];
+  }
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -177,10 +187,10 @@ const Navbar: React.FC<{
                           signIn("discord");
                         }}
                         className={
-                          "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                          "text-white bg-gradient-to-r from-indigo-900 to-indigo-500 px-3 py-2 rounded-2xl font-semibold"
                         }
                       >
-                        Login
+                        Become a dachi
                       </button>
                     ) : (
                       <></>
@@ -211,14 +221,14 @@ const Navbar: React.FC<{
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-300 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-sky-200 ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
                             <NextLink href={`/profile/${me?.name}`}>
                               <a
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400"
+                                  "block px-4 py-2 text-sm text-black hover:bg-sky-100"
                                 )}
                               >
                                 Your Profile
@@ -230,7 +240,7 @@ const Navbar: React.FC<{
                           {({ active }) => (
                             <button
                               className={classNames(
-                                "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 w-full text-left"
+                                "block px-4 py-2 text-sm text-black hover:bg-sky-100 w-full text-left"
                               )}
                               onClick={() => signOut()}
                             >

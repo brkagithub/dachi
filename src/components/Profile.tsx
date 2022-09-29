@@ -170,10 +170,19 @@ const Profile = (props: {
             <>
               <div className="bg-gray-800 rounded-2xl p-1">
                 <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
-                  {props.rankedStats.ign}{" "}
-                  {`(${serverMap.get(
-                    props.rankedStats.server ? props.rankedStats.server : ""
-                  )})`}
+                  <a
+                    className="cursor-pointer underline underline-offset-4"
+                    href={`https://${serverMap.get(
+                      props.rankedStats.server ? props.rankedStats.server : ""
+                    )}.op.gg/summoners/${serverMap.get(
+                      props.rankedStats.server ? props.rankedStats.server : ""
+                    )}/${props.rankedStats.ign}`}
+                  >
+                    {props.rankedStats.ign}{" "}
+                    {`(${serverMap.get(
+                      props.rankedStats.server ? props.rankedStats.server : ""
+                    )})`}
+                  </a>
                 </div>
                 <div className="flex justify-between items-center pb-2">
                   <img
