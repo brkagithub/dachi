@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       spacing: {
         192: "75vh",
+        128: "28rem",
+        92: "24rem",
       },
       maxWidth: {
         xxs: "14rem",

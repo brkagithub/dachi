@@ -68,7 +68,7 @@ const Profile = (props: {
           </div>
           <div className="flex flex-col order-2 items-center">
             <img
-              className="h-36 w-36 rounded-full relative bottom-16 border-4 border-indigo-800"
+              className="h-36 w-36 rounded-full relative bottom-16 border-4 border-gray-800"
               src={props.user.image || ""}
             ></img>
             <div className="text-xl text-center relative bottom-16 font-semibold">

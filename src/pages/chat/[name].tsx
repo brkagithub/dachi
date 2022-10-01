@@ -112,17 +112,6 @@ const ChatComponent: React.FC<{
 
   const messageTextIsEmpty = messageText.trim().length === 0;
 
-  if (!recipientImage) {
-    return (
-      <>
-        <Head>
-          <title>Chat - {recipientName}</title>
-        </Head>
-        <div className="text-center pt-4">no such user exists</div>
-      </>
-    );
-  }
-
   if (imageLoading) {
     return (
       <>
@@ -130,6 +119,17 @@ const ChatComponent: React.FC<{
           <title>Chat - {recipientName}</title>
         </Head>
         <div className="text-center pt-4">user data loading...</div>
+      </>
+    );
+  }
+
+  if (!recipientImage) {
+    return (
+      <>
+        <Head>
+          <title>Chat - {recipientName}</title>
+        </Head>
+        <div className="text-center pt-4">no such user exists</div>
       </>
     );
   }
@@ -348,7 +348,7 @@ const ChatComponent: React.FC<{
             </div>
             <form onSubmit={handleSubmit} className="pt-3 pb-3 pr-1 pl-1">
               <textarea
-                className="bg-gray-700 resize-none placeholder:text-black text-black w-full rounded-3xl p-2 mb-2 h-16"
+                className="bg-gray-300 resize-none placeholder:text-black text-black w-full rounded-3xl p-2 mb-2 h-16"
                 value={messageText}
                 placeholder="Message..."
                 onChange={(e) => handleTextChange(e)}

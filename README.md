@@ -131,7 +131,12 @@ Here are some resources that we commonly refer to:
 - [Protecting routes with Next-Auth.js](https://next-auth.js.org/configuration/nextjs#unstable_getserversession)
 
 TODO:
+
 - separate page to verify riot accounts
 - support multiple riot accounts instead of one
 - signup/login with google
 - live searching for party/clash
+- other games
+- reviews
+- blocking feature
+- next image
