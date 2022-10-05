@@ -129,7 +129,7 @@ const Profile = (props: {
             <div className="w-24 h-24">
               <div className="flex justify-center">
                 <img
-                  className="h-16 w-auto rounded-full"
+                  className="h-16 w-16 rounded-full"
                   src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1_img}.png`}
                 ></img>
               </div>
@@ -142,7 +142,7 @@ const Profile = (props: {
             <div className="w-24 h-24">
               <div className="flex justify-center">
                 <img
-                  className="h-16 w-auto rounded-full"
+                  className="h-16 w-16 rounded-full"
                   src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2_img}.png`}
                 ></img>
               </div>
@@ -154,7 +154,7 @@ const Profile = (props: {
             <div className="w-24 h-24">
               <div className="flex justify-center">
                 <img
-                  className="h-16 w-auto rounded-full"
+                  className="h-16 w-16 rounded-full"
                   src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3_img}.png`}
                 ></img>
               </div>

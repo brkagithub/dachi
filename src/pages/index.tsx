@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
-import { signIn, signOut } from "next-auth/react";
-import NextLink from "next/link";
+import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import Head from "next/head";
 
@@ -9,7 +8,10 @@ const HomeComponent = () => {
   return (
     <div className="max-w-7xl mx-auto pt-8 px-2 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="flex flex-col md:flex-row justify-center items-center">
-        <div className="h-128 w-80 bg-blue-300 order-2 mt-8 md:mt-0"></div>
+        <img
+          className="rounded-2xl border border-indigo-500 order-2 mt-16 md:mt-0"
+          src="https://res.cloudinary.com/dhupiskro/image/upload/v1664985776/homepage_profile.png"
+        ></img>
         <div className="flex flex-col pt-4 pl-1 pr-1 md:pr-0 md:pt-0 md:pl-12 items-center w-full order-1 md:order-3">
           <div className="text-4xl font-semibold text-left pt-4 md:pt-0">
             Find teammates and make friends anywhere in the world with{" "}
@@ -34,30 +36,39 @@ const HomeComponent = () => {
           Use our filtering system to find gamers to team up with.
         </div>
         <div className="flex flex-col md:flex-row items-center justify-around pt-4">
-          <div className="w-72 flex flex-col items-center pt-4 md:pt-2">
-            <div className="h-44 w-72 bg-blue-300"></div>
-            <div className="text-2xl font-bold text-indigo-500 pt-1">Role</div>
-            <div className="text-gray-300 text-lg text-center font-semibold">
-              Filter by role to find players that can be the perfect addition to
-              your party.
-            </div>
-          </div>
           <div className="w-72 flex flex-col items-center pt-8 md:pt-2">
-            <div className="h-44 w-72 bg-blue-300"></div>
-            <div className="text-2xl font-bold text-indigo-500 pt-1">Rank</div>
-            <div className="text-gray-300 text-lg text-center font-semibold">
-              You&apos;re high elo and need a duo? Need a teammate to get out of
-              Gold with?
-            </div>
-          </div>
-          <div className="w-72 flex flex-col items-center pt-8 md:pt-2">
-            <div className="h-44 w-72 bg-blue-300"></div>
+            <img
+              className="w-72 h-72"
+              src="https://res.cloudinary.com/dhupiskro/image/upload/v1664986540/homepage_globe.png"
+            ></img>
             <div className="text-2xl font-bold text-indigo-500 pt-1">
               Server
             </div>
             <div className="text-gray-300 text-lg text-center font-semibold">
               Can&apos;t find friends in your region? dachi&apos;s server
               filtering is here for you.
+            </div>
+          </div>
+          <div className="w-72 flex flex-col items-center pt-8 md:pt-2">
+            <img
+              className="w-72 h-72"
+              src="https://opgg-static.akamaized.net/images/medals_new/challenger.png"
+            ></img>
+            <div className="text-2xl font-bold text-indigo-500 pt-1">Rank</div>
+            <div className="text-gray-300 text-lg text-center font-semibold">
+              You&apos;re high elo and need a duo? Need a teammate to get out of
+              Gold with?
+            </div>
+          </div>
+          <div className="w-72 flex flex-col items-center pt-4 md:pt-2">
+            <img
+              className="w-64 h-64 p-8"
+              src="https://res.cloudinary.com/dhupiskro/image/upload/v1664987325/homepage_role.png"
+            ></img>
+            <div className="text-2xl font-bold text-indigo-500 pt-1">Role</div>
+            <div className="text-gray-300 text-lg text-center font-semibold">
+              Filter by role to find players that can be the perfect addition to
+              your party.
             </div>
           </div>
         </div>
@@ -92,7 +103,10 @@ const HomeComponent = () => {
               </div>
             </div>
           </div>
-          <div className="h-128 w-80 bg-blue-300 order-2"></div>
+          <img
+            className="order-2 pr-8 pl-8 pt-4 pb-4"
+            src="https://res.cloudinary.com/dhupiskro/image/upload/v1664984415/homepage_phone.png"
+          ></img>
         </div>
       </div>
     </div>

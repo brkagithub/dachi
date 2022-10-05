@@ -72,7 +72,7 @@ const Home: NextPage = () => {
                 }`}
                 key={friend.id}
               >
-                <div className="flex items-center cursor-pointer border border-indigo-400 rounded-3xl border-indigo- p-2 mb-4">
+                <div className="flex items-center cursor-pointer border border-indigo-400 rounded-3xl p-2 mb-4 h-32">
                   <div className="flex justify-start items-center w-full">
                     <img
                       className="h-16 w-16 rounded-full"
