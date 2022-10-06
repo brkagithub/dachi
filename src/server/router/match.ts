@@ -15,6 +15,14 @@ export const matchRouter = createRouter()
         });
       }
 
+      const usersBlocked = await prisma.user.findFirst({
+        where: { id: ctx.session.user.id },
+        select: {
+          blockedByMe: true,
+          blockedMe: true,
+        },
+      });
+
       const alreadyMatchedInitiated = await prisma.match.findMany({
         where: {
           requestInitiatorId: ctx.session.user.id,
@@ -37,6 +45,8 @@ export const matchRouter = createRouter()
         //combine targeted and initiated
         ...alreadyMatchedInitiated.map((user) => user.requestTargetId),
         ...alreadyMatchedTargeted.map((user) => user.requestInitiatorId),
+        ...usersBlocked!.blockedByMe.map((block) => block.blockedUserId),
+        ...usersBlocked!.blockedMe.map((block) => block.blockByUserId),
         ctx.session.user.id,
       ];
 

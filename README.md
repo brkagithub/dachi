@@ -138,5 +138,5 @@ TODO:
 - live searching for party/clash
 - other games
 - reviews
-- blocking feature
 - next image
+- unblock list

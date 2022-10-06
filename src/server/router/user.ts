@@ -2,9 +2,7 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
-import { DDragon } from "@fightmegg/riot-api";
 import { TRPCError } from "@trpc/server";
-import { FilterIcon } from "@heroicons/react/outline";
 
 interface champObject {
   id: number;
@@ -237,5 +235,47 @@ export const userRouter = createRouter()
           tiers: input.tiers,
         },
       });
+    },
+  })
+  .mutation("blockUser", {
+    input: z.object({
+      blockedId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      await prisma.block.create({
+        data: {
+          blockByUserId: ctx.session.user.id,
+          blockedUserId: input.blockedId,
+        },
+      });
+    },
+  })
+  .query("isBlocked", {
+    input: z.object({
+      blockedId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      const blockExists = await prisma.block.count({
+        where: {
+          blockByUserId: ctx.session.user.id,
+          blockedUserId: input.blockedId,
+        },
+      });
+
+      return blockExists > 0;
     },
   });

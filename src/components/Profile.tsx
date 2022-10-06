@@ -9,12 +9,28 @@ const Profile = (props: {
   rankedStats: LeagueAccount | null | undefined;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  const { data: isBlocked, isLoading: isLoadingBlock } = trpc.useQuery(
+    ["user.isBlocked", { blockedId: props.user.id }],
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const updateRiotAccountMutation = trpc.useMutation([
     "riot.updateRiotAccount",
   ]);
 
-  if (isLoading) {
+  const blockUserMutation = trpc.useMutation(["user.blockUser"]);
+
+  if (isLoading || isLoadingBlock) {
     return <div className="text-center pt-4">loading...</div>;
+  }
+
+  if (isBlocked) {
+    return (
+      <div className="text-center text-2xl font-semibold pt-2 text-indigo-200">
+        User is blocked or has blocked you, you cant see their profile.
+      </div>
+    );
   }
 
   let userRole = "";
@@ -237,7 +253,16 @@ const Profile = (props: {
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (
-          <></>
+          <button
+            className="bg-gradient-to-r from-red-900 to-red-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+            onClick={() => {
+              blockUserMutation.mutate({
+                blockedId: props.user.id,
+              });
+            }}
+          >
+            Block user
+          </button>
         )}
       </div>
     </>

@@ -79,9 +79,25 @@ model User {
     requestsSent          Match[] @relation("requestsSent")
     requestsReceived      Match[] @relation("requestsReceived")
 
+
+    blockedByMe        Block[]  @relation("blockedByMe")
+    blockedMe          Block[]  @relation("blockedMe")
+
     messagesSent          Message[] @relation("messagesSent")
     messagesReceived      Message[] @relation("messagesReceived")
 }
+
+model Block {
+    id                String    @id @default(cuid())
+    blockByUser       User      @relation(name: "blockedByMe", fields: [blockByUserId], references: [id])
+    blockByUserId     String
+    blockedUser       User      @relation(name: "blockedMe", fields: [blockedUserId], references: [id])
+    blockedUserId     String
+    //user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    //@@unique([provider, providerAccountId])
+}
+
 
 model Champion {
     id            Int    @id
