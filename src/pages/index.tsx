@@ -3,6 +3,7 @@ import { trpc } from "../utils/trpc";
 import { signIn } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import Head from "next/head";
+import Image from "next/image";
 
 const HomeComponent = () => {
   return (
@@ -37,10 +38,11 @@ const HomeComponent = () => {
         </div>
         <div className="flex flex-col md:flex-row items-center justify-around pt-4">
           <div className="w-72 flex flex-col items-center pt-8 md:pt-2">
-            <img
-              className="w-72 h-72"
+            <Image
               src="https://res.cloudinary.com/dhupiskro/image/upload/v1664986540/homepage_globe.png"
-            ></img>
+              width={288}
+              height={288}
+            ></Image>
             <div className="text-2xl font-bold text-indigo-500 pt-1">
               Server
             </div>
@@ -50,10 +52,11 @@ const HomeComponent = () => {
             </div>
           </div>
           <div className="w-72 flex flex-col items-center pt-8 md:pt-2">
-            <img
-              className="w-72 h-72"
-              src="https://opgg-static.akamaized.net/images/medals_new/challenger.png"
-            ></img>
+            <Image
+              src="https://res.cloudinary.com/dhupiskro/image/upload/v1665067163/challenger.png"
+              width={288}
+              height={288}
+            ></Image>
             <div className="text-2xl font-bold text-indigo-500 pt-1">Rank</div>
             <div className="text-gray-300 text-lg text-center font-semibold">
               You&apos;re high elo and need a duo? Need a teammate to get out of
@@ -61,10 +64,13 @@ const HomeComponent = () => {
             </div>
           </div>
           <div className="w-72 flex flex-col items-center pt-4 md:pt-2">
-            <img
-              className="w-64 h-64 p-8"
-              src="https://res.cloudinary.com/dhupiskro/image/upload/v1664987325/homepage_role.png"
-            ></img>
+            <div className="p-8">
+              <Image
+                src="https://res.cloudinary.com/dhupiskro/image/upload/v1664987325/homepage_role.png"
+                width={256}
+                height={256}
+              ></Image>
+            </div>
             <div className="text-2xl font-bold text-indigo-500 pt-1">Role</div>
             <div className="text-gray-300 text-lg text-center font-semibold">
               Filter by role to find players that can be the perfect addition to
@@ -103,10 +109,13 @@ const HomeComponent = () => {
               </div>
             </div>
           </div>
-          <img
-            className="order-2 pr-8 pl-8 pt-4 pb-4"
-            src="https://res.cloudinary.com/dhupiskro/image/upload/v1664984415/homepage_phone.png"
-          ></img>
+          <div className="order-2 pr-8 pl-8 pt-4 pb-4">
+            <Image
+              src="https://res.cloudinary.com/dhupiskro/image/upload/v1664984415/homepage_phone.png"
+              width={287}
+              height={597}
+            ></Image>
+          </div>
         </div>
       </div>
     </div>
