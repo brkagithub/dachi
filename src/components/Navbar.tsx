@@ -181,20 +181,6 @@ const Navbar: React.FC<{
                         </a>
                       )
                     )}
-                    {!me ? (
-                      <button
-                        onClick={() => {
-                          signIn("discord");
-                        }}
-                        className={
-                          "text-white bg-gradient-to-r from-indigo-900 to-indigo-500 px-3 py-2 rounded-2xl font-semibold"
-                        }
-                      >
-                        Become a dachi
-                      </button>
-                    ) : (
-                      <></>
-                    )}
                   </div>
                 </div>
               </div>

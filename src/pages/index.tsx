@@ -27,7 +27,14 @@ const HomeComponent = () => {
               onClick={() => signIn("discord")}
               className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
             >
-              Sign up for free
+              Login with Discord
+            </button>
+            <div className="p-2"></div>
+            <button
+              onClick={() => signIn("google")}
+              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+            >
+              Login with Google
             </button>
           </div>
         </div>
@@ -148,7 +155,6 @@ const Home: NextPage = () => {
         <title>Getbrka</title>
       </Head>
       <Navbar me={meData}></Navbar>
-      Not signed in <br />
       <HomeComponent />
     </>
   );

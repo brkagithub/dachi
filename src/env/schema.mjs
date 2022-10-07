@@ -12,6 +12,8 @@ export const serverSchema = z.object({
   NEXTAUTH_URL: z.string().url(),
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
   RIOT_API_KEY: z.string(),
   PUSHER_APP_ID: z.string(),
   PUSHER_APP_SECRET: z.string(),

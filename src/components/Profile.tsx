@@ -80,10 +80,12 @@ const Profile = (props: {
             </div>
           </div>
           <div className="flex flex-col order-2 items-center">
-            <img
-              className="h-36 w-36 rounded-full relative bottom-16 border-4 border-gray-800"
-              src={props.user.image || ""}
-            ></img>
+            {props.user.image && (
+              <img
+                className="h-36 w-36 rounded-full relative bottom-16 border-4 border-blue-700"
+                src={props.user.image}
+              ></img>
+            )}
             <div className="text-xl text-center relative bottom-16 font-semibold">
               {props.user.name}
             </div>
@@ -131,50 +133,58 @@ const Profile = (props: {
             </div>
           </div>
           <div className="order-3 w-full md:w-2/5 flex justify-center md:justify-around pt-4 pb-4 md:pb-0 md:pt-2 md:pl-8">
-            <div>
-              <img
-                className="h-16 w-16 rounded-full"
-                src={`https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/${userRole}.png`}
-              ></img>
-              <div className="text-center capitalize">{props.user.role}</div>
-            </div>
-            <div className="p-1"></div>
-            <div className="w-24 h-24">
-              <div className="flex justify-center">
+            {props.user.role && (
+              <div>
                 <img
                   className="h-16 w-16 rounded-full"
-                  src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1_img}.png`}
+                  src={`https://raw.githubusercontent.com/esports-bits/lol_images/master/role_lane_icons/${userRole}.png`}
                 ></img>
+                <div className="text-center capitalize">{props.user.role}</div>
               </div>
-              <div className="text-center capitalize">
-                {props.user.fav_champion1}
+            )}
+            <div className="p-1"></div>
+            {props.user.fav_champion1 && (
+              <div className="w-24 h-24">
+                <div className="flex justify-center">
+                  <img
+                    className="h-16 w-16 rounded-full"
+                    src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion1_img}.png`}
+                  ></img>
+                </div>
+                <div className="text-center capitalize">
+                  {props.user.fav_champion1}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="p-1"></div>
-            <div className="w-24 h-24">
-              <div className="flex justify-center">
-                <img
-                  className="h-16 w-16 rounded-full"
-                  src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2_img}.png`}
-                ></img>
+            {props.user.fav_champion2 && (
+              <div className="w-24 h-24">
+                <div className="flex justify-center">
+                  <img
+                    className="h-16 w-16 rounded-full"
+                    src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion2_img}.png`}
+                  ></img>
+                </div>
+                <div className="text-center capitalize">
+                  {props.user.fav_champion2}
+                </div>
               </div>
-              <div className="text-center capitalize">
-                {props.user.fav_champion2}
-              </div>
-            </div>
+            )}
             <div className="p-1"></div>
-            <div className="w-24 h-24">
-              <div className="flex justify-center">
-                <img
-                  className="h-16 w-16 rounded-full"
-                  src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3_img}.png`}
-                ></img>
+            {props.user.fav_champion3 && (
+              <div className="w-24 h-24">
+                <div className="flex justify-center">
+                  <img
+                    className="h-16 w-16 rounded-full"
+                    src={`http://ddragon.leagueoflegends.com/cdn/12.15.1/img/champion/${props.user.fav_champion3_img}.png`}
+                  ></img>
+                </div>
+                <div className="text-center capitalize">
+                  {props.user.fav_champion3}
+                </div>
               </div>
-              <div className="text-center capitalize">
-                {props.user.fav_champion3}
-              </div>
-            </div>
+            )}
           </div>
         </div>
         {props.rankedStats &&
