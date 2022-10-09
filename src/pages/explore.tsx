@@ -10,12 +10,9 @@ const Explore: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery(
-    ["match.getPotentialMatch"],
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery([
+    "match.getPotentialMatch",
+  ]);
   const utils = trpc.useContext();
   const createMatchMutation = trpc.useMutation(["match.createMatch"], {
     onSuccess: () => {
