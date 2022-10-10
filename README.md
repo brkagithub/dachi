@@ -140,3 +140,4 @@ TODO:
 - reviews
 - next image
 - unblock list
+- SEO twitter cards for example
