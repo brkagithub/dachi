@@ -9,7 +9,8 @@ import { compareStrings } from "../../utils/compareStrings";
 import NextLink from "next/link";
 import Head from "next/head";
 
-//todo: presence, persist msgs in database
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, "0");
 
 type Message = {
   body: string;
@@ -185,7 +186,8 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {message.timestamp.getHours()}:{message.timestamp.getMinutes()}
+                {message.timestamp.getHours()}:
+                {zeroPad(message.timestamp.getMinutes(), 2)}
               </div>
             </div>
           </div>
@@ -236,7 +238,10 @@ const ChatComponent: React.FC<{
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
                 {new Date(message.timestamp.toString()).getHours()}:
-                {new Date(message.timestamp.toString()).getMinutes()}
+                {zeroPad(
+                  new Date(message.timestamp.toString()).getMinutes(),
+                  2
+                )}
               </div>
             </div>
           </div>

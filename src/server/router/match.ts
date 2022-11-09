@@ -69,17 +69,13 @@ export const matchRouter = createRouter()
       } else {
         userStillNotMatched = await prisma.user.findFirst({
           where: {
-            NOT: {
-              id: {
-                in: alreadyMatchedWithIds,
-              },
-            },
-            AND: {
-              age: { gte: filter.ageLowerLimit, lte: filter.ageUpperLimit },
-              gender: { in: filter.genders },
-              role: { in: filter.roles },
-              server: { in: filter.servers },
-              tier: { in: filter.tiers },
+            age: { gte: filter.ageLowerLimit, lte: filter.ageUpperLimit },
+            gender: { in: filter.genders },
+            role: { in: filter.roles },
+            server: { in: filter.servers },
+            tier: { in: filter.tiers },
+            id: {
+              notIn: alreadyMatchedWithIds,
             },
           },
         });
