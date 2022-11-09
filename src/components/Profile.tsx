@@ -124,7 +124,7 @@ const Profile = (props: {
                 <div className="pr-1 pl-1">
                   <SocialIcon
                     style={{ height: 32, width: 32 }}
-                    url={`https://youtube.com/channel/${props.user.youtube}`}
+                    url={`https://www.youtube.com/@${props.user.youtube}`}
                   />
                 </div>
               ) : (
