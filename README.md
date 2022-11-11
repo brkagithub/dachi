@@ -141,3 +141,5 @@ TODO:
 - next image
 - unblock list
 - SEO twitter cards for example
+- option to turn off filter
+- button spinners loading

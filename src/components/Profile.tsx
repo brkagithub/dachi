@@ -19,8 +19,6 @@ const Profile = (props: {
     "riot.updateRiotAccount",
   ]);
 
-  const blockUserMutation = trpc.useMutation(["user.blockUser"]);
-
   if (isLoading || isLoadingBlock) {
     return <div className="text-center pt-4">loading...</div>;
   }
@@ -56,7 +54,7 @@ const Profile = (props: {
 
   return (
     <>
-      <div className="bg-gradient-to-r from-indigo-800 via-violet-500 to-gray-300 w-full h-48"></div>
+      <div className="bg-gradient-to-r from-indigo-800 via-violet-500 to-gray-300 w-full h-36 md:h-48"></div>
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex flex-col items-center">
         <div className="w-full flex flex-col md:flex-row md:justify-center">
           <div className="order-3 md:order-1 w-full md:w-2/5">
@@ -260,16 +258,7 @@ const Profile = (props: {
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (
-          <button
-            className="bg-gradient-to-r from-red-900 to-red-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
-            onClick={() => {
-              blockUserMutation.mutate({
-                blockedId: props.user.id,
-              });
-            }}
-          >
-            Block user
-          </button>
+          <></>
         )}
       </div>
     </>
