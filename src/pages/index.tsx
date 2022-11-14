@@ -142,7 +142,7 @@ const Home: NextPage = () => {
     return (
       <>
         <Head>
-          <title>Getbrka</title>
+          <title>Dachi</title>
         </Head>
         <Navbar me={meData}></Navbar>
         <HomeComponent />
@@ -152,7 +152,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Getbrka</title>
+        <title>Dachi</title>
       </Head>
       <Navbar me={meData}></Navbar>
       <HomeComponent />

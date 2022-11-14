@@ -140,4 +140,3 @@ TODO:
 - next image
 - unblock list
 - SEO twitter cards for example
-- button spinners loading

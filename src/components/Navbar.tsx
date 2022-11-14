@@ -108,14 +108,14 @@ const Navbar: React.FC<{
                     <img
                       className="block lg:hidden h-8 w-auto cursor-pointer"
                       src="/images/logo_getbrka.png"
-                      alt="Getbrka"
+                      alt="Dachi"
                     />
                   </NextLink>
                   <NextLink href="/">
                     <img
                       className="hidden lg:block w-10 h-auto cursor-pointer"
                       src="/images/logo_getbrka.png"
-                      alt="Getbrka"
+                      alt="Dachi"
                     />
                   </NextLink>
                 </div>
