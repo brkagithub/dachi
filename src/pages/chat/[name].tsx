@@ -186,7 +186,7 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {message.timestamp.getHours()}:
+                {zeroPad(message.timestamp.getHours(), 2)}:
                 {zeroPad(message.timestamp.getMinutes(), 2)}
               </div>
             </div>
@@ -237,7 +237,7 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {new Date(message.timestamp.toString()).getHours()}:
+                {zeroPad(new Date(message.timestamp.toString()).getHours(), 2)}
                 {zeroPad(
                   new Date(message.timestamp.toString()).getMinutes(),
                   2

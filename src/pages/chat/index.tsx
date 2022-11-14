@@ -5,6 +5,9 @@ import Navbar from "../../components/Navbar";
 import NextLink from "next/link";
 import Head from "next/head";
 
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, "0");
+
 const Home: NextPage = () => {
   //const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
   const { data: meData, isLoading } = trpc.useQuery(["user.me"], {
@@ -114,8 +117,15 @@ const Home: NextPage = () => {
                         friend.lastMessage[0].timestamp.toDateString() ? (
                           <div className="flex flex-col items-center">
                             <div className="pr-1 text-sm pb-1">
-                              {friend.lastMessage[0]?.timestamp.getHours()}:
-                              {friend.lastMessage[0]?.timestamp.getMinutes()}
+                              {zeroPad(
+                                friend.lastMessage[0]?.timestamp.getHours(),
+                                2
+                              )}
+                              :
+                              {zeroPad(
+                                friend.lastMessage[0]?.timestamp.getMinutes(),
+                                2
+                              )}
                             </div>
                             {friend.numUnseenMsgs > 0 && (
                               <div className="flex items-center justify-center rounded-full bg-red-600 w-6 h-6">
