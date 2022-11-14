@@ -189,7 +189,7 @@ const Profile = (props: {
           props.rankedStats.wins &&
           props.rankedStats.losses && (
             <>
-              <div className="bg-gray-800 rounded-2xl p-1">
+              <div className="bg-gray-800 rounded-2xl p-1 flex flex-col items-center mt-2 md:mt-0">
                 <div className="text-xl text-center pt-6 md:pt-2 md:pb-2">
                   <a
                     className="cursor-pointer underline underline-offset-4"
@@ -205,7 +205,7 @@ const Profile = (props: {
                     )})`}
                   </a>
                 </div>
-                <div className="flex justify-between items-center pb-2">
+                <div className="flex justify-between items-center">
                   <img
                     className="h-36 w-auto rounded-full"
                     src={`https://opgg-static.akamaized.net/images/medals_new/${props.rankedStats.tier?.toLowerCase()}.png`}
@@ -235,26 +235,27 @@ const Profile = (props: {
                     </div>
                   </div>
                 </div>
+                <button
+                  className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
+                  onClick={() => {
+                    if (props.rankedStats?.ign && props.rankedStats?.server) {
+                      updateRiotAccountMutation.mutate({
+                        ign: props.rankedStats.ign,
+                        server: props.rankedStats.server,
+                        userId: props.user.id,
+                      });
+                    }
+                  }}
+                >
+                  Refresh league stats
+                </button>
+                <div className="p-2"></div>
               </div>
-              <button
-                className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
-                onClick={() => {
-                  if (props.rankedStats?.ign && props.rankedStats?.server) {
-                    updateRiotAccountMutation.mutate({
-                      ign: props.rankedStats.ign,
-                      server: props.rankedStats.server,
-                      userId: props.user.id,
-                    });
-                  }
-                }}
-              >
-                Refresh league stats
-              </button>
             </>
           )}
 
         {meData && meData?.id == props.user.id ? (
-          <button className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
+          <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (
