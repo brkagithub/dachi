@@ -50,11 +50,12 @@ const SettingsPage = () => {
           <FilterEditForm
             defaultValues={{
               ageUpper: myFilter?.ageUpperLimit || 50,
-              ageLower: myFilter?.ageLowerLimit || 14,
+              ageLower: myFilter?.ageLowerLimit || 18,
               genders: myFilter?.genders || [],
               roles: myFilter?.roles || [],
               servers: myFilter?.servers || [],
               tiers: myFilter?.tiers || [],
+              ignoreFilter: false,
             }}
           />
         </div>
@@ -66,6 +67,7 @@ const SettingsPage = () => {
 };
 
 type Inputs = {
+  ignoreFilter: boolean;
   ageUpper: number;
   ageLower: number;
   roles: ("Top" | "Jungle" | "Mid" | "ADC" | "Support")[];
@@ -116,6 +118,7 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
       roles: data.roles,
       servers: data.servers,
       tiers: data.tiers,
+      ignoreFilter: data.ignoreFilter,
     });
   };
 
@@ -297,6 +300,25 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
             </div>
           );
         })}
+
+        <div className="pt-4" />
+
+        <div className="flex justify-between hover:bg-indigo-900 pr-1">
+          <label
+            htmlFor="ignoreFilter"
+            className="px-1 w-full text-indigo-400 font-semibold text-lg"
+          >
+            Ignore all filters
+          </label>
+          <input
+            {...register("ignoreFilter")}
+            name="ignoreFilter"
+            id="ignoreFilter"
+            type="checkbox"
+          ></input>
+        </div>
+
+        <div className="p-2"></div>
 
         <div className="flex flex-col items-center ">
           <input

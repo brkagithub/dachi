@@ -164,19 +164,7 @@ export const userRouter = createRouter()
         },
       });
 
-      if (!filter) {
-        const emptyFilter = await prisma.filter.create({
-          data: {
-            userId: ctx.session.user.id,
-            ageLowerLimit: 14,
-            ageUpperLimit: 50,
-          },
-        });
-
-        return emptyFilter;
-      } else {
-        return filter;
-      }
+      return filter;
     },
   })
   .mutation("updateFilterForUser", {
@@ -213,6 +201,7 @@ export const userRouter = createRouter()
           "IRON",
         ])
       ),
+      ignoreFilter: z.boolean(),
     }),
     async resolve({ input, ctx }) {
       if (!ctx.session || !ctx.session.user?.id) {
@@ -222,17 +211,31 @@ export const userRouter = createRouter()
         });
       }
 
-      await prisma.filter.update({
+      if (input.ignoreFilter) {
+        await prisma.filter.delete({ where: { userId: ctx.session.user.id } });
+        return;
+      }
+
+      await prisma.filter.upsert({
         where: {
           userId: ctx.session.user.id,
         },
-        data: {
+        update: {
           ageLowerLimit: input.ageLowerLimit,
           ageUpperLimit: input.ageUpperLimit,
           genders: input.genders,
           roles: input.roles,
           servers: input.servers,
           tiers: input.tiers,
+        },
+        create: {
+          ageLowerLimit: input.ageLowerLimit,
+          ageUpperLimit: input.ageUpperLimit,
+          genders: input.genders,
+          roles: input.roles,
+          servers: input.servers,
+          tiers: input.tiers,
+          userId: ctx.session.user.id,
         },
       });
     },

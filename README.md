@@ -134,12 +134,10 @@ TODO:
 
 - separate page to verify riot accounts
 - support multiple riot accounts instead of one
-- signup/login with google
 - live searching for party/clash
 - other games
 - reviews
 - next image
 - unblock list
 - SEO twitter cards for example
-- option to turn off filter
 - button spinners loading
