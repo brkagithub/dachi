@@ -322,9 +322,10 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
 
         <div className="flex flex-col items-center ">
           <input
-            className="bg-gray-900 rounded-full pt-2 pb-2 pr-4 pl-4 cursor-pointer text-lg font-bold border border-sky-100"
+            className="disabled:opacity-50 disabled:cursor-auto bg-gray-900 rounded-full pt-2 pb-2 pr-4 pl-4 cursor-pointer text-lg font-bold border border-sky-100"
             type="submit"
             value="Confirm changes"
+            disabled={updateFilterMutation.isLoading}
           />
           {formState.isSubmitSuccessful ? (
             <div className=" text-green-400">

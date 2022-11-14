@@ -138,7 +138,11 @@ const Requests: NextPage = () => {
                           }
                         }}
                         type="button"
-                        className="text-indigo-400 border border-indigo-400 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
+                        disabled={
+                          acceptFriendReqMutation.isLoading ||
+                          declineFriendReqMutation.isLoading
+                        }
+                        className="disabled:opacity-50 disabled:cursor-auto disabled:hover:bg-inherit text-indigo-400 border border-indigo-400 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
                       >
                         <svg
                           aria-hidden="true"
@@ -173,7 +177,11 @@ const Requests: NextPage = () => {
                           }
                         }}
                         type="button"
-                        className="text-indigo-400 border border-indigo-400 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
+                        disabled={
+                          acceptFriendReqMutation.isLoading ||
+                          declineFriendReqMutation.isLoading
+                        }
+                        className="disabled:opacity-50 disabled:cursor-auto disabled:hover:bg-inherit text-indigo-400 border border-indigo-400 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-700 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center"
                       >
                         <svg
                           aria-hidden="true"
