@@ -237,7 +237,7 @@ const ChatComponent: React.FC<{
             </div>
             <div className="flex">
               <div className="text-right text-xs pl-2 pr-1 pt-2 self-end">
-                {zeroPad(new Date(message.timestamp.toString()).getHours(), 2)}
+                {zeroPad(new Date(message.timestamp.toString()).getHours(), 2)}:
                 {zeroPad(
                   new Date(message.timestamp.toString()).getMinutes(),
                   2
