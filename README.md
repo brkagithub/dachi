@@ -13,3 +13,4 @@ TODO:
 - unblock list
 - SEO twitter cards for example (kinda done)
 - prettier logo etc?
+- search
