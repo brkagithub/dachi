@@ -9,6 +9,7 @@ TODO:
 - live searching for party/clash
 - other games
 - reviews
-- next image
+- next image (kinda done)
 - unblock list
-- SEO twitter cards for example
+- SEO twitter cards for example (kinda done)
+- prettier logo etc?

@@ -45,7 +45,7 @@ const SettingsPage = () => {
       ) : (
         <div className="max-w-xl mx-auto px-2 sm:px-6 lg:px-8 pt-1 flex flex-col items-center">
           <div className="text-center text-2xl font-semibold pt-2 text-indigo-200">
-            Update your filters here
+            Update your preferences here
           </div>
           <FilterEditForm
             defaultValues={{
@@ -308,7 +308,7 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
             htmlFor="ignoreFilter"
             className="px-1 w-full text-indigo-400 font-semibold text-lg"
           >
-            Ignore all filters
+            Turn off filters
           </label>
           <input
             {...register("ignoreFilter")}

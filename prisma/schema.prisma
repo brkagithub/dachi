@@ -147,7 +147,7 @@ model Filter {
     user   User @relation(fields: [userId], references: [id])
     userId String  @unique
     ageUpperLimit    Int @default(50)
-    ageLowerLimit    Int @default(14)
+    ageLowerLimit    Int @default(18)
     genders Gender[]
     roles   Role[]
     servers Server[]

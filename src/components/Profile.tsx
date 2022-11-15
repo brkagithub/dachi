@@ -63,9 +63,7 @@ const Profile = (props: {
                 <div className="capitalize">
                   {props.user.firstName}, {props.user.age}
                 </div>
-                <div className="capitalize">
-                  {props.user.country} {flag(props.user.country || "")}
-                </div>
+                <div className="capitalize">{props.user.country}</div>
                 {props.user.gender == "Nonconforming" ? (
                   ""
                 ) : (
