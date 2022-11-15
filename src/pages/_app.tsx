@@ -19,6 +19,29 @@ const MyApp: AppType = ({
             name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
           />
+          <meta
+            name="description"
+            content="Dachi - a website that helps you find gaming teammates and chat with them. Set up your profile and find friends via the site, chat with them live and organize a LoL session with them. Soon supporting other Riot Games titles."
+          />
+          <meta
+            property="og:description"
+            content="Dachi - a website that helps you find gaming teammates and chat with them. Set up your profile and find friends via the site, chat with them live and organize a LoL session with them. Soon supporting other Riot Games titles."
+          />
+          <meta
+            property="og:title"
+            content="Dachi - find gaming teammates and chat with them live!"
+          />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@dachi" />
+          <meta
+            name="twitter:title"
+            content="Dachi - team up with fellow gamers on our social app!"
+          />
+          <meta
+            name="twitter:description"
+            content="Dachi - a website that helps you find gaming teammates and chat with them. Set up your profile and find friends via the site, chat with them live and organize a LoL session with them. Soon supporting other Riot Games titles."
+          />
+          <meta name="twitter:image" content="images/logo_getbrka.png" />
         </Head>
         <Component {...pageProps} />
       </SessionProvider>
