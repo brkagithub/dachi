@@ -31,7 +31,10 @@ const MyApp: AppType = ({
             property="og:title"
             content="Dachi - find gaming teammates and chat with them live!"
           />
-          <meta name="twitter:card" content="summary" />
+          <meta
+            name="twitter:card"
+            content="Dachi - a website that helps you find gaming teammates and chat with them. Set up your profile and find friends via the site, chat with them live and organize a LoL session with them. Soon supporting other Riot Games titles."
+          />
           <meta name="twitter:site" content="@dachi" />
           <meta
             name="twitter:title"
