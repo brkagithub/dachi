@@ -41,7 +41,6 @@ const MyApp: AppType = ({
             name="twitter:description"
             content="Dachi - a website that helps you find gaming teammates and chat with them. Set up your profile and find friends via the site, chat with them live and organize a LoL session with them. Soon supporting other Riot Games titles."
           />
-          <meta name="twitter:image" content="images/logo_getbrka.png" />
         </Head>
         <Component {...pageProps} />
       </SessionProvider>
