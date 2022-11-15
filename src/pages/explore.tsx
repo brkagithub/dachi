@@ -10,9 +10,13 @@ const Explore: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { data: userMatchedData, isLoading: matchIsLoading } = trpc.useQuery([
-    "match.getPotentialMatch",
-  ]);
+  const {
+    data: userMatchedData,
+    isLoading: matchIsLoading,
+    isFetching: matchIsFetching,
+  } = trpc.useQuery(["match.getPotentialMatch"], {
+    refetchOnWindowFocus: false,
+  });
   const utils = trpc.useContext();
   const createMatchMutation = trpc.useMutation(["match.createMatch"], {
     onSuccess: () => {
@@ -82,12 +86,18 @@ const Explore: NextPage = () => {
             <div className="max-w-3xl mx-auto px-2 pt-4 sm:px-6 lg:px-8 flex justify-between">
               <button
                 type="button"
-                disabled={createMatchMutation.isLoading}
+                disabled={
+                  createMatchMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching
+                }
                 className="disabled:opacity-50 disabled:cursor-auto border border-sky-300 text-black bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm pt-3 pb-3 pl-4 pr-4 text-center mr-2 mb-2"
                 onClick={() => {
                   if (
                     userMatchedData.user?.id &&
-                    !createMatchMutation.isLoading
+                    !createMatchMutation.isLoading &&
+                    !matchIsLoading &&
+                    !matchIsFetching
                   ) {
                     createMatchMutation.mutate({
                       requestInitiatorId: meData.id,
@@ -97,7 +107,9 @@ const Explore: NextPage = () => {
                   }
                 }}
               >
-                {(createMatchMutation.isLoading && (
+                {((createMatchMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching) && (
                   <svg
                     width="44"
                     height="44"
@@ -170,12 +182,18 @@ const Explore: NextPage = () => {
                 )}
               </button>
               <button
-                disabled={blockUserMutation.isLoading}
+                disabled={
+                  blockUserMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching
+                }
                 className="disabled:opacity-50 disabled:cursor-auto border border-gray-700 text-black bg-gradient-to-r from-red-900 to-red-500 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-red-400 font-medium rounded-full text-sm pt-3 pb-3 pl-4 pr-4 text-center mr-2 mb-2"
                 onClick={() => {
                   if (
                     userMatchedData.user?.id &&
-                    !createMatchMutation.isLoading
+                    !createMatchMutation.isLoading &&
+                    !matchIsLoading &&
+                    !matchIsFetching
                   ) {
                     blockUserMutation.mutate({
                       blockedId: userMatchedData.user.id,
@@ -183,7 +201,9 @@ const Explore: NextPage = () => {
                   }
                 }}
               >
-                {(blockUserMutation.isLoading && (
+                {((blockUserMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching) && (
                   <svg
                     width="44"
                     height="44"
@@ -257,12 +277,18 @@ const Explore: NextPage = () => {
               </button>
               <button
                 type="button"
-                disabled={createMatchMutation.isLoading}
+                disabled={
+                  createMatchMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching
+                }
                 className="disabled:opacity-50 disabled:cursor-auto border border-red-300 text-black bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm pt-3 pb-3 pl-4 pr-4 text-center mr-2 mb-2"
                 onClick={() => {
                   if (
                     userMatchedData.user?.id &&
-                    !createMatchMutation.isLoading
+                    !createMatchMutation.isLoading &&
+                    !matchIsLoading &&
+                    !matchIsFetching
                   ) {
                     createMatchMutation.mutate({
                       requestInitiatorId: meData.id,
@@ -272,7 +298,9 @@ const Explore: NextPage = () => {
                   }
                 }}
               >
-                {(createMatchMutation.isLoading && (
+                {((createMatchMutation.isLoading ||
+                  matchIsLoading ||
+                  matchIsFetching) && (
                   <svg
                     width="44"
                     height="44"
