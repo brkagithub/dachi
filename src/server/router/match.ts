@@ -50,14 +50,13 @@ export const matchRouter = createRouter()
         ctx.session.user.id,
       ];
 
-      console.log(alreadyMatchedWithIds);
+      console.log(alreadyMatchedWithIds.length);
 
       const filter = await prisma.filter.findFirst({
         where: { userId: ctx.session.user.id },
       });
 
       let userStillNotMatched: User | null = null;
-      console.log(filter);
 
       if (!filter) {
         userStillNotMatched = await prisma.user.findFirst({
