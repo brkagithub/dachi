@@ -71,6 +71,7 @@ export const matchRouter = createRouter()
             },
           },
         });
+        console.log(userStillNotMatched);
       } else {
         userStillNotMatched = await prisma.user.findFirst({
           where: {
@@ -84,6 +85,7 @@ export const matchRouter = createRouter()
             },
           },
         });
+        console.log(userStillNotMatched);
       }
 
       const userRiotAccount = await prisma.leagueAccount.findFirst({

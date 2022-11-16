@@ -16,3 +16,4 @@ TODO:
 - search
 - when you name change chat gets weird - change recipientName to recipientId on chat page or make name not changeable
 - updating riot acc lasts too long sometimes
+- remove login buttons when logged in
