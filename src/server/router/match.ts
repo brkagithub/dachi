@@ -91,6 +91,12 @@ export const matchRouter = createRouter()
         where: { userId: userStillNotMatched?.id },
       });
 
+      console.log(
+        ctx.session.user.name,
+        " matched with ",
+        userStillNotMatched?.name
+      );
+
       return { user: userStillNotMatched, rankedStats: userRiotAccount };
     },
   })
