@@ -206,13 +206,13 @@ function UserEditForm({
       fav_champion2: data.favoriteChampion2,
       fav_champion3: data.favoriteChampion3,
       fav_champion1_img:
-        allChamps?.filter((champ) => champ.name == data.favoriteChampion1)[0]
+        allChamps?.find((champ) => champ.name == data.favoriteChampion1)
           ?.uniqueName || "",
       fav_champion2_img:
-        allChamps?.filter((champ) => champ.name == data.favoriteChampion2)[0]
+        allChamps?.find((champ) => champ.name == data.favoriteChampion2)
           ?.uniqueName || "",
       fav_champion3_img:
-        allChamps?.filter((champ) => champ.name == data.favoriteChampion3)[0]
+        allChamps?.find((champ) => champ.name == data.favoriteChampion3)
           ?.uniqueName || "",
       role: data.role,
       gender: data.gender,
@@ -264,6 +264,11 @@ function UserEditForm({
       <input
         className="shadow border border-sky-200 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("name", {
+          pattern: {
+            value: /^[A-Za-z][A-Za-z0-9_]{1,29}$/i,
+            message:
+              "You need to use a valid username (letters and numbers only)",
+          },
           required: true,
           onChange: () => {
             clearErrors("name");
@@ -272,7 +277,9 @@ function UserEditForm({
       />
 
       {errors.name && errors.name.type !== "checkUsername" && (
-        <span className="text-red-400">This field is required</span>
+        <span className="text-red-400">
+          Username needs to start with a letter and have 2+ characters.
+        </span>
       )}
 
       {errors.name && errors.name.type === "checkUsername" && (

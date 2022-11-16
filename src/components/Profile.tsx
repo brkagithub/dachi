@@ -311,7 +311,7 @@ const Profile = (props: {
 
         {meData && meData?.id == props.user.id ? (
           <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
-            <NextLink href="/profile/edit">Edit your profile here</NextLink>
+            <NextLink href="/profile/edit">Edit your profile</NextLink>
           </button>
         ) : (
           <></>

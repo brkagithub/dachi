@@ -125,8 +125,6 @@ export const riotRouter = createRouter()
         (acc) => acc.queueType == "RANKED_SOLO_5x5"
       );
 
-      console.log(soloQAccount);
-
       if (soloQAccount) {
         await prisma.leagueAccount.update({
           where: {

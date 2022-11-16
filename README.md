@@ -14,3 +14,5 @@ TODO:
 - SEO twitter cards for example (kinda done)
 - prettier logo etc?
 - search
+- when you name change chat gets weird - change recipientName to recipientId on chat page or make name not changeable
+- updating riot acc lasts too long sometimes
