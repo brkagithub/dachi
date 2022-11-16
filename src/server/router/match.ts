@@ -57,6 +57,7 @@ export const matchRouter = createRouter()
       let userStillNotMatched: User | null = null;
 
       if (!filter) {
+        console.log(userStillNotMatched);
         userStillNotMatched = await prisma.user.findFirst({
           where: {
             NOT: {

@@ -235,7 +235,7 @@ const Profile = (props: {
                 </div>
                 <button
                   disabled={updateRiotAccountMutation.isLoading}
-                  className="disabled:opacity-50 disabled:hover:border-0 disabled:cursor-auto bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
+                  className="disabled:opacity-50 disabled:hover:outline-0 disabled:cursor-auto bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
                   onClick={() => {
                     if (props.rankedStats?.ign && props.rankedStats?.server) {
                       updateRiotAccountMutation.mutate({
@@ -310,7 +310,7 @@ const Profile = (props: {
           )}
 
         {meData && meData?.id == props.user.id ? (
-          <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
+          <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
             <NextLink href="/profile/edit">Edit your profile here</NextLink>
           </button>
         ) : (

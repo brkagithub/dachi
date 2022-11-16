@@ -25,14 +25,14 @@ const HomeComponent = () => {
           <div className="flex justify-center">
             <button
               onClick={() => signIn("discord")}
-              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
             >
               Login with Discord
             </button>
             <div className="p-2"></div>
             <button
               onClick={() => signIn("google")}
-              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:border-2 hover:border-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
             >
               Login with Google
             </button>
