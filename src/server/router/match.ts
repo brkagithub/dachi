@@ -50,7 +50,10 @@ export const matchRouter = createRouter()
         ctx.session.user.id,
       ];
 
-      console.log(alreadyMatchedWithIds.length);
+      console.log(
+        "already matched with number: ",
+        alreadyMatchedWithIds.length
+      );
 
       const filter = await prisma.filter.findFirst({
         where: { userId: ctx.session.user.id },
