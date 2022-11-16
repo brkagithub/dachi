@@ -212,32 +212,33 @@ export const userRouter = createRouter()
       }
 
       if (input.ignoreFilter) {
-        await prisma.filter.delete({ where: { userId: ctx.session.user.id } });
-        return;
+        await prisma.filter.deleteMany({
+          where: { userId: ctx.session.user.id },
+        });
+      } else {
+        await prisma.filter.upsert({
+          where: {
+            userId: ctx.session.user.id,
+          },
+          update: {
+            ageLowerLimit: input.ageLowerLimit,
+            ageUpperLimit: input.ageUpperLimit,
+            genders: input.genders,
+            roles: input.roles,
+            servers: input.servers,
+            tiers: input.tiers,
+          },
+          create: {
+            ageLowerLimit: input.ageLowerLimit,
+            ageUpperLimit: input.ageUpperLimit,
+            genders: input.genders,
+            roles: input.roles,
+            servers: input.servers,
+            tiers: input.tiers,
+            userId: ctx.session.user.id,
+          },
+        });
       }
-
-      await prisma.filter.upsert({
-        where: {
-          userId: ctx.session.user.id,
-        },
-        update: {
-          ageLowerLimit: input.ageLowerLimit,
-          ageUpperLimit: input.ageUpperLimit,
-          genders: input.genders,
-          roles: input.roles,
-          servers: input.servers,
-          tiers: input.tiers,
-        },
-        create: {
-          ageLowerLimit: input.ageLowerLimit,
-          ageUpperLimit: input.ageUpperLimit,
-          genders: input.genders,
-          roles: input.roles,
-          servers: input.servers,
-          tiers: input.tiers,
-          userId: ctx.session.user.id,
-        },
-      });
     },
   })
   .mutation("blockUser", {

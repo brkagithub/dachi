@@ -55,6 +55,7 @@ export const matchRouter = createRouter()
       });
 
       let userStillNotMatched: User | null = null;
+      console.log(filter);
 
       if (!filter) {
         console.log(userStillNotMatched);
