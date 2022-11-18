@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import Head from "next/head";
 import Image from "next/image";
 
-const HomeComponent = () => {
+const HomeComponent = (props: { isLoggedIn: boolean }) => {
   return (
     <div className="max-w-7xl mx-auto pt-8 px-2 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="flex flex-col md:flex-row justify-center items-center">
@@ -22,21 +22,23 @@ const HomeComponent = () => {
             Set up your profile and your preferences so we can find you a
             suitable gamer buddy to chat and play games with.
           </div>
-          <div className="flex justify-center">
-            <button
-              onClick={() => signIn("discord")}
-              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
-            >
-              Login with Discord
-            </button>
-            <div className="p-2"></div>
-            <button
-              onClick={() => signIn("google")}
-              className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
-            >
-              Login with Google
-            </button>
-          </div>
+          {!props.isLoggedIn && (
+            <div className="flex justify-center">
+              <button
+                onClick={() => signIn("discord")}
+                className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+              >
+                Login with Discord
+              </button>
+              <div className="p-2"></div>
+              <button
+                onClick={() => signIn("google")}
+                className="bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+              >
+                Login with Google
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-col pt-16 w-full">
@@ -145,7 +147,7 @@ const Home: NextPage = () => {
           <title>Dachi</title>
         </Head>
         <Navbar me={meData}></Navbar>
-        <HomeComponent />
+        <HomeComponent isLoggedIn={true} />
       </>
     );
   }
@@ -155,7 +157,7 @@ const Home: NextPage = () => {
         <title>Dachi</title>
       </Head>
       <Navbar me={meData}></Navbar>
-      <HomeComponent />
+      <HomeComponent isLoggedIn={false} />
     </>
   );
 };
