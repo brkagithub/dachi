@@ -16,4 +16,5 @@ TODO:
 - search
 - when you name change chat gets weird - change recipientName to recipientId on chat page or make name not changeable
 - updating riot acc lasts too long sometimes
-- remove login buttons when logged in
+- additional checks/notes on what twitter, youtube handles should be
+- pusher is currently on EU cluster, while vercel and db are around washington dc - should probably change that
