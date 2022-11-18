@@ -90,7 +90,7 @@ const Profile = (props: {
                 <div className="pr-1 pl-1">
                   <SocialIcon
                     style={{ height: 32, width: 32 }}
-                    url={`https://twitter.com/${props.user.twitter}`}
+                    url={`${props.user.twitter}`}
                   />
                 </div>
               ) : (
