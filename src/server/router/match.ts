@@ -64,11 +64,10 @@ export const matchRouter = createRouter()
       if (!filter) {
         userStillNotMatched = await prisma.user.findFirst({
           where: {
-            NOT: {
-              id: {
-                in: alreadyMatchedWithIds,
-              },
+            id: {
+              notIn: alreadyMatchedWithIds,
             },
+            description: { not: "Add your description here" },
           },
         });
       } else {
