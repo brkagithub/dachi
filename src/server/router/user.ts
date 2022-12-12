@@ -306,9 +306,11 @@ export const userRouter = createRouter()
         },
         where: {
           OR: [
-            { name: { contains: input.searchTerm } },
-            { firstName: { contains: input.searchTerm } },
-            { description: { contains: input.searchTerm } },
+            { name: { contains: input.searchTerm, mode: "insensitive" } },
+            { firstName: { contains: input.searchTerm, mode: "insensitive" } },
+            {
+              description: { contains: input.searchTerm, mode: "insensitive" },
+            },
           ],
         },
         cursor: cursor ? { id: cursor } : undefined,
