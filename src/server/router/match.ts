@@ -304,24 +304,21 @@ export const matchRouter = createRouter()
   .mutation("acceptFriendReq", {
     input: z.object({
       requestInitiatorId: z.string(),
-      requestTargetId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      if (
-        !ctx.session ||
-        !ctx.session.user?.id ||
-        ctx.session.user.id != input.requestTargetId
-      ) {
+      if (!ctx.session || !ctx.session.user?.id) {
         throw new TRPCError({
           message: "You are not signed in",
           code: "UNAUTHORIZED",
         });
       }
 
+      const requestTargetId = ctx.session.user.id;
+
       await prisma.match.updateMany({
         where: {
           requestInitiatorId: input.requestInitiatorId,
-          requestTargetId: input.requestTargetId,
+          requestTargetId: requestTargetId,
         },
         data: {
           pending: false,
@@ -333,24 +330,21 @@ export const matchRouter = createRouter()
   .mutation("declineFriendReq", {
     input: z.object({
       requestInitiatorId: z.string(),
-      requestTargetId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      if (
-        !ctx.session ||
-        !ctx.session.user?.id ||
-        ctx.session.user.id != input.requestTargetId
-      ) {
+      if (!ctx.session || !ctx.session.user?.id) {
         throw new TRPCError({
           message: "You are not signed in",
           code: "UNAUTHORIZED",
         });
       }
 
+      const requestTargetId = ctx.session.user.id;
+
       await prisma.match.updateMany({
         where: {
           requestInitiatorId: input.requestInitiatorId,
-          requestTargetId: input.requestTargetId,
+          requestTargetId: requestTargetId,
         },
         data: {
           pending: false,

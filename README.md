@@ -36,3 +36,5 @@ Dachi has a very basic chat functionality - once you've befriended someone - you
 - updating riot acc lasts too long sometimes
 - additional checks/notes on what twitter, youtube handles should be
 - pusher is currently on EU cluster, while vercel and db are around washington dc - should probably change that
+- add people from their profiles
+- edit picture feature without going to edit profile

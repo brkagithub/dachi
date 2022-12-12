@@ -1,10 +1,11 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
+import { FormEvent, Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { inferQueryOutput, trpc } from "../utils/trpc";
 import NextLink from "next/link";
 import { signOut, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -23,6 +24,8 @@ export type { meType };
 type currentType = "settings" | "find friends" | "inbox" | "friend requests";
 
 const SearchBar = (props: { hidden: boolean }) => {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
   const surroundingDivClass = props.hidden
     ? "hidden relative md:block"
     : "relative";
@@ -44,12 +47,22 @@ const SearchBar = (props: { hidden: boolean }) => {
         </svg>
         <span className="sr-only">Search icon</span>
       </div>
-      <input
-        type="text"
-        id="search-navbar"
-        className="block p-2 pl-10 w-full text-gray-900 bg-gray-200 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Search..."
-      />
+      <form
+        onSubmit={(e: FormEvent) => {
+          e.preventDefault();
+          router.push(`/search/${searchTerm}`);
+        }}
+      >
+        <input
+          type="text"
+          id="search-navbar"
+          className="block p-2 pl-10 w-full text-gray-900 bg-gray-200 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </form>
     </div>
   );
 };

@@ -295,6 +295,15 @@ export const userRouter = createRouter()
 
       const users = await ctx.prisma.user.findMany({
         take: limit + 1, //+ 1 item is next cursor
+        select: {
+          id: true,
+          name: true,
+          firstName: true,
+          image: true,
+          role: true,
+          fav_champion1: true,
+          tier: true,
+        },
         where: {
           OR: [
             { name: { contains: input.searchTerm } },
@@ -304,10 +313,8 @@ export const userRouter = createRouter()
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          _relevance: {
-            fields: ["name", "firstName", "description"],
-            search: input.searchTerm,
-            sort: "asc",
+          riot_accounts: {
+            _count: "desc",
           },
         },
       });
