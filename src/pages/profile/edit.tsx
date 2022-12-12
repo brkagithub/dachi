@@ -260,6 +260,20 @@ function UserEditForm({
       className="w-full shadow-md rounded px-8 pt-6 pb-8 flex-col items-center"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <span className="px-1 text-indigo-400 font-semibold text-lg">
+        Profile picture
+      </span>
+      <input
+        id="file"
+        type="file"
+        className="block w-full text-indigo-300 bg-gray-900 rounded-lg border border-sky-100 cursor-pointer file:bg-indigo-300 file:border-0 file:p-1 file:text-gray-900 file:cursor-pointer"
+        {...register("profilePicture")}
+      />
+      <div className="px-1 text-indigo-400 text-sm">
+        If you want your old picture, do not click on this field
+      </div>
+
+      <div className="pt-4" />
       <span className="px-1 text-indigo-400 font-semibold text-lg">Name</span>
       <input
         className="shadow border border-sky-200 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
@@ -432,6 +446,9 @@ function UserEditForm({
         className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("twitter")}
       />
+      <div className="px-1 text-indigo-400 text-sm">
+        Your Twitter name after the @
+      </div>
 
       <div className="pt-4" />
       <span className="px-1 text-indigo-400 font-semibold text-lg">
@@ -441,6 +458,9 @@ function UserEditForm({
         className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("instagram")}
       />
+      <div className="px-1 text-indigo-400 text-sm">
+        Your Instagram username
+      </div>
 
       <div className="pt-4" />
       <span className="px-1 text-indigo-400 font-semibold text-lg">
@@ -450,6 +470,7 @@ function UserEditForm({
         className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("twitch")}
       />
+      <div className="text-indigo-400 text-sm">Your twitch username</div>
 
       <div className="pt-4" />
       <span className="px-1 text-indigo-400 font-semibold text-lg">
@@ -459,20 +480,11 @@ function UserEditForm({
         className="shadow border border-sky-100 rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-900"
         {...register("youtube")}
       />
+      <div className="px-1 text-indigo-400 text-sm">
+        Your Youtube name after the @
+      </div>
 
       <div className="pt-4" />
-      <span className="px-1 text-indigo-400 font-semibold text-lg">
-        Profile picture - leave empty if you want the current
-      </span>
-      <input
-        id="file"
-        type="file"
-        className="block w-full text-indigo-300 bg-gray-900 rounded-lg border border-sky-100 cursor-pointer file:bg-indigo-300 file:border-0 file:p-1 file:text-gray-900 file:cursor-pointer"
-        {...register("profilePicture")}
-      />
-
-      <div className="pt-4" />
-
       <div className="flex flex-col items-center ">
         <input
           className="disabled:opacity-50 disabled:cursor-auto bg-gray-900 rounded-full pt-2 pb-2 pr-4 pl-4 cursor-pointer text-lg font-bold border border-sky-100"

@@ -40,7 +40,7 @@ const ProfileCard: React.FC<{
         key={profileInput.id}
       >
         <div className="flex justify-start items-center">
-          <NextLink href={`profile/${profileInput.name}`}>
+          <NextLink href={`/profile/${profileInput.name}`}>
             <img
               className="h-16 w-16 rounded-full cursor-pointer"
               src={profileInput.image || ""}
@@ -48,7 +48,7 @@ const ProfileCard: React.FC<{
           </NextLink>
           <div className="p-4"></div>
           <div className="flex flex-col">
-            <NextLink href={`profile/${profileInput.name}`}>
+            <NextLink href={`/profile/${profileInput.name}`}>
               <div className="underline cursor-pointer text-center md:text-left">
                 @{profileInput.name}
               </div>
@@ -160,7 +160,7 @@ const ProfileCard: React.FC<{
         key={profileInput.id}
       >
         <div className="flex justify-start items-center">
-          <NextLink href={`profile/${profileInput.name}`}>
+          <NextLink href={`/profile/${profileInput.name}`}>
             <img
               className="h-16 w-16 rounded-full cursor-pointer"
               src={profileInput.image || ""}
@@ -168,7 +168,7 @@ const ProfileCard: React.FC<{
           </NextLink>
           <div className="p-4"></div>
           <div className="flex flex-col">
-            <NextLink href={`profile/${profileInput.name}`}>
+            <NextLink href={`/profile/${profileInput.name}`}>
               <div className="underline cursor-pointer text-center md:text-left">
                 @{profileInput.name}
               </div>
