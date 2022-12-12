@@ -1,14 +1,18 @@
 import type { LeagueAccount, User } from "@prisma/client";
 import NextLink from "next/link";
 import { trpc } from "../utils/trpc";
-import { flag } from "country-emoji";
 import { SocialIcon } from "react-social-icons";
 
 const Profile = (props: {
   user: User;
   rankedStats: LeagueAccount | null | undefined;
+  dontShowAddFriend?: boolean;
 }) => {
   const { data: meData, isLoading } = trpc.useQuery(["user.me"]);
+  const { data: isFriend, isLoading: isLoadingIsFriend } = trpc.useQuery([
+    "match.isFriendsWith",
+    { otherUserId: props.user.id },
+  ]);
   const { data: isBlocked, isLoading: isLoadingBlock } = trpc.useQuery(
     ["user.isBlocked", { blockedId: props.user.id }],
     {
@@ -18,6 +22,14 @@ const Profile = (props: {
   const updateRiotAccountMutation = trpc.useMutation([
     "riot.updateRiotAccount",
   ]);
+
+  const utils = trpc.useContext();
+
+  const createMatchMutation = trpc.useMutation(["match.createMatch"], {
+    onSuccess: () => {
+      utils.invalidateQueries(["match.isFriendsWith"]);
+    },
+  });
 
   if (isLoading || isLoadingBlock) {
     return <div className="text-center pt-4">loading...</div>;
@@ -235,7 +247,7 @@ const Profile = (props: {
                 </div>
                 <button
                   disabled={updateRiotAccountMutation.isLoading}
-                  className="disabled:opacity-50 disabled:hover:outline-0 disabled:cursor-auto bg-gradient-to-r from-indigo-900 to-indigo-500 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
+                  className="disabled:opacity-50 disabled:hover:outline-0 disabled:cursor-auto bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
                   onClick={() => {
                     if (props.rankedStats?.ign && props.rankedStats?.server) {
                       updateRiotAccountMutation.mutate({
@@ -310,11 +322,43 @@ const Profile = (props: {
           )}
 
         {meData && meData?.id == props.user.id ? (
-          <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
-            <NextLink href="/profile/edit">Edit your profile</NextLink>
-          </button>
+          <>
+            <button className="bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold">
+              <NextLink href="/profile/edit">Edit your profile</NextLink>
+            </button>
+            <div className="p-2"></div>
+          </>
         ) : (
           <></>
+        )}
+        {!props.dontShowAddFriend && !isLoadingIsFriend && !isFriend && (
+          <button
+            onClick={() => {
+              if (meData)
+                createMatchMutation.mutate({
+                  requestInitiatorId: meData.id,
+                  requestTargetId: props.user.id,
+                  addAsFriend: true,
+                });
+            }}
+            className="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
+          >
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+              ></path>
+            </svg>
+            <span className="pl-1">Add friend</span>
+          </button>
         )}
       </div>
     </>

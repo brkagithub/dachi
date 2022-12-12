@@ -25,10 +25,7 @@ export const userRouter = createRouter()
   .query("me", {
     resolve({ ctx }) {
       if (!ctx.session || !ctx.session.user) {
-        throw new TRPCError({
-          message: "You are not signed in",
-          code: "UNAUTHORIZED",
-        });
+        return null;
       }
 
       return ctx.session.user;
@@ -267,10 +264,7 @@ export const userRouter = createRouter()
     }),
     async resolve({ input, ctx }) {
       if (!ctx.session || !ctx.session.user?.id) {
-        throw new TRPCError({
-          message: "You are not signed in",
-          code: "UNAUTHORIZED",
-        });
+        return false; //if youre not logged, a user cant block you
       }
 
       const blockExists = await ctx.prisma.block.count({

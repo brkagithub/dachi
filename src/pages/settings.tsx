@@ -323,7 +323,8 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
           ></input>
         </div>
         <div className="px-1 text-red-500 text-sm">
-          If you do not want to use the filtering system - check this field.
+          If you do not want to use the filtering system and want to match with
+          any person on the site - check this field.
         </div>
 
         <div className="p-2"></div>

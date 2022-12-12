@@ -77,6 +77,7 @@ const Explore: NextPage = () => {
         <Navbar me={meData} />
         {userMatchedData && userMatchedData.user && (
           <ProfilePage
+            dontShowAddFriend={true}
             user={userMatchedData?.user}
             rankedStats={userMatchedData?.rankedStats}
           ></ProfilePage>

@@ -104,6 +104,35 @@ export const matchRouter = createRouter()
       return { user: userStillNotMatched, rankedStats: userRiotAccount };
     },
   })
+  .query("isFriendsWith", {
+    input: z.object({
+      otherUserId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        return true; //we are only using this in Profile so this should work
+      }
+
+      const userId = ctx.session.user.id;
+
+      return (
+        (await prisma.match.findFirst({
+          where: {
+            OR: [
+              {
+                requestInitiatorId: userId,
+                requestTargetId: input.otherUserId,
+              },
+              {
+                requestInitiatorId: input.otherUserId,
+                requestTargetId: userId,
+              },
+            ],
+          },
+        })) !== null
+      );
+    },
+  })
   .mutation("createMatch", {
     input: z.object({
       requestInitiatorId: z.string(),
