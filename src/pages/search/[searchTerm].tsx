@@ -85,7 +85,6 @@ const Search: NextPage = () => {
                 className="disabled:opacity-50 bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
                 onClick={() => {
                   fetchNextPage();
-                  console.log(flattenedUsers);
                 }}
               >
                 Show more
