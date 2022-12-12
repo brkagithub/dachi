@@ -462,10 +462,10 @@ function UserEditForm({
 
       <div className="pt-4" />
       <span className="px-1 text-indigo-400 font-semibold text-lg">
-        Profile picture
+        Profile picture - leave empty if you want the current
       </span>
-
       <input
+        id="file"
         type="file"
         className="block w-full text-indigo-300 bg-gray-900 rounded-lg border border-sky-100 cursor-pointer file:bg-indigo-300 file:border-0 file:p-1 file:text-gray-900 file:cursor-pointer"
         {...register("profilePicture")}

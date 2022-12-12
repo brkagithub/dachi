@@ -1,8 +1,8 @@
 import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
-import { prisma } from "../../server/db/client";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { User } from "@prisma/client";
 
 interface champObject {
   id: number;
@@ -43,7 +43,7 @@ export const userRouter = createRouter()
         });
       }
 
-      const user = await prisma.user.findFirst({
+      const user = await ctx.prisma.user.findFirst({
         where: { id: ctx.session?.user?.id },
       });
 
@@ -59,11 +59,11 @@ export const userRouter = createRouter()
         });
       }
 
-      const user = await prisma.user.findFirst({
+      const user = await ctx.prisma.user.findFirst({
         where: { id: ctx.session?.user?.id },
       });
 
-      const accounts = await prisma.leagueAccount.findMany({
+      const accounts = await ctx.prisma.leagueAccount.findMany({
         where: { userId: user?.id },
       });
 
@@ -98,7 +98,7 @@ export const userRouter = createRouter()
         });
       }
 
-      await prisma.user.update({
+      await ctx.prisma.user.update({
         where: { id: ctx.session?.user?.id },
         data: {
           ...input,
@@ -122,8 +122,8 @@ export const userRouter = createRouter()
   })*/
   .query("getImageAndFirstNameByName", {
     input: z.object({ name: z.string() }),
-    async resolve({ input }) {
-      const user = await prisma.user.findFirst({
+    async resolve({ input, ctx }) {
+      const user = await ctx.prisma.user.findFirst({
         where: { name: input.name },
         select: {
           image: true,
@@ -144,7 +144,7 @@ export const userRouter = createRouter()
         });
       }
 
-      await prisma.user.update({
+      await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: { image: input.newUrl },
       });
@@ -158,7 +158,7 @@ export const userRouter = createRouter()
           code: "UNAUTHORIZED",
         });
       }
-      const filter = await prisma.filter.findFirst({
+      const filter = await ctx.prisma.filter.findFirst({
         where: {
           userId: ctx.session.user.id,
         },
@@ -212,11 +212,11 @@ export const userRouter = createRouter()
       }
 
       if (input.ignoreFilter) {
-        await prisma.filter.deleteMany({
+        await ctx.prisma.filter.deleteMany({
           where: { userId: ctx.session.user.id },
         });
       } else {
-        await prisma.filter.upsert({
+        await ctx.prisma.filter.upsert({
           where: {
             userId: ctx.session.user.id,
           },
@@ -253,7 +253,7 @@ export const userRouter = createRouter()
         });
       }
 
-      await prisma.block.create({
+      await ctx.prisma.block.create({
         data: {
           blockByUserId: ctx.session.user.id,
           blockedUserId: input.blockedId,
@@ -273,7 +273,7 @@ export const userRouter = createRouter()
         });
       }
 
-      const blockExists = await prisma.block.count({
+      const blockExists = await ctx.prisma.block.count({
         where: {
           blockByUserId: ctx.session.user.id,
           blockedUserId: input.blockedId,
@@ -281,5 +281,42 @@ export const userRouter = createRouter()
       });
 
       return blockExists > 0;
+    },
+  })
+  .query("searchUsers", {
+    input: z.object({
+      searchTerm: z.string(),
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(),
+    }),
+    async resolve({ ctx, input }) {
+      const limit = input.limit ?? 20;
+      const { cursor } = input;
+
+      const users = await ctx.prisma.user.findMany({
+        take: limit + 1, //+ 1 item is next cursor
+        where: {
+          OR: [
+            { name: { contains: input.searchTerm } },
+            { firstName: { contains: input.searchTerm } },
+            { description: { contains: input.searchTerm } },
+          ],
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          _relevance: {
+            fields: ["name", "firstName", "description"],
+            search: input.searchTerm,
+            sort: "asc",
+          },
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (users.length > limit) {
+        nextCursor = users.pop()!.id;
+      }
+
+      return { users, nextCursor };
     },
   });
