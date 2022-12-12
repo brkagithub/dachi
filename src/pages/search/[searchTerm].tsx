@@ -70,7 +70,11 @@ const Search: NextPage = () => {
         <div className="max-w-xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           {flattenedUsers.map((u) => {
             return (
-              <ProfileCard acceptDecline={false} profileInput={u}></ProfileCard>
+              <ProfileCard
+                acceptDecline={false}
+                profileInput={u}
+                key={u.id}
+              ></ProfileCard>
             );
           })}
           <div className="p-2"></div>
