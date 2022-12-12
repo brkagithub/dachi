@@ -82,6 +82,7 @@ const Requests: NextPage = () => {
             <ProfileCard
               acceptDecline={true}
               profileInput={req.requestInitiator}
+              key={req.id}
             ></ProfileCard>
           ))}
         </div>
