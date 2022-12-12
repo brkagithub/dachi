@@ -70,7 +70,7 @@ const Profile = (props: {
                   <div className="capitalize">{props.user.gender}</div>
                 )}
               </div>
-              <div className="pt-1 pr-2 pl-2 md:pt-2 md:pr-0 md:pl-0 text-justify">
+              <div className="pt-1 pr-2 pl-2 md:pt-2 md:pr-0 md:pl-0 text-center md:text-justify">
                 {props.user.description}
               </div>
             </div>

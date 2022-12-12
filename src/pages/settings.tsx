@@ -322,6 +322,9 @@ function FilterEditForm({ defaultValues }: { defaultValues: Inputs }) {
             type="checkbox"
           ></input>
         </div>
+        <div className="px-1 text-red-500 text-sm">
+          If you do not want to use the filtering system - check this field.
+        </div>
 
         <div className="p-2"></div>
 

@@ -11,7 +11,7 @@ const HomeComponent = (props: { isLoggedIn: boolean }) => {
       <div className="flex flex-col md:flex-row justify-center items-center">
         <img
           className="rounded-2xl border border-indigo-500 order-2 mt-16 md:mt-0"
-          src="https://res.cloudinary.com/dhupiskro/image/upload/v1664985776/homepage_profile.png"
+          src="https://res.cloudinary.com/dhupiskro/image/upload/v1670873733/johnny7_v0pfmf.png"
           alt="Example profile"
         ></img>
         <div className="flex flex-col pt-4 pl-1 pr-1 md:pr-0 md:pt-0 md:pl-12 items-center w-full order-1 md:order-3">
