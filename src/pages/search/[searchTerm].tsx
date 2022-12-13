@@ -71,6 +71,7 @@ const Search: NextPage = () => {
           {flattenedUsers.map((u) => {
             return (
               <ProfileCard
+                unblockButton={false}
                 acceptDecline={false}
                 profileInput={u}
                 key={u.id}

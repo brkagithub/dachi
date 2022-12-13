@@ -80,6 +80,7 @@ const Requests: NextPage = () => {
           <div className="pt-4"> </div>
           {friendsRequests?.map((req) => (
             <ProfileCard
+              unblockButton={false}
               acceptDecline={true}
               profileInput={req.requestInitiator}
               key={req.id}
