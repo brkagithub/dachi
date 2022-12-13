@@ -15,11 +15,17 @@ type ProfileInput = {
 
 const ProfileCard: React.FC<{
   acceptDecline: boolean;
+  unblockButton: boolean;
   profileInput: ProfileInput;
-}> = ({ acceptDecline, profileInput }) => {
+}> = ({ acceptDecline, unblockButton, profileInput }) => {
   const acceptFriendReqMutation = trpc.useMutation(["match.acceptFriendReq"], {
     onSuccess: () => {
       utils.invalidateQueries(["match.getFriendRequests"]);
+    },
+  });
+  const unblockUserMutation = trpc.useMutation(["user.unblockUser"], {
+    onSuccess: () => {
+      utils.invalidateQueries(["user.getBlockList"]);
     },
   });
   const declineFriendReqMutation = trpc.useMutation(
@@ -33,51 +39,51 @@ const ProfileCard: React.FC<{
 
   const utils = trpc.useContext();
 
-  if (acceptDecline) {
-    return (
-      <div
-        className="flex justify-between items-center border rounded-3xl border-indigo-400 p-2 mb-4"
-        key={profileInput.id}
-      >
-        <div className="flex justify-start items-center">
+  return (
+    <div
+      className="flex justify-between items-center border rounded-3xl border-indigo-400 p-2 mb-4"
+      key={profileInput.id}
+    >
+      <div className="flex justify-start items-center">
+        <NextLink href={`/profile/${profileInput.name}`}>
+          <img
+            className="h-16 w-16 rounded-full cursor-pointer"
+            src={profileInput.image || ""}
+          ></img>
+        </NextLink>
+        <div className="p-4"></div>
+        <div className="flex flex-col">
           <NextLink href={`/profile/${profileInput.name}`}>
-            <img
-              className="h-16 w-16 rounded-full cursor-pointer"
-              src={profileInput.image || ""}
-            ></img>
+            <div className="underline cursor-pointer text-center md:text-left">
+              @{profileInput.name}
+            </div>
           </NextLink>
-          <div className="p-4"></div>
-          <div className="flex flex-col">
-            <NextLink href={`/profile/${profileInput.name}`}>
-              <div className="underline cursor-pointer text-center md:text-left">
-                @{profileInput.name}
-              </div>
-            </NextLink>
 
-            <div className="text-sm text-center md:text-left">
-              {profileInput.firstName}
-            </div>
-            <div className="flex md:items-center flex-col md:flex-row">
-              {profileInput.tier && (
-                <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 capitalize text-center md:text-left">
-                  {profileInput.tier.toLowerCase()}
-                </div>
-              )}
-              {profileInput.role && (
-                <>
-                  <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
-                    {profileInput.role}
-                  </div>
-                </>
-              )}
-              {profileInput.fav_champion1 && (
+          <div className="text-sm text-center md:text-left">
+            {profileInput.firstName}
+          </div>
+          <div className="flex md:items-center flex-col md:flex-row">
+            {profileInput.tier && (
+              <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 capitalize text-center md:text-left">
+                {profileInput.tier.toLowerCase()}
+              </div>
+            )}
+            {profileInput.role && (
+              <>
                 <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
-                  {profileInput.fav_champion1}
+                  {profileInput.role}
                 </div>
-              )}
-            </div>
+              </>
+            )}
+            {profileInput.fav_champion1 && (
+              <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
+                {profileInput.fav_champion1}
+              </div>
+            )}
           </div>
         </div>
+      </div>
+      {acceptDecline && (
         <div className="flex justify-end items-center">
           <div className="flex flex-col p-2 text-center">
             <div className="text-center"></div>
@@ -151,56 +157,20 @@ const ProfileCard: React.FC<{
             <div className="text-center">decline</div>
           </div>
         </div>
-      </div>
-    );
-  } else {
-    return (
-      <div
-        className="flex justify-between items-center border rounded-3xl border-indigo-400 p-2 mb-4"
-        key={profileInput.id}
-      >
-        <div className="flex justify-start items-center">
-          <NextLink href={`/profile/${profileInput.name}`}>
-            <img
-              className="h-16 w-16 rounded-full cursor-pointer"
-              src={profileInput.image || ""}
-            ></img>
-          </NextLink>
-          <div className="p-4"></div>
-          <div className="flex flex-col">
-            <NextLink href={`/profile/${profileInput.name}`}>
-              <div className="underline cursor-pointer text-center md:text-left">
-                @{profileInput.name}
-              </div>
-            </NextLink>
-
-            <div className="text-sm text-center md:text-left">
-              {profileInput.firstName}
-            </div>
-            <div className="flex md:items-center flex-col md:flex-row">
-              {profileInput.tier && (
-                <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 capitalize text-center md:text-left">
-                  {profileInput.tier.toLowerCase()}
-                </div>
-              )}
-              {profileInput.role && (
-                <>
-                  <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
-                    {profileInput.role}
-                  </div>
-                </>
-              )}
-              {profileInput.fav_champion1 && (
-                <div className="bg-gray-800 mt-2 pt-1 pb-1 pr-2 pl-2 rounded-lg text-sm mr-2 text-center md:text-left">
-                  {profileInput.fav_champion1}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+      )}
+      {unblockButton && (
+        <button
+          onClick={() => {
+            unblockUserMutation.mutate({ blockedId: profileInput.id });
+          }}
+          disabled={unblockUserMutation.isLoading}
+          className="disabled:opacity-50 disabled:cursor-auto disabled:hover:bg-inherit bg-gradient-to-r from-red-500 to-red-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer font-semibold"
+        >
+          Unblock
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default ProfileCard;

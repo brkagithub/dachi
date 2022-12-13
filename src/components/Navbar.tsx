@@ -220,14 +220,14 @@ const Navbar: React.FC<{
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-sky-200 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-indigo-400">
                         <Menu.Item>
                           {({ active }) => (
                             <NextLink href={`/profile/${me?.name}`}>
                               <a
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-black hover:bg-sky-100"
+                                  "block px-4 py-2 text-sm text-black hover:bg-indigo-500"
                                 )}
                               >
                                 Your Profile
@@ -237,9 +237,23 @@ const Navbar: React.FC<{
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
+                            <NextLink href={`/privacy`}>
+                              <a
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-black hover:bg-indigo-500"
+                                )}
+                              >
+                                Block list
+                              </a>
+                            </NextLink>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
                             <button
                               className={classNames(
-                                "block px-4 py-2 text-sm text-black hover:bg-sky-100 w-full text-left"
+                                "block px-4 py-2 text-sm text-black hover:bg-indigo-500 w-full text-left"
                               )}
                               onClick={() => signOut()}
                             >

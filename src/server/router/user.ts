@@ -2,7 +2,19 @@ import { createRouter } from "./context";
 //import { createProtectedRouter } from "./protected-router";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { User } from "@prisma/client";
+import { Role, Tier, User } from "@prisma/client";
+
+type BlockType = {
+  blockedUser: {
+    id: string;
+    name: string | null;
+    image: string | null;
+    firstName: string | null;
+    role: Role | null;
+    fav_champion1: string | null;
+    tier: Tier | null;
+  };
+};
 
 interface champObject {
   id: number;
@@ -258,6 +270,36 @@ export const userRouter = createRouter()
       });
     },
   })
+  .mutation("unblockUser", {
+    input: z.object({
+      blockedId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        throw new TRPCError({
+          message: "You are not signed in",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      const blockToDelete = await ctx.prisma.block.findFirst({
+        select: {
+          id: true,
+        },
+        where: {
+          blockByUserId: ctx.session.user.id,
+          blockedUserId: input.blockedId,
+        },
+      });
+
+      if (blockToDelete)
+        await ctx.prisma.block.delete({
+          where: {
+            id: blockToDelete.id,
+          },
+        });
+    },
+  })
   .query("isBlocked", {
     input: z.object({
       blockedId: z.string(),
@@ -321,5 +363,47 @@ export const userRouter = createRouter()
       }
 
       return { users, nextCursor };
+    },
+  })
+  .query("getBlockList", {
+    async resolve({ input, ctx }) {
+      if (!ctx.session || !ctx.session.user?.id) {
+        return []; //if youre not logged, you didnt block anyone
+      }
+
+      const usersBlockedByMe = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user.id },
+        include: {
+          blockedByMe: {
+            include: {
+              blockedUser: {
+                select: {
+                  id: true,
+                  name: true,
+                  firstName: true,
+                  image: true,
+                  role: true,
+                  fav_champion1: true,
+                  tier: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (usersBlockedByMe) {
+        return usersBlockedByMe.blockedByMe.map((block: BlockType) => {
+          return {
+            id: block.blockedUser.id,
+            name: block.blockedUser.name,
+            firstName: block.blockedUser.firstName,
+            image: block.blockedUser.image,
+            role: block.blockedUser.role,
+            fav_champion1: block.blockedUser.fav_champion1,
+            tier: block.blockedUser.tier,
+          };
+        });
+      } else return [];
     },
   });
