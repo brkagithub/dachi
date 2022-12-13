@@ -59,7 +59,7 @@ const Requests: NextPage = () => {
         <Navbar me={meData} />
         <div className="max-w-2xl mx-auto pt-8 pr-4 pl-4 md:pl-2 md:pr-2">
           <h1 className="text-2xl text-indigo-200 font-semibold">
-            You haven't blocked anyone yet
+            You haven&apos;t blocked anyone yet
           </h1>
         </div>
       </>
