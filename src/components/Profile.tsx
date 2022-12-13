@@ -331,35 +331,38 @@ const Profile = (props: {
         ) : (
           <></>
         )}
-        {!props.dontShowAddFriend && !isLoadingIsFriend && !isFriend && (
-          <button
-            onClick={() => {
-              if (meData)
-                createMatchMutation.mutate({
-                  requestInitiatorId: meData.id,
-                  requestTargetId: props.user.id,
-                  addAsFriend: true,
-                });
-            }}
-            className="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
-          >
-            <svg
-              className="w-8 h-8"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+        {!props.dontShowAddFriend &&
+          !isLoadingIsFriend &&
+          !isFriend &&
+          meData?.id != props.user.id && (
+            <button
+              onClick={() => {
+                if (meData)
+                  createMatchMutation.mutate({
+                    requestInitiatorId: meData.id,
+                    requestTargetId: props.user.id,
+                    addAsFriend: true,
+                  });
+              }}
+              className="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-900 hover:outline hover:outline-2 hover:outline-white rounded-full pr-4 pl-4 pt-2 pb-2 text-lg cursor-pointer mt-8 font-semibold"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-              ></path>
-            </svg>
-            <span className="pl-1">Add friend</span>
-          </button>
-        )}
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                ></path>
+              </svg>
+              <span className="pl-1">Add friend</span>
+            </button>
+          )}
       </div>
     </>
   );
