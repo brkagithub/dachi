@@ -222,6 +222,8 @@ function UserEditForm({
       youtube: data.youtube,
     });
 
+    console.log(accounts, data.server, data.ign, id);
+
     if (accounts.length > 0) {
       updateRiotAccountMutation.mutate({
         server: data.server,
